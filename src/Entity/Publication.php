@@ -33,6 +33,9 @@ class Publication
     #[ORM\JoinColumn(nullable: false)]
     private ?ForumCommentaire $commentaire = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +109,18 @@ class Publication
     public function setCommentaire(?ForumCommentaire $commentaire): static
     {
         $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
