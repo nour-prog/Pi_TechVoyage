@@ -1,0 +1,27 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}blank{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <title>New Hotel</title>
+
+    <h1>Create new Hotel</h1>
+
+    {{ include('hotel/_form.html.twig') }}
+
+    <a href="{{ path('app_hotel_index') }}">back to list</a>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+{% endblock %}
