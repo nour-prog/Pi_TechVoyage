@@ -1,0 +1,59 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}blank{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <h1>Reservation index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Datedepart</th>
+            <th>Dateretour</th>
+            <th>Classe</th>
+            <th>Destinationdepart</th>
+            <th>Destinationretour</th>
+            <th>Nbrdepersonne</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.Datedepart ? reservation.Datedepart|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.Dateretour ? reservation.Dateretour|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.Classe }}</td>
+                <td>{{ reservation.Destinationdepart }}</td>
+                <td>{{ reservation.Destinationretour }}</td>
+                <td>{{ reservation.Nbrdepersonne }}</td>
+                <td>
+                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">show</a>
+                    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reservation_new') }}">Create new</a>
+    </tr>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+{% endblock %}
