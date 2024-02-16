@@ -1,15 +1,6 @@
-{% extends 'frontoffice/base.html.twig' %}
-
-{% block title %}blank{% endblock %}
-
+{% block title %}Log in!{% endblock %}
 
 {% block body %}
-<br>
-<br>
-<br>
-<br>
-<br>
-
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -35,11 +26,4 @@
         Sign in
     </button>
 </form>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 {% endblock %}
