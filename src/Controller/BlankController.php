@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BlankController extends AbstractController
 {
-    #[Route('/blank', name: 'app_blank')]
+    #[Route('/blank22', name: 'app_blank')]
     public function index(): Response
     {
         return $this->render('frontoffice/blank/index.html.twig');
