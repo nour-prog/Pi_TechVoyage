@@ -11,6 +11,6 @@ class BlankController extends AbstractController
     #[Route('/blank', name: 'app_blank')]
     public function index(): Response
     {
-        return $this->render('frontoffice/reservation/index.html.twig');
+        return $this->render('frontoffice/reservation/new1.html.twig');
     }
 }

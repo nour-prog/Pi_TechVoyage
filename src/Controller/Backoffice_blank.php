@@ -11,6 +11,6 @@ class Backoffice_blank extends AbstractController
     #[Route('/backoffice/reservation', name: 'app_backoffice_blank')]
     public function index(): Response
     {
-        return $this->render('backoffice/reservation/index.html.twig');
+        return $this->render('backoffice/dashboard/index.html.twig');
     }
 }
