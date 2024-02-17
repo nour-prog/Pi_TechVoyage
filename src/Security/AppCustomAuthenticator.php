@@ -21,13 +21,8 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private $urlGenerator;
-    private $security;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->security = $security;
     }
 
 
@@ -50,29 +45,20 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
    
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $user = $token->getUser();
-
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+       /* if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
+        }*/
+
+        if ($token->getUser()->isAdmin()){
+            return new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard'));
         }
 
-        if ($this->hasRole($user, "ROLE_USER")) {
-            $url = $this->urlGenerator->generate('app_homepage');
-        } else {
-            $url = $this->urlGenerator->generate('app_admin_dashboard');
-        }
-
-        return new RedirectResponse($url);
+        // For example:
+         return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
+        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
-    private function hasRole($user, $role)
-    {
-        return in_array($role, $user->getRoles());
-    }
-
-
-
-
+    
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
