@@ -15,16 +15,21 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-
 class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    private $urlGenerator;
+    private $security;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security)
     {
+        $this->urlGenerator = $urlGenerator;
+        $this->security = $security;
     }
+
 
     public function authenticate(Request $request): Passport
     {
@@ -42,16 +47,31 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
+   
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        $user = $token->getUser();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-         return new RedirectResponse($this->urlGenerator->generate('app_admin_dashboard'));
-        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        if ($this->hasRole($user, "ROLE_USER")) {
+            $url = $this->urlGenerator->generate('app_homepage');
+        } else {
+            $url = $this->urlGenerator->generate('app_admin_dashboard');
+        }
+
+        return new RedirectResponse($url);
     }
+
+    private function hasRole($user, $role)
+    {
+        return in_array($role, $user->getRoles());
+    }
+
+
+
 
     protected function getLoginUrl(Request $request): string
     {
