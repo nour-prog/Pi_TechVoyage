@@ -16,6 +16,9 @@
 <table border="1">
     <tr>
         <td>Id</td>
+        <td>Nom</td>
+        <td>Prenom</td>
+        <td>Num</td>
         <td>email</td>
         <td>roles</td>
         <td>password</td>
@@ -25,6 +28,9 @@
     {% for i in tabUser %}
         <tr>
             <td>{{i.id}}</td>
+            <td>{{i.nom}}</td>
+            <td>{{i.prenom}}</td>
+            <td>{{i.getNumTel}}</td>
             <td>{{i.email}}</td>
             <td>{{i.roles[0]}}</td>
             <td>{{i.password}}</td>
