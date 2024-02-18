@@ -77,7 +77,7 @@ class CommentaireController extends AbstractController
         $commentaire=$repository->find($id);
         $form=$this->createForm(CommentaireType::class,$commentaire);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("list_commentaire_front");
@@ -91,7 +91,7 @@ class CommentaireController extends AbstractController
         $commentaire=$repository->find($id);
         $form=$this->createForm(CommentaireType::class,$commentaire);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("list_commentaire_back");

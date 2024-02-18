@@ -63,7 +63,7 @@ class ReclamationController extends AbstractController
         $reclamation=$repository->find($id);
         $form=$this->createForm(ReclamationType::class,$reclamation);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("list_reclamation_front");
