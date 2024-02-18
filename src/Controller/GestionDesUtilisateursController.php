@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\UserFormType;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ class GestionDesUtilisateursController extends AbstractController
         ]);
     }
 
-    #[Route('/listUser', name: 'list_User')]
+    #[Route('/backoffice/listUser', name: 'list_User')]
     public function list(UserRepository $repository)
     {
         $user= $repository->findAll();
@@ -30,13 +31,13 @@ class GestionDesUtilisateursController extends AbstractController
             array('tabUser'=>$user));
     }
 
-    #[Route('/UpdateUser/{id}', name: 'app_UpdateUser')]
+    #[Route('/backoffice/UpdateUser/{id}', name: 'app_UpdateUser')]
     public function UpdateUser(Request $request,UserRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $user=$repository->find($id);
-        $form=$this->createForm(RegistrationFormType::class,$user);
+        $form=$this->createForm(UserFormType::class,$user);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("list_User");
@@ -45,7 +46,7 @@ class GestionDesUtilisateursController extends AbstractController
 
     }
 
-    #[Route('/deleteUser/{id}', name: 'app_deleteUser')]
+    #[Route('/backoffice/deleteUser/{id}', name: 'app_deleteUser')]
 
     public function DeleteReclamation ($id, UserRepository $repository,ManagerRegistry $managerRegistry)
     {

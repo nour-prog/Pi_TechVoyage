@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class RegistrationFormType extends AbstractType
+class UserFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -38,49 +38,24 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('prenom',TextType::class , [
-                 'constraints' => [
+                'constraints' => [
                     new NotBlank([
-                         'message' => 'veuillez entrer le prenom',
-                    ])
-                ]
-            ])
+                             'message' => 'veuillez entrer le prenom',
+                           ])
+                       ]
+                   ])
             ->add('num_tel', null , [
                  'constraints' => [
-                     new NotBlank([
-                        'message' => 'veuillez entrer le prenom',
-                     ]),
-                    new Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre numéro de téléphone doit comporter au moins {{ limit }} caractères',
-                        'max' => 13,
-                    ]),
-                ]
-            ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter nos conditions.',
-                    ]),
-                ],
-            ])
-            ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-            ])
+                        new NotBlank([
+                            'message' => 'veuillez entrer le prenom',
+                        ]),
+                       new Length([
+                           'min' => 8,
+                           'minMessage' => 'Votre numéro de téléphone doit comporter au moins {{ limit }} caractères',
+                           'max' => 13,
+                      ]),
+                   ]
+               ])
             ->add('Submit',SubmitType::class) 
         ;
     }
