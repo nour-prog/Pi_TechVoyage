@@ -1,0 +1,52 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}list location{% endblock %}
+
+
+{% block body %}
+<h1>Liste des Location voitures</h1>
+
+<a href="{{ path('app_createLocationVoiture') }}"> Ajout Location Voiture </a>
+
+<table border="1">
+    <tr>
+        <td>Id</td>
+        <td>Prix Par Jour ($)</td>
+        <td>Date Debut</td>
+        <td>Date Fin</td>
+        <td>Type</td>
+        <td>Status</td>
+        <td>Voiture</td>
+    </tr>
+    {% for i in locationVoitureArr %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.prix}}</td>
+
+            {% if i.dateDebut is not null %}
+                <td>{{ i.dateDebut|date }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
+
+            {% if i.datefin is not null %}
+                <td>{{ i.datefin|date }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
+
+            
+            <td>{{i.type}}</td>
+            <td>{{i.status}}</td>
+            <td></td>
+
+            <td>
+                <a href = "{{ path('app_updateLocationVoiture', { id: i.id }) }}"> Modifier </a>
+                <a href = "{{ path('app_deleteLocationVoiture', { id: i.id }) }}"> Supprimer </a>
+             </td>
+
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
