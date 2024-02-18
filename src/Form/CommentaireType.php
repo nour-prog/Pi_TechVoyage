@@ -27,8 +27,6 @@ class CommentaireType extends AbstractType
                 ]),
             ],
         ])
-            ->add('dateCreation')
-
             ->add('Reclamation', null, [
                 'constraints' => [
                     new NotBlank(['message' => 'Veuillez choisir la réclamation.']),

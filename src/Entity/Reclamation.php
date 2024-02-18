@@ -24,16 +24,19 @@ class Reclamation
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $datesoumission = null;
+   
 
     #[ORM\Column(nullable: true)]
     private ?bool $estTraite = null;
 
-    #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'Reclamation')]
+    #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'Reclamation', cascade: ['persist', 'remove']    )]
     private Collection $reclamationCommentaires;
 
     public function __construct()
     {
         $this->reclamationCommentaires = new ArrayCollection();
+        $this->datesoumission = new \DateTime();
+
     }
 
     public function getId(): ?int

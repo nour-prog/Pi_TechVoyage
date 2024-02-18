@@ -33,11 +33,7 @@ class ReclamationType extends AbstractType
                 new NotBlank(['message' => 'Veuillez fournir une description pour cette réclamation.']),
             ],
         ])
-        ->add('datesoumission', null, [
-            'constraints' => [
-                new NotBlank(['message' => 'La date ne peut pas être vide']),
-            ],
-        ])            
+            
             ->add('estTraite')
             ->add('Submit',SubmitType::class)
 

@@ -23,6 +23,10 @@ class ReclamationCommentaire
     #[ORM\ManyToOne(inversedBy: 'reclamationCommentaires')]
     private ?Reclamation $Reclamation = null;
 
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+    }
     public function getId(): ?int
     {
         return $this->id;
