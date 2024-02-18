@@ -24,7 +24,11 @@
         <tr>
             <td>{{i.id}}</td>
             <td>{{i.contenu}}</td>
-            <td>{{i.dateCreation | date}}</td>
+            {% if i.dateCreation is not null %}
+                <td>{{ i.dateCreation|date }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
             <td>{{i.Reclamation}}</td>
 
 

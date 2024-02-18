@@ -20,6 +20,7 @@
         <td>Description</td>
         <td>EstTraite</td>
         <td>DateSoumission</td>
+        
 
     </tr>
     {% for i in tabReclamation %}
@@ -28,7 +29,12 @@
             <td>{{i.Sujet}}</td>
             <td>{{i.Description}}</td>
             <td>{{i.EstTraite}}</td>
-            <td>{{i.DateSoumission | date}}</td>
+             {% if i.DateSoumission is not null %}
+                <td>{{ i.DateSoumission|date }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
+            
 
             <td>
                  <a href = "{{ path('app_deleteReclamation_front', { id: i.id }) }}"> Supprimer </a>
