@@ -1,4 +1,4 @@
-{% extends 'frontoffice/base.html.twig' %}
+{% extends 'backoffice/base.html.twig' %}
 
 {% block title %}Reclamation{% endblock %}
 
@@ -31,15 +31,11 @@
             <td>{{i.DateSoumission | date}}</td>
 
             <td>
-                 <a href = "{{ path('app_deleteReclamation_front', { id: i.id }) }}"> Supprimer </a>
-                 <a href = "{{ path('app_updateReclamation', { id: i.id }) }}"> Modifier </a>
-
+                 <a href = "{{ path('app_deleteReclamation_back', { id: i.id }) }}"> Supprimer </a>
              </td>
 
         </tr>
     {% endfor %}
-                     <a href = "{{ path('add_reclamation') }}"> Ajouter </a>
-
 
 
 

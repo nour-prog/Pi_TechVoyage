@@ -1,4 +1,4 @@
-{% extends 'frontoffice/base.html.twig' %}
+{% extends 'backoffice/base.html.twig' %}
 
 {% block title %}Commentaire{% endblock %}
 
@@ -11,7 +11,7 @@
 <br>
 <br>
 <h1>Add Commentaire</h1>
-{{ form(formulaireCommentaire) }}
+{{ form(formulaireCommentaire, {'attr': {'novalidate': 'novalidate'}}) }}
 <br>
 <br>
 <br>

@@ -7,15 +7,37 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 
 class ReclamationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('sujet')
-            ->add('description')
-            ->add('datesoumission')
+        ->add('sujet', null, [
+            'constraints' => [
+                new NotBlank(['message' => 'Ce champ est obligatoire. Veuillez entrer un sujet.']), 
+                new Length([
+                    'min' => 3,
+                    'max' => 255,
+                    'minMessage' => 'Le sujet doit comporter au moins {{ limit }} caractères',
+                    'maxMessage' => 'Le sujet ne peut pas dépasser {{ limit }} caractères',
+                ]),
+            ],
+        ])
+        ->add('description', null, [
+            'constraints' => [
+                new NotBlank(['message' => 'Veuillez fournir une description pour cette réclamation.']),
+            ],
+        ])
+        ->add('datesoumission', null, [
+            'constraints' => [
+                new NotBlank(['message' => 'La date ne peut pas être vide']),
+            ],
+        ])            
             ->add('estTraite')
             ->add('Submit',SubmitType::class)
 

@@ -21,8 +21,17 @@ class ReclamationController extends AbstractController
         ]);
     }
 
-    #[Route('/listReclamation', name: 'list_reclamation')]
-    public function list(ReclamationRepository $repository)
+    #[Route('/backoffice/listReclamation', name: 'list_reclamation_back')]
+    public function listReclamationBack(ReclamationRepository $repository)
+    {
+        $reclamation= $repository->findAll();
+
+        return $this->render("backoffice/Reclamation/listeReclamation.html.twig",
+            array('tabReclamation'=>$reclamation));
+    }
+
+    #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]
+    public function listReclamationFront(ReclamationRepository $repository)
     {
         $reclamation= $repository->findAll();
 
@@ -40,7 +49,8 @@ class ReclamationController extends AbstractController
             $em= $managerRegistry->getManager();
             $em->persist($reclamation);
             $em->flush();
-            return new Response("Done!");
+            return $this->redirectToRoute("list_reclamation_front");
+
         }
         return $this->renderForm("frontoffice/Reclamation/addReclamation.html.twig",["formulaireReclamation"=>$form]);
     }
@@ -56,21 +66,33 @@ class ReclamationController extends AbstractController
         if($form->isSubmitted()){
             $em=$managerRegistry->getManager();
             $em->flush();
-            return $this->redirectToRoute("list_reclamation");
+            return $this->redirectToRoute("list_reclamation_front");
         }
         return $this->renderForm("frontoffice/Reclamation/updateReclamation.html.twig",["formulaireReclamation"=>$form]);
 
     }
 
-    #[Route('/deleteReclamation/{id}', name: 'app_deleteReclamation')]
+    #[Route('/deleteReclamationBack/{id}', name: 'app_deleteReclamation_back')]
 
-    public function DeleteReclamation ($id, ReclamationRepository $repository,ManagerRegistry $managerRegistry)
+    public function DeleteReclamationBack ($id, ReclamationRepository $repository,ManagerRegistry $managerRegistry)
     {
         $reclamation=$repository->find($id);
         $em=$managerRegistry->getManager();
          $em->remove($reclamation);
          $em->flush();
 
-        return $this->redirectToRoute("list_reclamation");
+        return $this->redirectToRoute("list_reclamation_back");
+    }
+
+    #[Route('/deleteReclamationFront/{id}', name: 'app_deleteReclamation_front')]
+
+    public function DeleteReclamationFront ($id, ReclamationRepository $repository,ManagerRegistry $managerRegistry)
+    {
+        $reclamation=$repository->find($id);
+        $em=$managerRegistry->getManager();
+         $em->remove($reclamation);
+         $em->flush();
+
+        return $this->redirectToRoute("list_reclamation_front");
     }
 }

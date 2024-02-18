@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReclamationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +27,14 @@ class Reclamation
 
     #[ORM\Column(nullable: true)]
     private ?bool $estTraite = null;
+
+    #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'Reclamation')]
+    private Collection $reclamationCommentaires;
+
+    public function __construct()
+    {
+        $this->reclamationCommentaires = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,5 +87,40 @@ class Reclamation
         $this->estTraite = $estTraite;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ReclamationCommentaire>
+     */
+    public function getReclamationCommentaires(): Collection
+    {
+        return $this->reclamationCommentaires;
+    }
+
+    public function addReclamationCommentaire(ReclamationCommentaire $reclamationCommentaire): static
+    {
+        if (!$this->reclamationCommentaires->contains($reclamationCommentaire)) {
+            $this->reclamationCommentaires->add($reclamationCommentaire);
+            $reclamationCommentaire->setReclamation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReclamationCommentaire(ReclamationCommentaire $reclamationCommentaire): static
+    {
+        if ($this->reclamationCommentaires->removeElement($reclamationCommentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($reclamationCommentaire->getReclamation() === $this) {
+                $reclamationCommentaire->setReclamation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return(string)$this->getSujet();
     }
 }

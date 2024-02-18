@@ -21,32 +21,57 @@ class CommentaireController extends AbstractController
         ]);
     }
 
-    #[Route('/listCommentaire', name: 'list_commentaire')]
-    public function list(ReclamationCommentaireRepository $repository)
+    #[Route('/backoffice/listCommentaire', name: 'list_commentaire_back')]
+    public function listCommenatireBack(ReclamationCommentaireRepository $repository)
     {
         $commentaire= $repository->findAll();
 
-        return $this->render("frontoffice/Commentaire/listeCommentaire.html.twig",
+        return $this->render("backoffice/ReclamationCommentaire/listeCommentaire.html.twig",
+            array('tabCommentaire'=>$commentaire));
+    }
+
+    #[Route('/frontoffice/listCommentaire', name: 'list_commentaire_front')]
+    public function listCommentaireFront(ReclamationCommentaireRepository $repository)
+    {
+        $commentaire= $repository->findAll();
+
+        return $this->render("frontoffice/ReclamationCommentaire/listeCommentaire.html.twig",
             array('tabCommentaire'=>$commentaire));
     }
 
 
-    #[Route('/addcommentaire', name: 'add_commentaire')]
-    public function addCommentaire(Request $request,ManagerRegistry $managerRegistry)
+    #[Route('/addCommentaireFront', name: 'add_commentaire_front')]
+    public function addCommentaireFront(Request $request,ManagerRegistry $managerRegistry)
     {
         $commentaire= new ReclamationCommentaire();
         $form= $this->createForm(CommentaireType::class,$commentaire);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em= $managerRegistry->getManager();
             $em->persist($commentaire);
             $em->flush();
-            return new Response("Done!");
+            return $this->redirectToRoute("list_commentaire_front");
         }
-        return $this->renderForm("frontoffice/Commentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
+        return $this->renderForm("frontoffice/ReclamationCommentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
 
-    #[Route('/UpdateCommentaire/{id}', name: 'app_updateCommentaire')]
+
+    #[Route('/addCommentaireBack', name: 'add_commentaire_back')]
+    public function addCommentaireBack(Request $request,ManagerRegistry $managerRegistry)
+    {
+        $commentaire= new ReclamationCommentaire();
+        $form= $this->createForm(CommentaireType::class,$commentaire);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $em= $managerRegistry->getManager();
+            $em->persist($commentaire);
+            $em->flush();
+            return $this->redirectToRoute("list_commentaire_back");
+        }
+        return $this->renderForm("backoffice/ReclamationCommentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
+    }
+
+    #[Route('/UpdateCommentaireFront/{id}', name: 'app_updateCommentaire_front')]
     public function UpdateCommentaire(Request $request,ReclamationCommentaireRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
@@ -55,20 +80,46 @@ class CommentaireController extends AbstractController
         if($form->isSubmitted()){
             $em=$managerRegistry->getManager();
             $em->flush();
-            return $this->redirectToRoute("list_commentaire");
+            return $this->redirectToRoute("list_commentaire_front");
         }
-        return $this->renderForm("frontoffice/Commentaire/updateCommentaire.html.twig",["formulaireCommentaire"=>$form]);
+        return $this->renderForm("frontoffice/ReclamationCommentaire/updateCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
 
-    #[Route('/deleteCommentaire/{id}', name: 'app_deleteCommentaire')]
+    #[Route('/UpdateCommentaireBack/{id}', name: 'app_updateCommentaire_back')]
+    public function UpdateCommentaireBack(Request $request,ReclamationCommentaireRepository $repository,$id,ManagerRegistry $managerRegistry)
+    {
+        $commentaire=$repository->find($id);
+        $form=$this->createForm(CommentaireType::class,$commentaire);
+        $form->handleRequest($request);
+        if($form->isSubmitted()){
+            $em=$managerRegistry->getManager();
+            $em->flush();
+            return $this->redirectToRoute("list_commentaire_back");
+        }
+        return $this->renderForm("backoffice/ReclamationCommentaire/updateCommentaire.html.twig",["formulaireCommentaire"=>$form]);
+    }
 
-    public function DeleteCommentaire ($id, ReclamationCommentaireRepository $repository,ManagerRegistry $managerRegistry)
+    #[Route('/deleteCommentaireFront/{id}', name: 'app_deleteCommentaire_front')]
+
+    public function DeleteCommentaireFront ($id, ReclamationCommentaireRepository $repository,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
         $em=$managerRegistry->getManager();
         $em->remove($commentaire);
         $em->flush();
 
-        return $this->redirectToRoute("list_commentaire");
+        return $this->redirectToRoute("list_commentaire_front");
+    }
+
+    #[Route('/deleteCommentaireBack/{id}', name: 'app_deleteCommentaire_back')]
+
+    public function DeleteCommentaireBack ($id, ReclamationCommentaireRepository $repository,ManagerRegistry $managerRegistry)
+    {
+        $commentaire=$repository->find($id);
+        $em=$managerRegistry->getManager();
+        $em->remove($commentaire);
+        $em->flush();
+
+        return $this->redirectToRoute("list_commentaire_back");
     }
 }

@@ -1,0 +1,48 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Commentaire{% endblock %}
+
+
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1>Liste de commentaire</h1>
+<table border="1">
+    <tr>
+        <td>Id</td>
+        <td>Contenu</td>
+        <td>DateCreation</td>
+        <td>Réclamation</td>
+
+
+    </tr>
+    {% for i in tabCommentaire %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.contenu}}</td>
+            <td>{{i.dateCreation | date}}</td>
+            <td>{{i.Reclamation}}</td>
+
+
+             <td>
+                 <a href = "{{ path('app_deleteCommentaire_back', { id: i.id }) }}"> Supprimer </a>
+                 <a href = "{{ path('app_updateCommentaire_back', { id: i.id }) }}"> Modifier </a>
+             </td>
+
+        </tr>
+    {% endfor %}
+
+            <a href = "{{ path('add_commentaire_back') }}"> Ajouter </a>
+
+</table>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+{% endblock %}

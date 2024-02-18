@@ -16,6 +16,8 @@
         <td>Id</td>
         <td>Contenu</td>
         <td>DateCreation</td>
+        <td>Réclamation</td>
+
 
     </tr>
     {% for i in tabCommentaire %}
@@ -23,14 +25,19 @@
             <td>{{i.id}}</td>
             <td>{{i.contenu}}</td>
             <td>{{i.dateCreation | date}}</td>
+            <td>{{i.Reclamation}}</td>
+
 
              <td>
-                 <a href = "{{ path('app_deleteCommentaire', { id: i.id }) }}"> Delete </a>
-                 <a href = "{{ path('app_updateCommentaire', { id: i.id }) }}"> Edit </a>
+                 <a href = "{{ path('app_deleteCommentaire_front', { id: i.id }) }}"> Supprimer </a>
+                 <a href = "{{ path('app_updateCommentaire_front', { id: i.id }) }}"> Modifier </a>
              </td>
 
         </tr>
     {% endfor %}
+
+            <a href = "{{ path('add_commentaire_front') }}"> Ajouter </a>
+
 </table>
 <br>
 <br>
