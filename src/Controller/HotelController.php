@@ -36,7 +36,7 @@ class HotelController extends AbstractController
             return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('frontoffice/hotel/new1.html.twig', [
+        return $this->renderForm('backoffice/new1.html.twig', [
             'hotel' => $hotel,
             'form' => $form,
         ]);
