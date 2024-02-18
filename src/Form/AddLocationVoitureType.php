@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+use App\Repository\VoitureRepository;
+
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -38,6 +40,18 @@ class AddLocationVoitureType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => "veuillez entrer un type",
+                    ]),
+                ]
+            ])
+            ->add('voiture', null, [
+                'query_builder' => function (VoitureRepository $repo) {
+                    return $repo->createQueryBuilder('voiture')
+                        ->leftJoin('voiture.locationVoiture', 'loc')
+                        ->where('loc.id IS NULL');
+                },
+                'constraints' => [
+                    new NotBlank([
+                        'message' => "veuillez choisir une voiture",
                     ]),
                 ]
             ])

@@ -28,6 +28,9 @@ class Voiture
     #[ORM\Column]
     private ?int $capacite = null;
 
+    #[ORM\OneToOne(mappedBy: 'voiture', cascade: ['persist', 'remove'])]
+    private ?LocationVoiture $locationVoiture = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,28 @@ class Voiture
     public function setCapacite(int $capacite): static
     {
         $this->capacite = $capacite;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getModel() . "(" . $this->getMarque() . ")";
+    }
+
+    public function getLocationVoiture(): ?LocationVoiture
+    {
+        return $this->locationVoiture;
+    }
+
+    public function setLocationVoiture(LocationVoiture $locationVoiture): static
+    {
+        // set the owning side of the relation if necessary
+        if ($locationVoiture->getVoiture() !== $this) {
+            $locationVoiture->setVoiture($this);
+        }
+
+        $this->locationVoiture = $locationVoiture;
 
         return $this;
     }

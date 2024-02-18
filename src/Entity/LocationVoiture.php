@@ -29,6 +29,10 @@ class LocationVoiture
     #[ORM\Column(length: 255)]
     private ?string $status = "disponible";
 
+    #[ORM\OneToOne(inversedBy: 'locationVoiture', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Voiture $voiture = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,5 +96,22 @@ class LocationVoiture
         $this->status = $status;
 
         return $this;
+    }
+
+    public function getVoiture(): ?Voiture
+    {
+        return $this->voiture;
+    }
+
+    public function setVoiture(Voiture $voiture): static
+    {
+        $this->voiture = $voiture;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getStatus();
     }
 }

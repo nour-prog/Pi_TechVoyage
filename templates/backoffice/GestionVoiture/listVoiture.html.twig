@@ -16,6 +16,7 @@
         <td>Energie</td>
         <td>Capacité</td>
         <td>Couleur</td>
+        <td>location</td>
     </tr>
     {% for i in voitureArr %}
         <tr>
@@ -25,6 +26,8 @@
             <td>{{i.energy}}</td>
             <td>{{i.capacite}}</td>
             <td>{{i.couleur}}</td>
+            <td>{{i.locationVoiture}}</td>
+            
 
             <td>
                 <a href = "{{ path('app_updateVoiture', { id: i.id }) }}"> Modifier </a>
