@@ -1,0 +1,38 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}list voiture{% endblock %}
+
+
+{% block body %}
+<h1>Liste des voitures</h1>
+
+<a href="{{ path('app_createVoiture') }}"> Ajout Voiture </a>
+
+<table border="1">
+    <tr>
+        <td>Id</td>
+        <td>Modéle</td>
+        <td>Marque</td>
+        <td>Energie</td>
+        <td>Capacité</td>
+        <td>Couleur</td>
+    </tr>
+    {% for i in voitureArr %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.model}}</td>
+            <td>{{i.marque}}</td>
+            <td>{{i.energy}}</td>
+            <td>{{i.capacite}}</td>
+            <td>{{i.couleur}}</td>
+
+            <td>
+                <a href = "{{ path('app_updateVoiture', { id: i.id }) }}"> Modifier </a>
+                <a href = "{{ path('app_deleteVoiture', { id: i.id }) }}"> Supprimer </a>
+             </td>
+
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

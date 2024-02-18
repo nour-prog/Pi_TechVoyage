@@ -1,0 +1,8 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}ajout voiture{% endblock %}
+
+
+{% block body %}
+    {{ form(formulaireVoiture, {attr: {novalidate: 'novalidate'}}) }}
+{% endblock %}
