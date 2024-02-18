@@ -18,11 +18,12 @@
         <td>Id</td>
         <td>Nom</td>
         <td>Prenom</td>
-        <td>Num</td>
-        <td>email</td>
-        <td>roles</td>
-        <td>password</td>
-        <td>isVerified</td>
+        <td>Numéro de téléphone</td>
+        <td>Email</td>
+        <td>Roles</td>
+        <td>Password</td>
+        <td>IsVerified</td>
+        <td>Action</td>
 
     </tr>
     {% for i in tabUser %}
@@ -36,8 +37,8 @@
             <td>{{i.password}}</td>
             <td>{{i.isVerified}}</td>
             <td>
-                <a href = "{{ path('app_deleteUser', { id: i.id }) }}"> Delete </a>
-                <a href = "{{ path('app_UpdateUser', { id: i.id }) }}"> Edit </a>
+                <a href = "{{ path('app_deleteUser', { id: i.id }) }}"> Supprimer </a>
+                <a href = "{{ path('app_UpdateUser', { id: i.id }) }}"> Modifier </a>
             </td>
         </tr>
         
