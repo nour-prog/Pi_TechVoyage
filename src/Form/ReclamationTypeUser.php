@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
-class ReclamationType extends AbstractType
+class ReclamationTypeUser extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -34,7 +34,6 @@ class ReclamationType extends AbstractType
             ],
         ])
             
-            ->add('estTraite')
             ->add('Submit',SubmitType::class)
 
         ;

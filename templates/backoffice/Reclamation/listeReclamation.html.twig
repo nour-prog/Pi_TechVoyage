@@ -18,8 +18,8 @@
         <td>Id</td>
         <td>Sujet</td>
         <td>Description</td>
+        <td>Date de soumission</td>
         <td>EstTraite</td>
-        <td>DateSoumission</td>
 
     </tr>
     {% for i in tabReclamation %}
@@ -27,16 +27,23 @@
             <td>{{i.id}}</td>
             <td>{{i.Sujet}}</td>
             <td>{{i.Description}}</td>
-            <td>{{i.EstTraite}}</td>
 
             {% if i.DateSoumission is not null %}
                 <td>{{ i.DateSoumission|date }}</td>
             {% else %}
                 <td></td>
             {% endif %}
-
+            <td>
+            {% if i.EstTraite  %}
+                <i class="fas fa-check"></i>
+            {% else %}
+                <i class="fas fa-times"></i>
+            {% endif %}
+            </td>
             <td>
                  <a href = "{{ path('app_deleteReclamation_back', { id: i.id }) }}"> Supprimer </a>
+                 <a href = "{{ path('app_updateReclamation_back', { id: i.id }) }}"> Modifier </a>
+
              </td>
 
         </tr>

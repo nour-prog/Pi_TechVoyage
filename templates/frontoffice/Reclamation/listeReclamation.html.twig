@@ -18,7 +18,6 @@
         <td>Id</td>
         <td>Sujet</td>
         <td>Description</td>
-        <td>EstTraite</td>
         <td>DateSoumission</td>
         
 
@@ -28,7 +27,6 @@
             <td>{{i.id}}</td>
             <td>{{i.Sujet}}</td>
             <td>{{i.Description}}</td>
-            <td>{{i.EstTraite}}</td>
              {% if i.DateSoumission is not null %}
                 <td>{{ i.DateSoumission|date }}</td>
             {% else %}
@@ -38,7 +36,7 @@
 
             <td>
                  <a href = "{{ path('app_deleteReclamation_front', { id: i.id }) }}"> Supprimer </a>
-                 <a href = "{{ path('app_updateReclamation', { id: i.id }) }}"> Modifier </a>
+                 <a href = "{{ path('app_updateReclamation_front', { id: i.id }) }}"> Modifier </a>
 
              </td>
 

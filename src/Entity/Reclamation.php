@@ -27,7 +27,7 @@ class Reclamation
    
 
     #[ORM\Column(nullable: true)]
-    private ?bool $estTraite = null;
+    private ?bool $estTraite = false;
 
     #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'Reclamation', cascade: ['persist', 'remove']    )]
     private Collection $reclamationCommentaires;

@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Reclamation;
-use App\Form\ReclamationType;
+use App\Form\ReclamationTypeUser;
+use App\Form\ReclamationTypeAdmin;
 use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +44,7 @@ class ReclamationController extends AbstractController
     public function addReclamation(Request $request,ManagerRegistry $managerRegistry)
     {
         $reclamation= new Reclamation();
-        $form= $this->createForm(ReclamationType::class,$reclamation);
+        $form= $this->createForm(ReclamationTypeUser::class,$reclamation);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $em= $managerRegistry->getManager();
@@ -57,11 +58,11 @@ class ReclamationController extends AbstractController
 
     
 
-    #[Route('/UpdateReclamation/{id}', name: 'app_updateReclamation')]
-    public function UpdateReclamation(Request $request,ReclamationRepository $repository,$id,ManagerRegistry $managerRegistry)
+    #[Route('/UpdateReclamationFront/{id}', name: 'app_updateReclamation_front')]
+    public function UpdateReclamationFront(Request $request,ReclamationRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $reclamation=$repository->find($id);
-        $form=$this->createForm(ReclamationType::class,$reclamation);
+        $form=$this->createForm(ReclamationTypeUser::class,$reclamation);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
@@ -70,6 +71,20 @@ class ReclamationController extends AbstractController
         }
         return $this->renderForm("frontoffice/Reclamation/updateReclamation.html.twig",["formulaireReclamation"=>$form]);
 
+    }
+
+    #[Route('/UpdateReclamationBack/{id}', name: 'app_updateReclamation_back')]
+    public function UpdateReclamationBack(Request $request,ReclamationRepository $repository,$id,ManagerRegistry $managerRegistry)
+    {
+        $reclamation=$repository->find($id);
+        $form=$this->createForm(ReclamationTypeAdmin::class,$reclamation);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $em=$managerRegistry->getManager();
+            $em->flush();
+            return $this->redirectToRoute("list_reclamation_back");
+        }
+        return $this->renderForm("backoffice/Reclamation/updateReclamation.html.twig",["formulaireReclamation"=>$form]);
     }
 
     #[Route('/deleteReclamationBack/{id}', name: 'app_deleteReclamation_back')]
