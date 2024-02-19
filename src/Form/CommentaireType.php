@@ -16,23 +16,9 @@ class CommentaireType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('contenu', null, [
-            'constraints' => [
-                new NotBlank(['message' => 'Le contenu ne peut pas être vide']),
-                new Length([
-                    'min' => 3,
-                    'max' => 255,
-                    'minMessage' => 'Le contenu doit comporter au moins {{ limit }} caractères',
-                    'maxMessage' => 'Le contenu ne peut pas dépasser {{ limit }} caractères',
-                ]),
-            ],
-        ])
-            ->add('Reclamation', null, [
-                'constraints' => [
-                    new NotBlank(['message' => 'Veuillez choisir la réclamation.']),
-                ],
-            ])           
-             ->add('Submit',SubmitType::class)
+        ->add('contenu')
+        ->add('Reclamation',null,['placeholder' => "choisir la réclamation",])           
+        ->add('Submit',SubmitType::class)
 
         ;
     }

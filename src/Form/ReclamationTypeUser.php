@@ -17,25 +17,9 @@ class ReclamationTypeUser extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('sujet', null, [
-            'constraints' => [
-                new NotBlank(['message' => 'Ce champ est obligatoire. Veuillez entrer un sujet.']), 
-                new Length([
-                    'min' => 3,
-                    'max' => 255,
-                    'minMessage' => 'Le sujet doit comporter au moins {{ limit }} caractères',
-                    'maxMessage' => 'Le sujet ne peut pas dépasser {{ limit }} caractères',
-                ]),
-            ],
-        ])
-        ->add('description', null, [
-            'constraints' => [
-                new NotBlank(['message' => 'Veuillez fournir une description pour cette réclamation.']),
-            ],
-        ])
-            
-            ->add('Submit',SubmitType::class)
-
+        ->add('sujet')
+        ->add('description')  
+        ->add('Submit',SubmitType::class)
         ;
     }
 

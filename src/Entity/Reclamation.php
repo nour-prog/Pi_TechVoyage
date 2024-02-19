@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
@@ -17,9 +18,15 @@ class Reclamation
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+
+    #[Assert\NotBlank(message: "Ce champ est obligatoire. Veuillez entrer un sujet.")]
+    #[Assert\Length(min : 3,max: 255, minMessage : "Le sujet doit comporter au moins {{ limit }} caractères",
+    maxMessage: "Le sujet ne peut pas dépasser {{ limit }} caractères")]
     private ?string $sujet = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+
+    #[Assert\NotBlank(message: "Veuillez fournir une description pour cette réclamation.")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
