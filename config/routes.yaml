@@ -1,3 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+app_publication_showback:
+    path: '/publication/{id}'
+    controller: 'App\Controller\PublicationController::show'
+    methods: ['GET']
+
+app_publication_showfront:
+    path: '/front/publication/{id}'
+    controller: 'App\Controller\PublicationController::showFront'
+    methods: ['GET']

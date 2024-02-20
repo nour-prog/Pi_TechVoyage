@@ -1,0 +1,48 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block body %}
+    <h1>{% if publication.id is null %}Create new{% else %}Edit{% endif %} Publication</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{% if publication.id is null %}Create new{% else %}Edit{% endif %} Publication</h5>
+            <div class="row mb-3">
+                {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+
+                <label for="inputText" class="col-sm-4 col-form-label">Title</label>
+                <div class="col-sm-10" style="min-width: 500px">
+                    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.title) %}
+                        <div class="text-danger">{{ form_errors(form.title) }}</div>
+                    {% endif %}
+                </div>
+
+                <label for="inputText" class="col-sm-4 col-form-label">Short Description</label>
+                <div class="col-sm-10" style="min-width: 500px">
+                    {{ form_widget(form.shortDescription, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.shortDescription) %}
+                        <div class="text-danger">{{ form_errors(form.shortDescription) }}</div>
+                    {% endif %}
+                </div>
+
+                <label for="inputText" class="col-sm-4 col-form-label">Content</label>
+                <div class="col-sm-10" style="min-width: 500px">
+                    {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+                    {% if form_errors(form.content) %}
+                        <div class="text-danger">{{ form_errors(form.content) }}</div>
+                    {% endif %}
+                </div>
+
+
+
+                <br/>
+                <div class="col-sm-10" style="display: flex; align-items: center; justify-content: flex-end">
+                    {{ form_widget(form.ajouter) }}
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

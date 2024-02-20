@@ -1,0 +1,40 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block body %}
+    <h1>Publication</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ publication.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ publication.title }}</td>
+            </tr>
+            <tr>
+                <th>ShortDescription</th>
+                <td>{{ publication.shortDescription }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ publication.content }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ publication.createdAt ? publication.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ publication.updatedAt ? publication.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ publication.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+{% endblock %}

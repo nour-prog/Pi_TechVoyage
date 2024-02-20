@@ -5,7 +5,9 @@ namespace App\Entity;
 use App\Repository\PublicationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 #[ORM\Entity(repositoryClass: PublicationRepository::class)]
 class Publication
 {
@@ -15,26 +17,40 @@ class Publication
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 20,
+        maxMessage: "Title cannot be longer than 20 characters."
+    )]
     private ?string $shortDescription = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\ManyToOne(inversedBy: 'publications')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?ForumCommentaire $commentaire = null;
-
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+      pattern: "/^[^\s]+\.[^\s]+$/",
+      message: "The value '{{ value }}' is not a valid file path."
+    )
+    ]
+ 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
+
+    #[ORM\OneToMany(targetEntity: ForumCommentaire::class, mappedBy: 'publication', cascade: ['remove'])]
+
+    private Collection $comments;
+
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,41 +93,6 @@ class Publication
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getCommentaire(): ?ForumCommentaire
-    {
-        return $this->commentaire;
-    }
-
-    public function setCommentaire(?ForumCommentaire $commentaire): static
-    {
-        $this->commentaire = $commentaire;
-
-        return $this;
-    }
 
     public function getImage(): ?string
     {
@@ -124,4 +105,30 @@ class Publication
 
         return $this;
     }
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(ForumCommentaire $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setPublication($this);
+        }
+
+        return $this;
+    }
+    public function removeComment(ForumCommentaire $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getPublication() === $this) {
+                $comment->setPublication(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

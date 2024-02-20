@@ -1,0 +1,32 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block body %}
+    <h1>ForumCommentaire</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ forum_commentaire.id }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ forum_commentaire.content }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ forum_commentaire.createdAt ? forum_commentaire.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ forum_commentaire.updatedAt ? forum_commentaire.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_forum_commentaire_index') }}">back to list</a>
+
+
+
+
+{% endblock %}
