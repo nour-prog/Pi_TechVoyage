@@ -57,7 +57,7 @@ class GestionLocationVoiture extends AbstractController
         $locationVoiture=$repository->find($id);
         $form=$this->createForm(UpdateLocationVoitureType::class,$locationVoiture);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("app_listLocationVoiture");

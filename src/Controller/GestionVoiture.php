@@ -56,7 +56,7 @@ class GestionVoiture extends AbstractController
         $voiture=$repository->find($id);
         $form=$this->createForm(VoitureType::class,$voiture);
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("app_listVoiture");

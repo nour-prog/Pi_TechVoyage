@@ -20,6 +20,7 @@ class UpdateLocationVoitureType extends AbstractType
     {
         $builder
             ->add('prix', NumberType::class,[
+                'empty_data' => '0',
                 'label' => 'Prix Par Jour ($)',
                 'constraints' => [
                     new NotBlank([
@@ -28,6 +29,7 @@ class UpdateLocationVoitureType extends AbstractType
                 ]
             ])
             ->add('type', ChoiceType::class,[
+                'empty_data' => 'null',
                 'choices' => [
                     'Sports' => 'Sports',
                     'Famille' => 'Famille',
@@ -42,6 +44,7 @@ class UpdateLocationVoitureType extends AbstractType
                 ]
             ])
             ->add('status', ChoiceType::class, [
+                'empty_data' => 'null',
                 'choices' => [
                     'disponible' => 'disponible',
                     'réservé' => 'réservé',

@@ -21,6 +21,7 @@ class VoitureType extends AbstractType
     {
         $builder
             ->add('couleur', TextType::class, [
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'veuillez entrer une couleur',
@@ -28,6 +29,7 @@ class VoitureType extends AbstractType
                 ]
             ])
             ->add('marque', TextType::class, [
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'veuillez entrer une marque',
@@ -35,6 +37,7 @@ class VoitureType extends AbstractType
                 ]
             ])
             ->add('model', TextType::class, [
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'veuillez entrer un modèle',
@@ -42,6 +45,7 @@ class VoitureType extends AbstractType
                 ]
             ])
             ->add('energy', ChoiceType::class, [
+                'empty_data' => "null",
                 'choices' => [
                     'Gasoline' => 'Gasoline',
                     'Diesel' => 'Diesel',
@@ -55,6 +59,7 @@ class VoitureType extends AbstractType
                 ]
             ])
             ->add('capacite', IntegerType::class, [
+                'empty_data' => "0",
                 'constraints' => [
                     new NotBlank([
                         'message' => 'veuillez entrer une capacité',
