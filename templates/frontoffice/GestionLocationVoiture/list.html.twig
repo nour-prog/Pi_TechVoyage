@@ -1,13 +1,20 @@
-{% extends 'backoffice/base.html.twig' %}
+{% extends 'frontoffice/base.html.twig' %}
 
 {% block title %}list location voiture{% endblock %}
 
 
 {% block body %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 <h1>Liste des Location voitures</h1>
 
-<a href="{{ path('app_createLocationVoiture') }}"> Ajout Location Voiture </a>
-
+<a href="{{ path('app_listReserved_user') }}"> Mes voitures réservés </a>
 <table border="1">
     <tr>
         <td>Id</td>
@@ -34,19 +41,23 @@
             {% else %}
                 <td></td>
             {% endif %}
-
+            
             
             <td>{{i.type}}</td>
             <td>{{i.status}}</td>
             <td>{{i.voiture}}</td>
-
             <td>
-                <a href = "{{ path('app_updateLocationVoiture', { id: i.id }) }}"> Modifier </a>
-                <a href = "{{ path('app_deleteLocationVoiture', { id: i.id }) }}"> Supprimer </a>
-             </td>
-
+                <a href = "{{ path('app_updateLocationVoiture', { id: i.id }) }}"> Réserver </a>
+            </td>
         </tr>
     {% endfor %}
 </table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 {% endblock %}

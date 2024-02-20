@@ -65,6 +65,33 @@ class GestionLocationVoiture extends AbstractController
         return $this->renderForm("backoffice/GestionLocationVoiture/update.html.twig",["formulaireLocationVoiture"=>$form]);
     }
 
-    // Frontoffice: reserve location voiture
+    // Frontoffice: consult/reserve location voiture
+    #[Route('/locationVoiture', name: 'app_listLocationVoiture_user')]
+    public function listVoiture_user(LocationVoitureRepository $repository)
+    {
+        // $locationVoitures= $repository->findAll();
+        $locationVoitures = $repository->findBy(['status' => 'disponible']);
+        
+        return $this->render("frontoffice/GestionLocationVoiture/list.html.twig",
+            array('locationVoitureArr'=>$locationVoitures));
+    }
+    
+
+    #[Route('/locationVoiture/myReserved', name: 'app_listReserved_user')]
+    public function listReserved_user(LocationVoitureRepository $repository)
+    {
+        // $locationVoitures= $repository->findAll();
+        $locationVoitures = $repository->findBy(['status' => 'réservé']);
+        
+        return $this->render("frontoffice/GestionLocationVoiture/reservedList.html.twig",
+            array('locationVoitureArr'=>$locationVoitures));
+    }
+    
+
+    #[Route('/locationVoiture/reserve', name: 'app_reserveVoiture_user')]
+    public function reserveVoiture_user(LocationVoitureRepository $repository)
+    {
+    }
+    
 
 }
