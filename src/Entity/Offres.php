@@ -34,6 +34,18 @@ class Offres
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+    public function __construct(?DateTimeImmutable $createdAt = null) {
+        if ($createdAt === null) {
+            $createdAt = new \DateTimeImmutable();
+        }
+        $this->createdAt = $createdAt;
+    }
+    
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +119,18 @@ class Offres
     public function setImage(?string $image): static
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

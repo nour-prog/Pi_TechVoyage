@@ -1,0 +1,58 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Ajouter un Offre!{% endblock %}
+
+{% block body %}
+
+<h1>Ajouter un Offre</h1>
+
+    
+    {{ form_start(form)}}
+
+    <div class="form-group">
+    {{form_label(form.title)}}
+    <br>
+    {{ form_widget(form.title)}}
+
+    </div>
+    <br>
+    <br>
+        <div class="form-group">
+    {{ form_label(form.description)}}
+    <br>
+    {{ form_widget(form.description)}}
+    </div>
+<br>
+<br>
+    <div class="form-group">
+    {{ form_label(form.lieu)}}
+    <br>
+    {{ form_widget(form.lieu)}}
+    </div>
+    <br>
+    <br>
+
+        <div class="form-group">
+    {{ form_label(form.prix)}}
+    <br>
+    {{ form_widget(form.prix)}}
+    </div>
+<br>
+<br>
+        <div class="form-group">
+    {{ form_label(form.image)}}
+    <br>
+    {{ form_widget(form.image)}}
+    </div>
+<br>
+<br>
+
+    <button class="btn btn-primary"> Ajouter</button>
+
+    {{form_end(form)}}
+ 
+
+    
+
+
+{% endblock %}
