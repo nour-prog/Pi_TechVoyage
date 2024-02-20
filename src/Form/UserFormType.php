@@ -21,6 +21,7 @@ class UserFormType extends AbstractType
     {
         $builder
             ->add('email', TextType::class , [
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'veuillez entrer une adresse mail',
@@ -31,6 +32,7 @@ class UserFormType extends AbstractType
                 ]
             ])
             ->add('nom',TextType::class , [
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'veuillez entrer le nom',
@@ -38,6 +40,7 @@ class UserFormType extends AbstractType
                 ]
             ])
             ->add('prenom',TextType::class , [
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank([
                              'message' => 'veuillez entrer le prenom',
@@ -45,6 +48,7 @@ class UserFormType extends AbstractType
                        ]
                    ])
             ->add('num_tel', null , [
+                'empty_data' => '0',
                  'constraints' => [
                         new NotBlank([
                             'message' => 'veuillez entrer le prenom',
