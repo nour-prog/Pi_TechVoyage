@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -18,6 +19,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: "Ce champ est obligatoire. Veuillez entrer votre mail.")]
+    /**
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' is not a valid email."
+     * )
+     */
     private ?string $email = null;
 
     #[ORM\Column]
@@ -33,12 +40,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Ce champ est obligatoire. Veuillez entrer votre nom.")]
+    #[Assert\Length(min : 3,max: 255, minMessage : "Le nom doit comporter au moins {{ limit }} caractères",
+    maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Ce champ est obligatoire. Veuillez entrer votre prenom.")]
+    #[Assert\Length(min : 3,max: 255, minMessage : "Le prenom doit comporter au moins {{ limit }} caractères",
+    maxMessage: "Le prenom ne peut pas dépasser {{ limit }} caractères")]
     private ?string $prenom = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Ce champ est obligatoire. Veuillez entrer votre numéro de téléphone.")]
+    #[Assert\Length(min : 8,max: 13, minMessage : "Le numéro de téléphone doit comporter au moins {{ limit }} chiffres",
+    maxMessage: "Le numéro de téléphone ne peut pas dépasser {{ limit }} chiffres")]
     private ?int $num_tel = null;
 
     public function getId(): ?int

@@ -20,42 +20,10 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', TextType::class , [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'veuillez entrer une adresse mail',
-                    ]),
-                    new Email([
-                        'message' => 'l e-mail {{ value }} n est pas une adresse e-mail valide',
-                    ])
-                ]
-            ])
-            ->add('nom',TextType::class , [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'veuillez entrer le nom',
-                    ])
-                ]
-            ])
-            ->add('prenom',TextType::class , [
-                 'constraints' => [
-                    new NotBlank([
-                         'message' => 'veuillez entrer le prenom',
-                    ])
-                ]
-            ])
-            ->add('num_tel', null , [
-                 'constraints' => [
-                     new NotBlank([
-                        'message' => 'veuillez entrer le prenom',
-                     ]),
-                    new Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre numéro de téléphone doit comporter au moins {{ limit }} caractères',
-                        'max' => 13,
-                    ]),
-                ]
-            ])
+            ->add('email')
+            ->add('nom')
+            ->add('prenom')
+            ->add('num_tel')
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
