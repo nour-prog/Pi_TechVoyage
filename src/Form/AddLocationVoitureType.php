@@ -44,6 +44,7 @@ class AddLocationVoitureType extends AbstractType
                 ]
             ])
             ->add('voiture', null, [
+                'placeholder' => "choisir une voiture",
                 'query_builder' => function (VoitureRepository $repo) {
                     return $repo->createQueryBuilder('voiture')
                         ->leftJoin('voiture.locationVoiture', 'loc')
@@ -55,7 +56,9 @@ class AddLocationVoitureType extends AbstractType
                     ]),
                 ]
             ])
-            ->add('Submit',SubmitType::class)
+            ->add('Submit',SubmitType::class,[
+                "label"=> "Ajouter"
+            ])
         ;
     }
 

@@ -56,7 +56,9 @@ class UpdateLocationVoitureType extends AbstractType
                     ]),
                 ]
             ])
-            ->add('Submit',SubmitType::class)
+            ->add('Submit',SubmitType::class,[
+                "label"=> "modifier"
+            ])
         ;
     }
 

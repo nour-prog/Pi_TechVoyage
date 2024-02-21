@@ -93,6 +93,7 @@ class GestionLocationVoiture extends AbstractController
     public function reserveVoiture_user(Request $request, $id, LocationVoitureRepository $repository, ManagerRegistry $managerRegistry)
     {
         $locationVoiture=$repository->find($id);
+        $voiture=$locationVoiture->getVoiture();
         $form=$this->createForm(ReserveLocationVoitureType::class,$locationVoiture);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
@@ -103,6 +104,6 @@ class GestionLocationVoiture extends AbstractController
             $em->flush();
             return $this->redirectToRoute("app_listLocationVoiture_user");
         }
-        return $this->renderForm("frontoffice/GestionLocationVoiture/reserveVoiture.html.twig",["formulaireLocationVoiture"=>$form]);
+        return $this->renderForm("frontoffice/GestionLocationVoiture/reserveVoiture.html.twig",["formulaireLocationVoiture"=>$form, "voiture"=>$voiture]);
     }
 }
