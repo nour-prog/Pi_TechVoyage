@@ -11,47 +11,43 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-use App\Repository\VoitureRepository;
 
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Expression;
 
 class ReserveLocationVoitureType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $currentDate = new \DateTime();
+
         $builder
-            ->add('prix', NumberType::class,[
-                'label' => 'Prix Par Jour ($)',
+            ->add('dateDebut', null, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => "veuillez entrer un prix",
+                        'message' => "veuillez entrer un date",
+                    ]),
+                    new GreaterThan([
+                        'value' => $currentDate,
+                        'message' => 'La date doit être ultérieure à la date actuelle.',
                     ]),
                 ]
             ])
-            ->add('type', ChoiceType::class,[
-                'choices' => [
-                    'Sports' => 'Sports',
-                    'Famille' => 'Famille',
-                    'Minivan' => 'Minivan',
-                    'Luxe' => 'Luxe',
-                ],
-                'placeholder' => "choisir le type du voiture",
+            ->add('datefin', null, [
                 'constraints' => [
                     new NotBlank([
-                        'message' => "veuillez entrer un type",
+                        'message' => "veuillez entrer un date",
                     ]),
-                ]
-            ])
-            ->add('voiture', null, [
-                'query_builder' => function (VoitureRepository $repo) {
-                    return $repo->createQueryBuilder('voiture')
-                        ->leftJoin('voiture.locationVoiture', 'loc')
-                        ->where('loc.id IS NULL');
-                },
-                'constraints' => [
-                    new NotBlank([
-                        'message' => "veuillez choisir une voiture",
+                    new GreaterThan([
+                        'value' => $currentDate,
+                        'message' => 'La date doit être ultérieure à la date actuelle.',
+                    ]),
+                    new GreaterThan([
+                        'propertyPath' => 'parent.all[dateDebut].data',
+                        'message' => 'La date fin doit être ultérieure à la date debut.',
                     ]),
                 ]
             ])

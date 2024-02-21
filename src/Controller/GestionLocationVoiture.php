@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\LocationVoiture;
 use App\Form\AddLocationVoitureType;
 use App\Form\UpdateLocationVoitureType;
+use App\Form\ReserveLocationVoitureType;
 use App\Repository\LocationVoitureRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -88,10 +89,20 @@ class GestionLocationVoiture extends AbstractController
     }
     
 
-    #[Route('/locationVoiture/reserve', name: 'app_reserveVoiture_user')]
-    public function reserveVoiture_user(LocationVoitureRepository $repository)
+    #[Route('/locationVoiture/reserve/{id}', name: 'app_reserveVoiture_user')]
+    public function reserveVoiture_user(Request $request, $id, LocationVoitureRepository $repository, ManagerRegistry $managerRegistry)
     {
+        $locationVoiture=$repository->find($id);
+        $form=$this->createForm(ReserveLocationVoitureType::class,$locationVoiture);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            //update the status to réservé
+            $locationVoiture->setStatus("réservé");
+            //update the db
+            $em=$managerRegistry->getManager();
+            $em->flush();
+            return $this->redirectToRoute("app_listLocationVoiture_user");
+        }
+        return $this->renderForm("frontoffice/GestionLocationVoiture/reserveVoiture.html.twig",["formulaireLocationVoiture"=>$form]);
     }
-    
-
 }

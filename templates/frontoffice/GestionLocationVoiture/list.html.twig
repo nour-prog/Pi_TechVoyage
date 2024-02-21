@@ -47,7 +47,7 @@
             <td>{{i.status}}</td>
             <td>{{i.voiture}}</td>
             <td>
-                <a href = "{{ path('app_updateLocationVoiture', { id: i.id }) }}"> Réserver </a>
+                <a href = "{{ path('app_reserveVoiture_user', { id: i.id }) }}"> Réserver </a>
             </td>
         </tr>
     {% endfor %}
