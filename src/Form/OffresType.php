@@ -43,6 +43,7 @@ class OffresType extends AbstractType
                     ])
                 ],
             ])
+
             ->add('prix', NumberType::class, [ 
                 "attr" => [
                     "class" =>"from-control"

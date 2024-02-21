@@ -1,7 +1,13 @@
-{% extends 'backoffice/base.html.twig' %}
-{% block title %}Blank{% endblock %}
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}Show{% endblock %}
+
+
 {% block body %}
-<a href="{{ path('offres_ajout')}}" class="btn btn-sm btn-outline-secondary">Add</a>
+<br>
+<br>
+<br>
+<br>
 <main role ="main">
 <div class ="album py-5 bg-light">
 <div class="container-fluid">
@@ -47,10 +53,11 @@
                 <p class="card-text">{{ offres.lieu }}</p>
                 <p class="card-text">{{ offres.prix }}</p>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                        <a href="{{ path('offres_delete', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('Attention, cela va supprimer')">Delete</a>
-                        <a href="{{ path('offres_edit', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                 <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-secondary">Reserver</button>
+                        
                     </div>
+                  
                     <small class="text-muted">{{ offres.createdAt|date("d/m/Y") }}</small>
                 </div>
             </div>
@@ -61,4 +68,5 @@
 </div>
 </div>
 </main>
+
 {% endblock %}

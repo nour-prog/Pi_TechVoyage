@@ -15,4 +15,7 @@ class HomepageController extends AbstractController
             "table" =>$offresRepository->findAll()
         ]);
     }
+
+
+
 }

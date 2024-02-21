@@ -91,6 +91,13 @@ class OffresController extends AbstractController
     }
 
 
+    #[Route('/{id}/show', name: 'offres_show')]
+    public function show($id,OffresRepository $offresRepository): Response{
+        $offres = $offresRepository->findBy(['id'=>$id]);
+        return $this->render('frontoffice/homepage/show.html.twig',[
+            "table"=>$offres,
+        ]);
 
+    }
 
 }
