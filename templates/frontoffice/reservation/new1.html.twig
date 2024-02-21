@@ -1,6 +1,6 @@
 {% extends 'frontoffice/base.html.twig' %}
 
-{% block title %}blank{% endblock %}
+{% block title %}Reservation{% endblock %}
 
 
 {% block body %}
@@ -9,7 +9,13 @@
     <br>
     <br>
     <br>
+    <style>
+        body {
+            background-image: url('{{ asset('frontoffice/images/background.jpg') }}'); /* Set your background image URL */
 
+            /* Add more styling as needed */
+        }
+    </style>
     <h1>Create new Reservation</h1>
 
     {{ include('reservation/_form.html.twig') }}

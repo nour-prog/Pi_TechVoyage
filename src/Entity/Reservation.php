@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ReservationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -18,6 +19,7 @@ class Reservation
     private ?\DateTimeInterface $Datedepart = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+
     private ?\DateTimeInterface $Dateretour = null;
 
     #[ORM\Column(length: 255)]
@@ -30,6 +32,11 @@ class Reservation
     private ?string $Destinationretour = null;
 
     #[ORM\Column]
+
+    #[Assert\Range(
+        min: 0,
+        notInRangeMessage: ""
+    )]
     private ?int $Nbrdepersonne = null;
 
     public function getId(): ?int
