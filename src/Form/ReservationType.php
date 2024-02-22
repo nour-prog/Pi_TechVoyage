@@ -66,6 +66,12 @@ class ReservationType extends AbstractType
                 'label' => 'Date de retour',
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
+                'constraints' => [
+                    new GreaterThan([
+                        'propertyPath' => 'parent.all[dateDepart].data',
+                        'message' => 'La date fin doit être ultérieure à la date debut.',
+                    ]),
+                ]
             ])
         ;
     }

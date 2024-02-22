@@ -28,22 +28,12 @@ class Hotel1Type extends AbstractType
                 // Autres options si nécessaire
             ])
 
-                ->add('nbretoile', IntegerType::class, [
-                    'label' => 'Nombre de etoile',
-                    'constraints' => [
-                        new GreaterThan([
-                            'value'   => 0,
-                            'message' => 'Le nombre de personnes ne peut pas être négatif.',
-                        ]),
-                    ],
-                    // Autres options si nécessaire
-                ])
+                ->add('nbretoile')
             ->add('emplacement')
             ->add('avis', TextType::class, [
-                'label' => 'Avis',
                 'constraints' => [
                     new Assert\Regex([
-                        'pattern' => '/^(?i)(?!.*\b(gros_mot1|gros_mot2|gros_mot3)\b).*/',
+                        'pattern' => '/^(?i)(?!.*\b(gros|gros_mot2|gros_mot3)\b).*/',
                         'message' => 'Des termes offensants ont été détectés dans l\'avis.',
                     ]),
                     new Assert\Regex([
