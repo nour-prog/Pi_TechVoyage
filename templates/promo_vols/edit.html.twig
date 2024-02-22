@@ -1,0 +1,13 @@
+{% extends 'backoffice/base.html.twig' %}
+{% block title %}
+<title>Edit PromoVols</title>
+{% endblock %}
+{% block body %}
+    <h1>Edit PromoVols</h1>
+
+    {{ include('promo_vols/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_promo_vols_index') }}">back to list</a>
+
+    {{ include('promo_vols/_delete_form.html.twig') }}
+{% endblock %}

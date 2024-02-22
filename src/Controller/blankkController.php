@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,26 +10,20 @@ use App\Repository\VolsRepository;
 use App\Repository\PromoVolsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class BlankController extends AbstractController
+class blankkController extends AbstractController
 {
-    #[Route('/frontoffice/vols', name: 'app_blank')]
-    public function index(VolsRepository $volsRepository): Response
-    {
 
-        return $this->render('frontoffice/blank/index.html.twig', [
-            'vols' => $volsRepository->findAll(),
-        ]);
+#[Route('/frontoffice/volspromo', name: 'app_blankk')]
+public function indexpromo(PromoVolsRepository  $PromoVolsRepository): Response
+{
 
-
-
-    }
+return $this->render('frontoffice/blank/volpromo.html.twig', [
+'promo_vols' => $PromoVolsRepository->findAll(),
+]);
 
 
 
-
-
-
-
+}
 
 
 

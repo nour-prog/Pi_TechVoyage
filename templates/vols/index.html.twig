@@ -1,41 +1,27 @@
-{% extends 'frontoffice/base.html.twig' %}
+{% extends 'backoffice/base.html.twig' %}
+{% block title %}
 
-{% block title %}blank{% endblock %}
+<title>Vols index</title>
+{% endblock %}
 
 {% block body %}
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
-
-
-
-
-
     <h1>Vols</h1>
 
     <table class="table">
         <thead>
-        <tr>
-            <th>Id</th>
-            <th>Duree</th>
-            <th>Datedepart</th>
-            <th>Datearrive</th>
-            <th>Nbrescale</th>
-            <th>Nbrplace</th>
-            <th>Classe</th>
-            <th>Destination</th>
-            <th>Pointdepart</th>
-            <th>Prix</th>
-        </tr>
+            <tr>
+                <th>Id</th>
+                <th>Duree</th>
+                <th>Datedepart</th>
+                <th>Datearrive</th>
+                <th>Nbrescale</th>
+                <th>Nbrplace</th>
+                <th>Classe</th>
+                <th>Destination</th>
+                <th>Pointdepart</th>
+                <th>Prix</th>
+                <th>actions</th>
+            </tr>
         </thead>
         <tbody>
         {% for vol in vols %}
@@ -51,7 +37,8 @@
                 <td>{{ vol.pointdepart }}</td>
                 <td>{{ vol.prix }}</td>
                 <td>
-
+                    <a href="{{ path('app_vols_show', {'id': vol.id}) }}">show</a>
+                    <a href="{{ path('app_vols_edit', {'id': vol.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -62,46 +49,5 @@
         </tbody>
     </table>
 
-
-
-
-
-
-
-
-
-
-
-
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    <a href="{{ path('app_vols_new') }}">Create new</a>
 {% endblock %}

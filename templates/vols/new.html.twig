@@ -1,0 +1,13 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}
+<title>New Vols</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Create new Vols</h1>
+
+    {{ include('vols/_form.html.twig') }}
+
+    <a href="{{ path('app_vols_index') }}">back to list</a>
+{% endblock %}

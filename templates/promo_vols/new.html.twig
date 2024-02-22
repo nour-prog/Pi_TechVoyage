@@ -1,0 +1,11 @@
+{% extends 'backoffice/base.html.twig' %}
+{% block title %}
+<title>New PromoVols</title>
+{% endblock %}
+{% block body %}
+    <h1>Create new PromoVols</h1>
+
+    {{ include('promo_vols/_form.html.twig') }}
+
+    <a href="{{ path('app_promo_vols_index') }}">back to list</a>
+{% endblock %}
