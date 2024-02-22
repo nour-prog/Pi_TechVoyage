@@ -13,4 +13,7 @@ class BlankController extends AbstractController
     {
         return $this->render('frontoffice/blank/index.html.twig');
     }
+
+
+    
 }

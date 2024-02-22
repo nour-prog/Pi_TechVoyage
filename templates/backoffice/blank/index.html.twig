@@ -1,7 +1,8 @@
 {% extends 'backoffice/base.html.twig' %}
 {% block title %}Blank{% endblock %}
 {% block body %}
-<a href="{{ path('offres_ajout')}}" class="btn btn-sm btn-outline-secondary">Add</a>
+<a href="{{ path('offres_ajout')}}" class="btn btn-sm btn-outline-secondary">Add offre</a>
+<a href="{{ path('app_affichecommentaireb') }}" class="btn btn-sm btn-outline-secondary">Afficher tous les commentaires</a>
 <main role ="main">
 <div class ="album py-5 bg-light">
 <div class="container-fluid">
@@ -49,7 +50,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="btn-group">
                         <a href="{{ path('offres_delete', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('Attention, cela va supprimer')">Delete</a>
-                        <a href="{{ path('offres_edit', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                        <a href="{{ path('offres_edit', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>             
                     </div>
                     <small class="text-muted">{{ offres.createdAt|date("d/m/Y") }}</small>
                 </div>

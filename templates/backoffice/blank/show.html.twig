@@ -1,0 +1,32 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}OffreCommentaire{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .commentaire {
+            margin-bottom: 20px; /* Adjust the margin-bottom value to control the vertical spacing */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <main role="main">
+        <div class="row">
+            {% for offrecommentaire in commentaires %}
+                <div class="commentaire">
+                    {{ offrecommentaire.avis|trim }}
+                </div>
+                <div class="btn-group">
+                        <a href="{{ path('app_delete', {'id': offrecommentaire.id}) }}" class="btn btn-sm btn-outline-secondary">Delete</a>
+                      
+                    </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}

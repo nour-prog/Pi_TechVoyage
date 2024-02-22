@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use  App\Repository\OffreCommentaireRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use  App\Repository\OffresRepository;
@@ -15,4 +16,13 @@ class Backoffice_blank extends AbstractController
             "table" =>$offresRepository->findAll()
         ]);
     }
+    #[Route('/show/commentaireb', name: 'app_affichecommentaireb')]
+    public function affichecommentaireb(OffreCommentaireRepository $offrecommentaireRepository): Response
+    {      
+        return $this->render('backoffice/blank/show.html.twig',[
+            "commentaires" =>$offrecommentaireRepository->findAll()
+        ]);
+    }
+
+
 }
