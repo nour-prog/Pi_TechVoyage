@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\ForumCommentaire;
 use App\Entity\Publication;
 use App\Form\ForumCommentaireType;
@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\Mapping as ORM;
+
 
 #[Route('/forum/commentaire')]
 class ForumCommentaireController extends AbstractController
@@ -30,25 +31,9 @@ class ForumCommentaireController extends AbstractController
         ]);
     }
 
+ 
+
    /* #[Route('/new/{id}', name: 'app_forum_commentaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager , Publication $publication ): Response
-    {
-
-         $f =new ForumCommentaire();
-         $f->setPublication($publication);
-        $f->setCreatedAt(new \DateTime());
-
-        $f->setContent($request ->request->get('content'));
-
-        $entityManager->persist($f);
-
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_publication_indexfront', [], Response::HTTP_SEE_OTHER);
-
-    }*/
-
-    #[Route('/new/{id}', name: 'app_forum_commentaire_new', methods: ['GET', 'POST'])]
 public function new(Request $request, EntityManagerInterface $entityManager, int $id, PublicationRepository $publicationRepository): Response
 {
     $publication = $publicationRepository->find($id);
@@ -61,6 +46,59 @@ public function new(Request $request, EntityManagerInterface $entityManager, int
     $forumCommentaire->setPublication($publication);
     $forumCommentaire->setCreatedAt(new \DateTime());
     $forumCommentaire->setContent($request->request->get('content'));
+
+    $entityManager->persist($forumCommentaire);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('app_publication_indexfront', [], Response::HTTP_SEE_OTHER);
+}*/
+
+#[Route('/new/{id}', name: 'app_forum_commentaire_new', methods: ['GET', 'POST'])]
+public function new(
+    Request $request,
+    EntityManagerInterface $entityManager,
+    int $id,
+    PublicationRepository $publicationRepository,
+    ValidatorInterface $validator
+): Response {
+    $publication = $publicationRepository->find($id);
+
+    if (!$publication) {
+        throw $this->createNotFoundException('Publication not found');
+    }
+
+    $forumCommentaire = new ForumCommentaire();
+    $forumCommentaire->setPublication($publication);
+    $forumCommentaire->setCreatedAt(new \DateTime());
+
+    
+    $content = $request->request->get('content');
+
+    
+    $profanityWords = ['shit', 'fuck', 'hate', 'damn', 'go to hell','loser','Shut up!','stupid'];
+
+    
+    foreach ($profanityWords as $profanityWord) {
+        if (stripos($content, $profanityWord) !== false) {
+            
+            return $this->json(['error' => 'Le contenu contient un mot interdit.'], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+   
+    $forumCommentaire->setContent($content);
+
+   
+    $violations = $validator->validate($forumCommentaire);
+
+    if (count($violations) > 0) {
+        $errorMessages = [];
+        foreach ($violations as $violation) {
+            $errorMessages[] = $violation->getMessage();
+        }
+
+        return $this->json(['errors' => $errorMessages], Response::HTTP_BAD_REQUEST);
+    }
 
     $entityManager->persist($forumCommentaire);
     $entityManager->flush();

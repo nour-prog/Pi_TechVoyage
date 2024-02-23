@@ -1,0 +1,27 @@
+
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Sorted Publications{% endblock %}
+
+{% block body %}
+    <h1>Sorted Publications</h1>
+
+    <p>Sorted by: {{ sort }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for publication in publications %}
+                <tr>
+                    <td>{{ publication.title }}</td>
+                    <td>{{ publication.createdAt|date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -46,4 +46,78 @@ class PublicationRepository extends ServiceEntityRepository
            ->getOneOrNullResult()
        ;
    }
+
+   public function findOneById($value): ?Publication
+{
+    return $this->createQueryBuilder('p')
+        ->andWhere('p.id = :val')
+        ->setParameter('val', $value)
+        ->getQuery()
+        ->getOneOrNullResult();
 }
+//Recherche 
+public function findAllSorted($sortOption = 'title')
+{
+    $queryBuilder = $this->createQueryBuilder('p');
+
+    switch ($sortOption) {
+        case 'title':
+            $queryBuilder->orderBy('p.title', 'ASC');
+            break;
+        case 'createdAt':
+            $queryBuilder->orderBy('p.createdAt', 'ASC');
+            break;
+        case 'commentsCount':
+            // Ajoutez ici votre logique pour trier par le nombre de commentaires
+            break;
+        // Ajoutez d'autres options de tri au besoin
+
+        default:
+            $queryBuilder->orderBy('p.title', 'ASC');
+    }
+
+    return $queryBuilder->getQuery()->getResult();
+}
+
+    public function findBySearchTerm(string $searchTerm): array
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        if (!empty($searchTerm)) {
+            $qb->andWhere('p.title LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    // Dans PublicationRepository.php
+    public function findAllSortedAndSearch(string $sort, string $searchTerm): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p');
+    
+        if ($searchTerm) {
+            $queryBuilder->andWhere('p.title LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+    
+        // Add sorting conditions based on your requirements
+        switch ($sort) {
+            case 'title':
+                $queryBuilder->orderBy('p.title', 'ASC');
+                break;
+            case 'shortDescription':
+                $queryBuilder->orderBy('p.shortDescription', 'ASC');
+                break;
+            // Add other sorting cases as needed
+            default:
+                // Default sorting (e.g., by ID)
+                $queryBuilder->orderBy('p.id', 'ASC');
+        }
+    
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+}
+
+

@@ -1,0 +1,27 @@
+
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block body %}
+    <h1>Search Results</h1>
+
+    <p>Showing results for: {{ searchTerm }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for publication in publications %}
+                <tr>
+                    <td>{{ publication.title }}</td>
+                    <td>{{ publication.createdAt|date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

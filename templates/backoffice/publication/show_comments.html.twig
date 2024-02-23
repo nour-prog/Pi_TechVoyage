@@ -1,0 +1,26 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Comments for {{ publication.getTitle() }}{% endblock %}
+
+{% block body %}
+    <h1>Comments for {{ publication.getTitle() }}</h1>
+
+    <div>
+        <p>{{ publication.getContent() }}</p>
+        <p>Posted at: {{ publication.getCreatedAt()|date('Y-m-d H:i:s') }}</p>
+    </div>
+
+    <h2>Comments</h2>
+    {% if comments is not empty %}
+        <ul>
+            {% for comment in comments %}
+                <li>
+                    <p>{{ comment.getContent() }}</p>
+                    <p>Posted at: {{ comment.getCreatedAt()|date('Y-m-d H:i:s') }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No comments yet.</p>
+    {% endif %}
+{% endblock %}
