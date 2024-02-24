@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -56,6 +58,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(min : 8,max: 13, minMessage : "Le numéro de téléphone doit comporter au moins {{ limit }} chiffres",
     maxMessage: "Le numéro de téléphone ne peut pas dépasser {{ limit }} chiffres")]
     private ?int $num_tel = null;
+
+    #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'user')]
+    private Collection $reclamations;
+
+    public function __construct()
+    {
+        $this->reclamations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -201,6 +211,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
       public function setNumTel(int $num_tel): static
       {
           $this->num_tel = $num_tel;
+
+          return $this;
+      }
+
+      /**
+       * @return Collection<int, Reclamation>
+       */
+      public function getReclamations(): Collection
+      {
+          return $this->reclamations;
+      }
+
+      public function addReclamation(Reclamation $reclamation): static
+      {
+          if (!$this->reclamations->contains($reclamation)) {
+              $this->reclamations->add($reclamation);
+              $reclamation->setUser($this);
+          }
+
+          return $this;
+      }
+
+      public function removeReclamation(Reclamation $reclamation): static
+      {
+          if ($this->reclamations->removeElement($reclamation)) {
+              // set the owning side to null (unless already changed)
+              if ($reclamation->getUser() === $this) {
+                  $reclamation->setUser(null);
+              }
+          }
 
           return $this;
       }

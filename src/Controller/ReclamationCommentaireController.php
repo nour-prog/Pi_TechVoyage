@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CommentaireController extends AbstractController
+class ReclamationCommentaireController extends AbstractController
 {
     #[Route('/commentaire', name: 'app_commentaire')]
     public function index(): Response
@@ -56,7 +56,7 @@ class CommentaireController extends AbstractController
     }
 
 
-    #[Route('/addCommentaireBack', name: 'add_commentaire_back')]
+    #[Route('/backoffice/addCommentaireBack', name: 'add_commentaire_back')]
     public function addCommentaireBack(Request $request,ManagerRegistry $managerRegistry)
     {
         $commentaire= new ReclamationCommentaire();
@@ -85,7 +85,7 @@ class CommentaireController extends AbstractController
         return $this->renderForm("frontoffice/ReclamationCommentaire/updateCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
 
-    #[Route('/UpdateCommentaireBack/{id}', name: 'app_updateCommentaire_back')]
+    #[Route('/backoffice/UpdateCommentaireBack/{id}', name: 'app_updateCommentaire_back')]
     public function UpdateCommentaireBack(Request $request,ReclamationCommentaireRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
@@ -111,7 +111,7 @@ class CommentaireController extends AbstractController
         return $this->redirectToRoute("list_commentaire_front");
     }
 
-    #[Route('/deleteCommentaireBack/{id}', name: 'app_deleteCommentaire_back')]
+    #[Route('/backoffice/deleteCommentaireBack/{id}', name: 'app_deleteCommentaire_back')]
 
     public function DeleteCommentaireBack ($id, ReclamationCommentaireRepository $repository,ManagerRegistry $managerRegistry)
     {

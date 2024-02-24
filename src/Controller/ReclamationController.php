@@ -51,7 +51,6 @@ class ReclamationController extends AbstractController
             $em->persist($reclamation);
             $em->flush();
             return $this->redirectToRoute("list_reclamation_front");
-
         }
         return $this->renderForm("frontoffice/Reclamation/addReclamation.html.twig",["formulaireReclamation"=>$form]);
     }
@@ -73,7 +72,7 @@ class ReclamationController extends AbstractController
 
     }
 
-    #[Route('/UpdateReclamationBack/{id}', name: 'app_updateReclamation_back')]
+    #[Route('/backoffice/UpdateReclamationBack/{id}', name: 'app_updateReclamation_back')]
     public function UpdateReclamationBack(Request $request,ReclamationRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $reclamation=$repository->find($id);
@@ -87,7 +86,7 @@ class ReclamationController extends AbstractController
         return $this->renderForm("backoffice/Reclamation/updateReclamation.html.twig",["formulaireReclamation"=>$form]);
     }
 
-    #[Route('/deleteReclamationBack/{id}', name: 'app_deleteReclamation_back')]
+    #[Route('/backoffice/deleteReclamationBack/{id}', name: 'app_deleteReclamation_back')]
 
     public function DeleteReclamationBack ($id, ReclamationRepository $repository,ManagerRegistry $managerRegistry)
     {

@@ -39,6 +39,9 @@ class Reclamation
     #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'Reclamation', cascade: ['persist', 'remove']    )]
     private Collection $reclamationCommentaires;
 
+    #[ORM\ManyToOne(inversedBy: 'reclamations')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->reclamationCommentaires = new ArrayCollection();
@@ -132,5 +135,17 @@ class Reclamation
     public function __toString()
     {
         return(string)$this->getSujet();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
