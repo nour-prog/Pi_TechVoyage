@@ -1,0 +1,24 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}S'inscrire{% endblock %}
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+    <h1>Register</h1>
+    {{ form_errors(registrationForm) }}
+   
+    {{form(registrationForm,{'attr': {'novalidate': 'novalidate'}})}}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+{% endblock %}

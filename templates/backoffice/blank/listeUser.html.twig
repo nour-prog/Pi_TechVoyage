@@ -1,0 +1,52 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Liste user{% endblock %}
+
+{% block body %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1>Liste des utilisateurs</h1>
+
+
+<table border="1">
+    <tr>
+        <td>Id</td>
+        <td>Nom</td>
+        <td>Prenom</td>
+        <td>Numéro de téléphone</td>
+        <td>Email</td>
+        <td>Roles</td>
+        <td>Password</td>
+        <td>IsVerified</td>
+        <td>Action</td>
+
+    </tr>
+    {% for i in tabUser %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.nom}}</td>
+            <td>{{i.prenom}}</td>
+            <td>{{i.getNumTel}}</td>
+            <td>{{i.email}}</td>
+            <td>{{i.roles[0]}}</td>
+            <td>{{i.password}}</td>
+            <td>{{i.isVerified}}</td>
+            <td>
+                <a href = "{{ path('app_deleteUser', { id: i.id }) }}"> Supprimer </a>
+                <a href = "{{ path('app_UpdateUser', { id: i.id }) }}"> Modifier </a>
+            </td>
+        </tr>
+        
+    {% endfor %}
+</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}
