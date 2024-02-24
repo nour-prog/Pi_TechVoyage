@@ -2,60 +2,58 @@
 
 {% block title %}Reclamation{% endblock %}
 
-
 {% block body %}
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Liste des réclamations</h1>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>Liste des réclamations</h1>
 
+    {{ form_start(form) }}
+    {{ form_widget(form.estTraite) }}
+    {{ form_widget(form.Filtrer) }}
+    {{ form_end(form) }}
 
-<table border="1">
-    <tr>
-        <td>Id</td>
-        <td>Sujet</td>
-        <td>Description</td>
-        <td>Date de soumission</td>
-        <td>EstTraite</td>
-
-    </tr>
-    {% for i in tabReclamation %}
+    <table border="1">
         <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.Sujet}}</td>
-            <td>{{i.Description}}</td>
-
-            {% if i.DateSoumission is not null %}
-                <td>{{ i.DateSoumission|date }}</td>
-            {% else %}
-                <td></td>
-            {% endif %}
-            <td>
-            {% if i.EstTraite  %}
-                <i class="fas fa-check"></i>
-            {% else %}
-                <i class="fas fa-times"></i>
-            {% endif %}
-            </td>
-            <td>
-                 <a href = "{{ path('app_deleteReclamation_back', { id: i.id }) }}"> Supprimer </a>
-                 <a href = "{{ path('app_updateReclamation_back', { id: i.id }) }}"> Modifier </a>
-
-             </td>
-
+            <td>Id</td>
+            <td>Sujet</td>
+            <td>Description</td>
+            <td>Date de soumission</td>
+            <td>EstTraite</td>
+            <td>Actions</td>
         </tr>
-    {% endfor %}
+        {% for i in tabReclamation %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.Sujet}}</td>
+                <td>{{i.Description}}</td>
+                {% if i.DateSoumission is not null %}
+                    <td>{{ i.DateSoumission|date }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td>
+                    {% if i.EstTraite  %}
+                        <i class="fas fa-check"></i>
+                    {% else %}
+                        <i class="fas fa-times"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_deleteReclamation_back', { id: i.id }) }}"> Supprimer </a>
+                    <a href="{{ path('app_updateReclamation_back', { id: i.id }) }}"> Modifier </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 
+    <br>
+    <br>
+    <br>
+    <br>
 
-
-</table>
-<br>
-<br>
-<br>
-<br>
-
-<br>
+    <br>
 {% endblock %}

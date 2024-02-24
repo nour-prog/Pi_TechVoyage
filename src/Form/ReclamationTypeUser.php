@@ -18,7 +18,7 @@ class ReclamationTypeUser extends AbstractType
     {
         $builder
         ->add('sujet')
-        ->add('description')  
+        ->add('description')
         ->add('Submit',SubmitType::class)
         ;
     }

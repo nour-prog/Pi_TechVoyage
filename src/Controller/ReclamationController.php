@@ -5,12 +5,15 @@ namespace App\Controller;
 use App\Entity\Reclamation;
 use App\Form\ReclamationTypeUser;
 use App\Form\ReclamationTypeAdmin;
+use App\Form\ReclamationFilterType;
 use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+
 
 class ReclamationController extends AbstractController
 {
@@ -23,36 +26,80 @@ class ReclamationController extends AbstractController
     }
 
     #[Route('/backoffice/listReclamation', name: 'list_reclamation_back')]
-    public function listReclamationBack(ReclamationRepository $repository)
+    public function listReclamationBack(Request $request, ReclamationRepository $repository)
     {
-        $reclamation= $repository->findAll();
-
-        return $this->render("backoffice/Reclamation/listeReclamation.html.twig",
-            array('tabReclamation'=>$reclamation));
+        $form = $this->createForm(ReclamationFilterType::class);
+        $form->handleRequest($request);
+    
+        // Récupérer la valeur du filtre
+        $estTraite = $form->get('estTraite')->getData();
+    
+        // Utiliser la valeur du filtre pour récupérer les réclamations
+        if ($estTraite === null) {
+            // Si "Toutes" est sélectionné, récupérer toutes les réclamations
+            $reclamations = $repository->findAll();
+        } else {
+            // Sinon, filtrer par l'état de traitement
+            $reclamations = $repository->findBy(['estTraite' => $estTraite]);
+        }
+    
+        return $this->render('backoffice/Reclamation/listeReclamation.html.twig', [
+            'tabReclamation' => $reclamations,
+            'form' => $form->createView(),
+        ]);
     }
-
     #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]
-    public function listReclamationFront(ReclamationRepository $repository)
+    public function listReclamationFront(ReclamationRepository $repository, Security $security)
     {
-        $reclamation= $repository->findAll();
+    // Récupérer l'utilisateur actuellement connecté
+        $user = $security->getUser();
+
+        if ($user) {
+        // Récupérer les réclamations de l'utilisateur actuel
+        $reclamations = $repository->findBy(['user' => $user]);
+    }   else {
+        // Gérer le cas où l'utilisateur n'est pas connecté si nécessaire
+        $reclamations = [];
+    }
 
         return $this->render("frontoffice/Reclamation/listeReclamation.html.twig",
-            array('tabReclamation'=>$reclamation));
-    }
+             ['tabReclamation' => $reclamations]
+    );
+}
 
     #[Route('/addReclamation', name: 'add_reclamation')]
-    public function addReclamation(Request $request,ManagerRegistry $managerRegistry)
+    public function addReclamation(Request $request)
     {
-        $reclamation= new Reclamation();
-        $form= $this->createForm(ReclamationTypeUser::class,$reclamation);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $em= $managerRegistry->getManager();
-            $em->persist($reclamation);
-            $em->flush();
-            return $this->redirectToRoute("list_reclamation_front");
+        // Créez une nouvelle instance de l'entité Reclamation
+        $reclamation = new Reclamation();
+
+        // Obtenez l'utilisateur actuel
+        $user = $this->getUser();
+
+        // Si l'utilisateur est connecté, pré-remplissez le champ de l'utilisateur dans le formulaire
+        if ($user) {
+            $reclamation->setUser($user);
         }
-        return $this->renderForm("frontoffice/Reclamation/addReclamation.html.twig",["formulaireReclamation"=>$form]);
+        
+
+        // Créez le formulaire en utilisant le ReclamationTypeUser
+        $form = $this->createForm(ReclamationTypeUser::class, $reclamation);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Traitez le formulaire et enregistrez la réclamation
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($reclamation);
+            $entityManager->flush();
+
+            // Redirigez vers la page où vous affichez la liste des réclamations
+            return $this->redirectToRoute('list_reclamation_front');
+        }
+
+        return $this->render('frontoffice/Reclamation/addReclamation.html.twig', [
+            'formulaireReclamation' => $form->createView(),
+        ]);
     }
 
     

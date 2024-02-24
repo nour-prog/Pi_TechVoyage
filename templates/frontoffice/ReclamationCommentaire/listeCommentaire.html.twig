@@ -2,51 +2,49 @@
 
 {% block title %}Commentaire{% endblock %}
 
-
 {% block body %}
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Liste de commentaire</h1>
-<table border="1">
-    <tr>
-        <td>Id</td>
-        <td>Contenu</td>
-        <td>DateCreation</td>
-        <td>Réclamation</td>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>Liste de commentaires</h1>
 
-
-    </tr>
-    {% for i in tabCommentaire %}
+    <table border="1">
         <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.contenu}}</td>
-            {% if i.dateCreation is not null %}
-                <td>{{ i.dateCreation|date }}</td>
-            {% else %}
-                <td></td>
-            {% endif %}
-            <td>{{i.Reclamation}}</td>
-
-
-             <td>
-                 <a href = "{{ path('app_deleteCommentaire_front', { id: i.id }) }}"> Supprimer </a>
-                 <a href = "{{ path('app_updateCommentaire_front', { id: i.id }) }}"> Modifier </a>
-             </td>
-
+            <td>Id</td>
+            <td>Contenu</td>
+            <td>DateCreation</td>
+            <td>Réclamation</td>
+            <td>Actions</td>
         </tr>
-    {% endfor %}
+        {% for commentaire in tabCommentaire %}
+            <tr>
+                <td>{{ commentaire.id }}</td>
+                <td>{{ commentaire.contenu }}</td>
+                {% if commentaire.dateCreation is not null %}
+                    <td>{{ commentaire.dateCreation|date }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                <td>{{ commentaire.reclamation.id }}</td>
+                <td>
+                    <a href="{{ path('app_deleteCommentaire_front', { id: commentaire.id }) }}"> Supprimer </a>
+                    <a href="{{ path('app_updateCommentaire_front', { id: commentaire.id }) }}"> Modifier </a>
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="5">
+                <a href="{{ path('add_commentaire_front') }}"> Ajouter </a>
+            </td>
+        </tr>
+    </table>
 
-            <a href = "{{ path('add_commentaire_front') }}"> Ajouter </a>
-
-</table>
-<br>
-<br>
-<br>
-<br>
-
-<br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 {% endblock %}
