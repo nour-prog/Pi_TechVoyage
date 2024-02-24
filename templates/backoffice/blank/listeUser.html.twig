@@ -4,49 +4,78 @@
 
 {% block body %}
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Liste des utilisateurs</h1>
+   <link rel="stylesheet" href="/CRUD/CRUD.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   
 
-
-<table border="1">
-    <tr>
-        <td>Id</td>
-        <td>Nom</td>
-        <td>Prenom</td>
-        <td>Numéro de téléphone</td>
-        <td>Email</td>
-        <td>Roles</td>
-        <td>Password</td>
-        <td>IsVerified</td>
-        <td>Action</td>
-
-    </tr>
-    {% for i in tabUser %}
-        <tr>
+   
+<div class="container">
+    <div class="table-wrapper">
+      <div class="table-title">
+        <div class="row">
+          <div class="col-sm-6">
+            <h2>Liste des utilisateurs</h2>
+          </div>
+          
+        </div>
+      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>
+              <span class="custom-checkbox">
+                                  <input type="checkbox" id="selectAll">
+                                  <label for="selectAll"></label>
+              </span>
+            </th>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Email</th>
+            <th>téléphone</th>
+            <th>Roles</th>
+            <th>IsVerified</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        {% for i in tabUser %}
+        <tbody>
+          <tr>
+            <td>
+              <span class="custom-checkbox">
+                                  <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                  <label for="checkbox1"></label>
+             </span>
+            </td>
             <td>{{i.id}}</td>
             <td>{{i.nom}}</td>
             <td>{{i.prenom}}</td>
-            <td>{{i.getNumTel}}</td>
             <td>{{i.email}}</td>
+            <td>{{i.getNumTel}}</td>
             <td>{{i.roles[0]}}</td>
-            <td>{{i.password}}</td>
             <td>{{i.isVerified}}</td>
             <td>
-                <a href = "{{ path('app_deleteUser', { id: i.id }) }}"> Supprimer </a>
-                <a href = "{{ path('app_UpdateUser', { id: i.id }) }}"> Modifier </a>
+              <a href="{{ path('app_UpdateUser', { id: i.id }) }}" class="edit" ><i class="material-icons" data-toggle="tooltip" >&#xE254;</i></a>
+              <a href="{{ path('app_deleteUser', { id: i.id }) }}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
             </td>
-        </tr>
-        
-    {% endfor %}
-</table>
-<br>
-<br>
-<br>
-<br>
-<br>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="clearfix">
+        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+        <ul class="pagination">
+          <li class="page-item disabled"><a href="#">Previous</a></li>
+          <li class="page-item active"><a href="#" class="page-link">1</a></li>
+          <li class="page-item"><a href="#" class="page-link">2</a></li>
+          <li class="page-item"><a href="#" class="page-link">3</a></li>
+          <li class="page-item"><a href="#" class="page-link">4</a></li>
+          <li class="page-item"><a href="#" class="page-link">5</a></li>
+          <li class="page-item"><a href="#" class="page-link">Next</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script src="/CRUD/CRUD.js"></script>
+
 {% endblock %}
