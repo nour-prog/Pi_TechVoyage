@@ -1,0 +1,57 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}Reclamation{% endblock %}
+
+
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1>Liste des réclamations</h1>
+
+
+<table border="1">
+    <tr>
+        <td>Id</td>
+        <td>Sujet</td>
+        <td>Description</td>
+        <td>DateSoumission</td>
+        
+
+    </tr>
+    {% for i in tabReclamation %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td>{{i.Sujet}}</td>
+            <td>{{i.Description}}</td>
+             {% if i.DateSoumission is not null %}
+                <td>{{ i.DateSoumission|date }}</td>
+            {% else %}
+                <td></td>
+            {% endif %}
+            
+
+            <td>
+                 <a href = "{{ path('app_deleteReclamation_front', { id: i.id }) }}"> Supprimer </a>
+                 <a href = "{{ path('app_updateReclamation_front', { id: i.id }) }}"> Modifier </a>
+
+             </td>
+
+        </tr>
+    {% endfor %}
+                     <a href = "{{ path('add_reclamation') }}"> Ajouter </a>
+
+
+
+
+</table>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+{% endblock %}
