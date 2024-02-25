@@ -69,7 +69,7 @@ class StringToFileTransformer implements DataTransformerInterface
 {
     public function transform($value)
     {
-        // Transform the string value (e.g., file path) to a File object
+        
         if (is_string($value)) {
             return new File($value);
         }
@@ -79,7 +79,7 @@ class StringToFileTransformer implements DataTransformerInterface
 
     public function reverseTransform($value)
     {
-        // Transform the File object to a string value (e.g., file path)
+        
         if ($value instanceof File) {
             return $value->getPathname();
         }

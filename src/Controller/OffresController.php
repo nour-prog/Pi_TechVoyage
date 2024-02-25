@@ -15,38 +15,38 @@ class OffresController extends AbstractController
     #[Route('offres/ajouter', name: 'offres_ajout')]
     public function index(Request $request, Cloudinary $cloudinary): Response
     {
-        // Create a new instance of the Offres entity
+        
         $offres = new Offres();
     
-        // Create the form using OffresType form class and pass the $offres entity
+        
         $form = $this->createForm(OffresType::class, $offres);
         
-        // Handle the submitted form data
+        
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Retrieve the uploaded image file from the form
+            
             $imageFile = $form->get('image')->getData();
         
             if ($imageFile) {
-                // Upload the image file to Cloudinary using the Cloudinary service
+                
                 $result = $cloudinary->uploadApi()->upload($imageFile);
                 $newFilename = $result['secure_url'];
             
-                // Set the image filename to the Offres entity
+                
                 $offres->setImage($newFilename);
             }
     
-            // Persist the Offres entity to the database
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($offres);
             $em->flush();
     
-            // Redirect to a specific route after successful form submission
+            
             return $this->redirectToRoute('app_backoffice_blank');
         }
     
-        // Render the template with the form view
+        
         return $this->render('backoffice/offres/index.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -62,11 +62,11 @@ class OffresController extends AbstractController
             $imageFile = $form->get('image')->getData();
         
             if ($imageFile) {
-                // Upload the image file to Cloudinary using the Cloudinary service
+                
                 $result = $cloudinary->uploadApi()->upload($imageFile);
                 $newFilename = $result['secure_url'];
             
-                // Set the image filename to the Offres entity
+                
                 $offres->setImage($newFilename);
             }
             $em = $this->getDoctrine()->getManager();
@@ -99,5 +99,15 @@ class OffresController extends AbstractController
         ]);
 
     }
-
+    
 }
+
+
+
+
+
+
+
+
+
+

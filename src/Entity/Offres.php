@@ -18,15 +18,17 @@ class Offres
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\NotBlank(message:"ce champs est obligatoire")]
-    #[Assert\Length(min:5,max:10,minMessage:"le titre doit comporter au moins{{limit}} caractére",
-    maxMessage:"le titre ne peut pas depasser {{limit}} caractére")]
+    
+    // #[Assert\NotBlank(message:"ce champs est obligatoire")]
+    // #[Assert\Length(min:5,max:10,minMessage:"le titre doit comporter au moins{{limit}} caractére",
+    // maxMessage:"le titre ne peut pas depasser {{limit}} caractére")]
+
     private ?string $title = null;
 
 
-    #[Assert\NotBlank(message:"ce champs est obligatoire")]
-    #[Assert\Length(min:10,max:255,minMessage:"la description doit comporter au moins{{limit}} caractére",
-    maxMessage:"la description ne peut pas depasser {{limit}} caractére")]
+    // #[Assert\NotBlank(message:"ce champs est obligatoire")]
+    // #[Assert\Length(min:10,max:255,minMessage:"la description doit comporter au moins{{limit}} caractére",
+    // maxMessage:"la description ne peut pas depasser {{limit}} caractére")]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -34,17 +36,17 @@ class Offres
     private ?bool $published = null;
    
       
-    #[Assert\NotBlank(message:"ce champs est obligatoire")]
-    #[Assert\Range(min:0.0,max:100.0,minMessage:"La valeur doit être supérieure ou égale à {{ limit }}",
-    maxMessage:"La valeur doit être inférieure ou égale à {{ limit }}")]
+    // #[Assert\NotBlank(message:"ce champs est obligatoire")]
+    // #[Assert\Range(min:0.0,max:100.0,minMessage:"La valeur doit être supérieure ou égale à {{ limit }}",
+    // maxMessage:"La valeur doit être inférieure ou égale à {{ limit }}")]
 
     #[ORM\Column(nullable: true)]
     private ?float $prix = null;
 
 
-    #[Assert\NotBlank(message:"ce champs est obligatoire")]
-    #[Assert\Length(min:10,max:20,minMessage:"le titre doit comporter au moins{{limit}} caractére",
-    maxMessage:"le lieu ne peut pas depasser {{limit}} caractére")]
+    // #[Assert\NotBlank(message:"ce champs est obligatoire")]
+    // #[Assert\Length(min:10,max:20,minMessage:"le titre doit comporter au moins{{limit}} caractére",
+    // maxMessage:"le lieu ne peut pas depasser {{limit}} caractére")]
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lieu = null;

@@ -16,17 +16,17 @@
     <br>
     <br>
     <br>
+    <br>
     <main role="main">
-        <div class="row">
+        <table border="1">
+            <tr>
+                <td>Commentaire</td>
+            </tr>
             {% for offrecommentaire in commentaires %}
-                
- 
-                <div class="commentaire">
-                    {{ offrecommentaire.avis}}
-                        
- 
-                </div>
+                <tr>
+                    <td>{{ offrecommentaire.avis}}</td>
+                </tr>
             {% endfor %}
-        </div>
+        </table>
     </main>
 {% endblock %}
