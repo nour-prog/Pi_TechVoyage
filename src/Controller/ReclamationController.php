@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Twilio\Rest\Client;
+
 
 
 class ReclamationController extends AbstractController
@@ -120,18 +122,50 @@ class ReclamationController extends AbstractController
     }
 
     #[Route('/backoffice/UpdateReclamationBack/{id}', name: 'app_updateReclamation_back')]
-    public function UpdateReclamationBack(Request $request,ReclamationRepository $repository,$id,ManagerRegistry $managerRegistry)
+    public function UpdateReclamationBack(Request $request, ReclamationRepository $repository, $id, ManagerRegistry $managerRegistry)
     {
-        $reclamation=$repository->find($id);
-        $form=$this->createForm(ReclamationTypeAdmin::class,$reclamation);
+        $reclamation = $repository->find($id);
+        $form = $this->createForm(ReclamationTypeAdmin::class, $reclamation);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            $em=$managerRegistry->getManager();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $managerRegistry->getManager();
             $em->flush();
+
+            // Récupérer le numéro de téléphone de l'utilisateur associé à la réclamation
+            $userPhoneNumber = $reclamation->getUser()->getNumTel();
+
+            // Envoyer le SMS
+            $this->envoyerSms($userPhoneNumber, 'Votre réclamation a été traitée avec succès.');
+
             return $this->redirectToRoute("list_reclamation_back");
         }
-        return $this->renderForm("backoffice/Reclamation/updateReclamation.html.twig",["formulaireReclamation"=>$form]);
+
+        return $this->renderForm("backoffice/Reclamation/updateReclamation.html.twig", ["formulaireReclamation" => $form]);
     }
+
+    private function envoyerSms($phoneNumber, $message)
+{
+    // Récupérer les paramètres Twilio depuis les paramètres Symfony
+    $sid = $this->getParameter('twilio_account_sid');
+    $token = $this->getParameter('twilio_auth_token');
+    $twilioPhoneNumber = $this->getParameter('twilio_phone_number');
+
+    // Supprimer les caractères non numériques du numéro de téléphone
+    $cleanedPhoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+    // Ajouter le préfixe international pour la Tunisie (+216)
+    $cleanedPhoneNumber = '+216' . $cleanedPhoneNumber;
+
+    // Utiliser le service SMS pour envoyer le message
+    $twilio = new Client($sid, $token);
+    $twilio->messages->create(
+        $cleanedPhoneNumber,
+        ['from' => $twilioPhoneNumber, 'body' => $message]
+    );
+}
+
+
 
     #[Route('/backoffice/deleteReclamationBack/{id}', name: 'app_deleteReclamation_back')]
 
