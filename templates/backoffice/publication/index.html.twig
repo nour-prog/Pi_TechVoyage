@@ -39,7 +39,13 @@
                     <td>{{ publication.title }}</td>
                     <td>{{ publication.shortDescription }}</td>
                     <td>{{ publication.content }}</td>
-                    <td>{{ publication.image }}</td>
+                    <td>
+                                    {% if publication.image %}
+                                    <img src="{{ asset('uploads/' ~publication.image) }}" alt="publication.name"
+                                         width="60" height="60"
+                                         class ="fluid my-2 rounded">
+                                     {% endif %}
+                                </td>
                     <td>
                         <a href="{{ path('app_publication_showback', {'id': publication.id}) }}">Show</a>
                         <a href="{{ path('app_publication_edit', {'id': publication.id}) }}">Edit</a>

@@ -9,7 +9,7 @@
 
 <html lang="en">
 <head>
-
+       
   <!-- Basic Page Needs
   ================================================== -->
   <meta charset="utf-8">
@@ -17,8 +17,12 @@
 
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
-    {% endblock %}
+        <!-- Inclure Font Awesome via CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="..." crossorigin="anonymous" />
 
+
+    {% endblock %}
+        
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
@@ -48,6 +52,10 @@
   <link rel="stylesheet" href="/frontoffice/plugins/slick/slick.css">
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="/frontoffice/css/style.css">
+  <!-- Inclure les fichiers CSS de Font Awesome -->
+<link rel="stylesheet" href="path/to/fontawesome/css/fontawesome.min.css" />
+<link rel="stylesheet" href="path/to/fontawesome/css/solid.min.css" />
+
 
 </head>
 <body id="body">

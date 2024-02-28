@@ -33,20 +33,17 @@ class Publication
     #[Assert\NotBlank]
     private ?string $content = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Regex(
-      //pattern: "/^[^\s]+\.[^\s]+$/",
-      pattern: "/^[^\s]+\.(png|gif|bmp)$/i",
-      message: "The value '{{ value }}' is not a valid file path."
-    )
-    ]
- 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
     #[ORM\OneToMany(targetEntity: ForumCommentaire::class, mappedBy: 'publication', cascade: ['remove'])]
-
     private Collection $comments;
+
+    #[ORM\Column(length: 255)]
+    private ?string $rating = null;
+
+    #[ORM\ManyToOne(inversedBy: 'publication')]
+    private ?Like $likee = null;
 
 
     public function __construct()
@@ -142,6 +139,30 @@ class Publication
         }
     
         return $this->comments->first()->getCreatedAt();
+    }
+
+    public function getRating(): ?string
+    {
+        return $this->rating;
+    }
+
+    public function setRating(string $rating): static
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getLikee(): ?Like
+    {
+        return $this->likee;
+    }
+
+    public function setLikee(?Like $likee): static
+    {
+        $this->likee = $likee;
+
+        return $this;
     }
 
 

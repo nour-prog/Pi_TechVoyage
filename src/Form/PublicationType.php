@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 class PublicationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -15,7 +16,9 @@ class PublicationType extends AbstractType
             ->add('title')
             ->add('shortDescription')
             ->add('content')
-            ->add('image')
+            ->add('image',FileType::class,['required' => false,
+            'mapped'=>false
+        ])
             ->add('ajouter', SubmitType::class, [
                 'label' => 'Ajouter',
                 'attr' => ['class' => 'btn btn-primary'],

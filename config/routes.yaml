@@ -7,3 +7,8 @@ app_publication_showfront:
     path: '/front/publication/{id}'
     controller: 'App\Controller\PublicationController::showFront'
     methods: ['GET']
+
+app_like_publication:
+    path: '/publication/{id}/like'
+    controller: 'App\Controller\PublicationController::likePublication'
+    methods: ['POST']

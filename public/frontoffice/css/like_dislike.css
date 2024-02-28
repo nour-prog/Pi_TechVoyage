@@ -1,0 +1,15 @@
+.like-dislike {
+    display: flex;
+}
+
+.like-button, .dislike-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.like-button:hover, .dislike-button:hover {
+    color: #007bff;
+}
