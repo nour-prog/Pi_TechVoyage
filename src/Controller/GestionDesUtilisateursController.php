@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class GestionDesUtilisateursController extends AbstractController
 {
@@ -30,6 +31,30 @@ class GestionDesUtilisateursController extends AbstractController
         return $this->render("backoffice/blank/listeUser.html.twig",
             array('tabUser'=>$user));
     }
+
+
+
+    #[Route('/listeprofile', name: 'list_profile_front')]
+    public function listuserFront(UserRepository $repository, Security $security)
+    {
+    // Récupérer l'utilisateur actuellement connecté
+        $user = $security->getUser();
+
+        if ($user) {
+        // Récupérer les données de l'utilisateur actuel
+        $user = $repository->findBy(['id' => $user]);
+    }   else {
+        // Gérer le cas où l'utilisateur n'est pas connecté si nécessaire
+        $user = [];
+    }
+
+        return $this->render("frontoffice/Profile/profile.html.twig",
+             ['tabuser' => $user]
+    );
+}
+    
+
+
 
     #[Route('/backoffice/UpdateUser/{id}', name: 'app_UpdateUser')]
     public function UpdateUser(Request $request,UserRepository $repository,$id,ManagerRegistry $managerRegistry)
