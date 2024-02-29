@@ -29,6 +29,8 @@
                 </ol>
               </nav>
               <!-- /Breadcrumb -->
+              
+
               {% for i in tabuser %}
               <div class="row gutters-sm">
                 <div class="col-md-4 mb-3">
@@ -111,7 +113,7 @@
                         </div>
                       </div>
                       <hr>
-                      {% endfor %}
+                      
                       <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0">Address</h6>
@@ -123,7 +125,7 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-12">
-                          <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                          <a class="btn btn-info " target="__blank" href="{{ path('app_profile', { id: i.id }) }}">Edit</a>
                         </div>
                       </div>
                     </div>
@@ -139,4 +141,5 @@
 <br>
 <br>
 <br>
+{% endfor %}
 {% endblock %}

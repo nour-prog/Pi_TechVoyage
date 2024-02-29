@@ -71,6 +71,23 @@ class GestionDesUtilisateursController extends AbstractController
 
     }
 
+
+
+    #[Route('/profile/update/{id}', name: 'app_profile')]
+    public function UpdateProfile(Request $request,UserRepository $repository,$id,ManagerRegistry $managerRegistry)
+    {
+        $user=$repository->find($id);
+        $form=$this->createForm(UserFormType::class,$user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $em=$managerRegistry->getManager();
+            $em->flush();
+            return $this->redirectToRoute("list_profile_front");
+        }
+        return $this->renderForm("frontoffice/profile/updateprofile.html.twig",["formulaireUser"=>$form]);
+
+    }
+
     #[Route('/backoffice/deleteUser/{id}', name: 'app_deleteUser')]
 
     public function DeleteReclamation ($id, UserRepository $repository,ManagerRegistry $managerRegistry)

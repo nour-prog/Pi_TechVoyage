@@ -36,6 +36,7 @@ class UserFormType extends AbstractType
                 'empty_data' => '0',
                 
                ])
+            ->add('isVerified', null)   
             ->add('Submit',SubmitType::class) 
         ;
     }
