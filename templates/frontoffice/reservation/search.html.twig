@@ -1,0 +1,9 @@
+{% if reservation is not empty %}
+    <ul>
+        {% for reservation in reservation %}
+            <li>{{ reservation.id }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun résultat trouvé pour votre recherche "{{ query }}".</p>
+{% endif %}

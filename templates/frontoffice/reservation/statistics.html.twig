@@ -1,0 +1,35 @@
+
+<h1>Statistics</h1>
+
+<canvas id="rdvChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('rdvChart').getContext('2d');
+    var rdvData = {{ rdvByMonth|json_encode|raw }};
+    console.log(rdvData); // Add this line to inspect the data
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Rendez-vous par mois',
+                data: months.map(month => rdvData[month] || 0),
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    suggestedMin: 1,
+                    suggestedMax: 10
+                }
+            }
+        }
+    });
+</script>
