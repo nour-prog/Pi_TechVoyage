@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Twilio\Rest\Client;
-
+use Twilio\Rest\Client as TwilioClient;
+use GuzzleHttp\Client as GuzzleClient;
 
 
 class ReclamationController extends AbstractController
@@ -140,7 +140,7 @@ class ReclamationController extends AbstractController
 
     $cleanedPhoneNumber = '+216' . $cleanedPhoneNumber;
 
-    $twilio = new Client($sid, $token);
+    $twilio = new TwilioClient($sid, $token);
     $twilio->messages->create(
         $cleanedPhoneNumber,
         ['from' => $twilioPhoneNumber, 'body' => $message]
@@ -171,5 +171,35 @@ class ReclamationController extends AbstractController
          $em->flush();
 
         return $this->redirectToRoute("list_reclamation_front");
+    }
+
+
+    public function checkBadWords(Request $request)
+    {
+        // Récupérer le texte de la réclamation depuis la requête
+        $reclamationText = $request->get('reclamation_text');
+
+        // Vérifier les "Bad words" avec l'API Purgomalum
+        $guzzleClient = new GuzzleClient();
+
+        $response = $client->get('https://www.purgomalum.com/service/containsprofanity', [
+            'query' => [
+                'text' => $reclamationText,
+                'add' => 'censor',
+                'fill_text' => '***',
+            ],
+        ]);
+
+        $result = json_decode($response->getBody(), true);
+
+        // Vérifier la réponse de l'API
+        if ($result['result']) {
+            // Le texte contient des "Bad words"
+            // Vous pouvez prendre des mesures appropriées ici (par exemple, empêcher la soumission)
+            return $this->json(['containsBadWords' => true]);
+        } else {
+            // Le texte est propre
+            return $this->json(['containsBadWords' => false]);
+        }
     }
 }

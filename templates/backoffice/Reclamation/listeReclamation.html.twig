@@ -9,7 +9,7 @@
     <br>
     <br>
     <br>
-    <h1>Liste des réclamations</h1>
+    <h1>Liste des réclamations ({{ tabReclamation|length }} réclamations)</h1>
 
     {{ form_start(form) }}
     {{ form_widget(form.estTraite) }}
@@ -24,6 +24,7 @@
             <td>EstTraite</td>
             <td>Actions</td>
         </tr>
+
         {% for i in tabReclamation %}
             <tr>
                 <td>{{i.Sujet}}</td>
