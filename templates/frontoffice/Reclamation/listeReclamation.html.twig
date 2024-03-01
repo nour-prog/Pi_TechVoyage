@@ -13,7 +13,6 @@
 
     <table border="1">
         <tr>
-            <td>Id</td>
             <td>Sujet</td>
             <td>Description</td>
             <td>DateSoumission</td>
@@ -24,7 +23,6 @@
             {# Vérifiez si l'utilisateur de la réclamation est le même que l'utilisateur connecté #}
             {% if reclamation.user == app.user %}
                 <tr>
-                    <td>{{ reclamation.id }}</td>
                     <td>{{ reclamation.Sujet }}</td>
                     <td>{{ reclamation.Description }}</td>
                     {% if reclamation.DateSoumission is not null %}

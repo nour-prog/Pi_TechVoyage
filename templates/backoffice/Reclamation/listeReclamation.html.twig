@@ -18,7 +18,6 @@
 
     <table border="1">
         <tr>
-            <td>Id</td>
             <td>Sujet</td>
             <td>Description</td>
             <td>Date de soumission</td>
@@ -27,7 +26,6 @@
         </tr>
         {% for i in tabReclamation %}
             <tr>
-                <td>{{i.id}}</td>
                 <td>{{i.Sujet}}</td>
                 <td>{{i.Description}}</td>
                 {% if i.DateSoumission is not null %}

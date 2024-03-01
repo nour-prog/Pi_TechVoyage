@@ -33,15 +33,11 @@ class ReclamationController extends AbstractController
         $form = $this->createForm(ReclamationFilterType::class);
         $form->handleRequest($request);
     
-        // Récupérer la valeur du filtre
         $estTraite = $form->get('estTraite')->getData();
     
-        // Utiliser la valeur du filtre pour récupérer les réclamations
         if ($estTraite === null) {
-            // Si "Toutes" est sélectionné, récupérer toutes les réclamations
             $reclamations = $repository->findAll();
         } else {
-            // Sinon, filtrer par l'état de traitement
             $reclamations = $repository->findBy(['estTraite' => $estTraite]);
         }
     
@@ -50,17 +46,15 @@ class ReclamationController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    
     #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]
     public function listReclamationFront(ReclamationRepository $repository, Security $security)
     {
-    // Récupérer l'utilisateur actuellement connecté
         $user = $security->getUser();
 
         if ($user) {
-        // Récupérer les réclamations de l'utilisateur actuel
         $reclamations = $repository->findBy(['user' => $user]);
     }   else {
-        // Gérer le cas où l'utilisateur n'est pas connecté si nécessaire
         $reclamations = [];
     }
 
@@ -72,30 +66,24 @@ class ReclamationController extends AbstractController
     #[Route('/addReclamation', name: 'add_reclamation')]
     public function addReclamation(Request $request)
     {
-        // Créez une nouvelle instance de l'entité Reclamation
         $reclamation = new Reclamation();
 
-        // Obtenez l'utilisateur actuel
         $user = $this->getUser();
 
-        // Si l'utilisateur est connecté, pré-remplissez le champ de l'utilisateur dans le formulaire
         if ($user) {
             $reclamation->setUser($user);
         }
         
 
-        // Créez le formulaire en utilisant le ReclamationTypeUser
         $form = $this->createForm(ReclamationTypeUser::class, $reclamation);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Traitez le formulaire et enregistrez la réclamation
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($reclamation);
             $entityManager->flush();
 
-            // Redirigez vers la page où vous affichez la liste des réclamations
             return $this->redirectToRoute('list_reclamation_front');
         }
 
@@ -132,10 +120,8 @@ class ReclamationController extends AbstractController
             $em = $managerRegistry->getManager();
             $em->flush();
 
-            // Récupérer le numéro de téléphone de l'utilisateur associé à la réclamation
             $userPhoneNumber = $reclamation->getUser()->getNumTel();
 
-            // Envoyer le SMS
             $this->envoyerSms($userPhoneNumber, 'Votre réclamation a été traitée avec succès.');
 
             return $this->redirectToRoute("list_reclamation_back");
@@ -146,18 +132,14 @@ class ReclamationController extends AbstractController
 
     private function envoyerSms($phoneNumber, $message)
 {
-    // Récupérer les paramètres Twilio depuis les paramètres Symfony
     $sid = $this->getParameter('twilio_account_sid');
     $token = $this->getParameter('twilio_auth_token');
     $twilioPhoneNumber = $this->getParameter('twilio_phone_number');
 
-    // Supprimer les caractères non numériques du numéro de téléphone
     $cleanedPhoneNumber = preg_replace('/[^0-9]/', '', $phoneNumber);
 
-    // Ajouter le préfixe international pour la Tunisie (+216)
     $cleanedPhoneNumber = '+216' . $cleanedPhoneNumber;
 
-    // Utiliser le service SMS pour envoyer le message
     $twilio = new Client($sid, $token);
     $twilio->messages->create(
         $cleanedPhoneNumber,

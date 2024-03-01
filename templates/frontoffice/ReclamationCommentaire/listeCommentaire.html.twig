@@ -13,7 +13,6 @@
 
     <table border="1">
         <tr>
-            <td>Id</td>
             <td>Contenu</td>
             <td>DateCreation</td>
             <td>Réclamation</td>
@@ -21,7 +20,6 @@
         </tr>
         {% for commentaire in tabCommentaire %}
             <tr>
-                <td>{{ commentaire.id }}</td>
                 <td>{{ commentaire.contenu }}</td>
                 {% if commentaire.dateCreation is not null %}
                     <td>{{ commentaire.dateCreation|date }}</td>

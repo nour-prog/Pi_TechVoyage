@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 class ReclamationTypeUser extends AbstractType
@@ -18,7 +19,7 @@ class ReclamationTypeUser extends AbstractType
     {
         $builder
         ->add('sujet')
-        ->add('description')
+        ->add('description',TextareaType::class)
         ->add('Submit',SubmitType::class)
         ;
     }
