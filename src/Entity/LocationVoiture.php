@@ -110,6 +110,18 @@ class LocationVoiture
         return $this;
     }
 
+    public function getObject()
+    {
+        return [
+            "prix" => $this->getPrix(),
+            "dateDebut" => $this->getDateDebut(),
+            "datefin" => $this->getDatefin(),
+            "type" => $this->getType(),
+            "status" => $this->getStatus(),
+            "voiture" => $this->getVoiture()->__toString(),
+        ];
+    }
+
     public function __toString()
     {
         return $this->getStatus();

@@ -14,8 +14,31 @@
 <br>
 <h1>Liste des Location voitures</h1>
 
-<a href="{{ path('app_listReserved_user') }}"> Mes voitures réservés </a>
-<table border="1">
+
+<form id = "searchForm">
+    <div class="row">
+        <div class="col-md-3">
+            <input type="text" class="form-control mb-3" name="type" placeholder="Type">
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control mb-3" name="marque" placeholder="Marque">
+        </div>
+        <div class="col-md-3">
+            <input type="number" class="form-control mb-3" name="maxPrix" placeholder="Max Prix">
+        </div>
+        <div class="col-md-3">
+            <input type="number" class="form-control mb-3" name="minPrix" placeholder="Min Prix">
+        </div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+
+
+<br>
+<table border="1" id="dataTable">
     <tr>
         <td>Id</td>
         <td>Prix Par Jour ($)</td>
@@ -52,6 +75,9 @@
         </tr>
     {% endfor %}
 </table>
+
+<a href="{{ path('app_listReserved_user') }}"> Mes voitures réservés </a>
+
 <br>
 <br>
 <br>
@@ -59,5 +85,75 @@
 <br>
 <br>
 <br>
+
+<script>
+    document.getElementById('searchForm').addEventListener('submit', searchSubmit);
+    async function searchSubmit(e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        //remove empty inputs
+        let filteredFormData = new FormData();
+        for (let pair of formData.entries()) {
+            if (pair[1] !== '') {
+                filteredFormData.append(pair[0], pair[1]);
+            }
+        }
+        //send request
+        let response = await fetch("{{path('app_searchLocationVoiture_user')}}"+ '?' + new URLSearchParams(filteredFormData).toString());
+        let json = await response.json();
+        updateTable(json)
+    }
+    function updateTable(jsonData){
+        let dataTable = document.getElementById("dataTable");
+        dataTable.innerHTML = `
+        <tr>
+            <td>Id</td>
+            <td>Prix Par Jour ($)</td>
+            <td>Date Debut</td>
+            <td>Date Fin</td>
+            <td>Type</td>
+            <td>Status</td>
+            <td>Voiture</td>
+        </tr>
+        `;
+        for(let key in jsonData){
+            console.log(JSON.stringify(jsonData[key].datefin))
+            dataTable.innerHTML += `
+                <tr>
+                    <td>${key}</td>
+                    <td>${jsonData[key].prix}</td>
+                    <td>${jsonData[key].dateDebut == null ? "": formatDate(new Date(jsonData[key].dateDebut.date))}</td>
+                    <td>${jsonData[key].datefin == null ? "": formatDate(new Date(jsonData[key].datefin.date))}</td>
+                    <td>${jsonData[key].type}</td>
+                    <td>${jsonData[key].status}</td>
+                    <td>${jsonData[key].voiture}</td>
+                    <td>
+                        <a href = "${'/locationVoiture/reserve/' + key}"> Réserver </a>
+                    </td>
+                </tr>
+            `;
+            console.log(key + ": " + jsonData[key]);
+        } 
+    }
+
+    function formatDate(date) {
+        let options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric', 
+            hour: 'numeric', 
+            minute: 'numeric',
+            hour12: false
+        };
+        let formattedDate = date.toLocaleString('en-US', options);
+        
+        // Check if hour is 0 (midnight) and replace it with 00
+        if (date.getHours() === 0) {
+            formattedDate = formattedDate.replace(/(\d{1,2}:\d{2})/, '00:00');
+        }
+        
+        return formattedDate;
+    }
+</script>
 
 {% endblock %}

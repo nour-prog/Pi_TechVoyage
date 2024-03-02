@@ -13,6 +13,7 @@ use App\Form\UpdateLocationVoitureType;
 use App\Form\ReserveLocationVoitureType;
 use App\Repository\LocationVoitureRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class GestionLocationVoiture extends AbstractController
 {
@@ -105,5 +106,41 @@ class GestionLocationVoiture extends AbstractController
             return $this->redirectToRoute("app_listLocationVoiture_user");
         }
         return $this->renderForm("frontoffice/GestionLocationVoiture/reserveVoiture.html.twig",["formulaireLocationVoiture"=>$form, "voiture"=>$voiture]);
+    }
+
+    #[Route('/locationVoiture/search', name: 'app_searchLocationVoiture_user')]
+    public function searchVoiture_user(LocationVoitureRepository $repository, Request $request)
+    {
+        $type = $request->query->get('type');
+        $marque = $request->query->get('marque');
+        $maxPrix = $request->query->get('maxPrix');
+        $minPrix = $request->query->get('minPrix');
+
+        $queryBuilder = $repository->createQueryBuilder('lv');
+        $queryBuilder->leftJoin('lv.voiture', 'v');
+
+        //apply filters
+        if ($type !== null) {
+            $queryBuilder->andWhere('lv.type LIKE :type')
+                        ->setParameter('type', '%' . $type . '%');
+        }
+        if ($marque !== null) {
+            $queryBuilder->andWhere('v.marque LIKE :marque')
+                        ->setParameter('marque', '%' . $marque . '%');
+        }
+        if ($maxPrix !== null) {
+            $queryBuilder->andWhere('lv.prix <= :maxPrix')
+                        ->setParameter('maxPrix', $maxPrix);
+        }
+        if ($minPrix !== null) {
+            $queryBuilder->andWhere('lv.prix >= :minPrix')
+                        ->setParameter('minPrix', $minPrix);
+        }
+        $locations = $queryBuilder->getQuery()->getResult();
+        $objects = [];
+        foreach ($locations as $locationVoiture) {
+            $objects[$locationVoiture->getId()] = $locationVoiture->getObject();
+        }
+        return new JsonResponse($objects);
     }
 }
