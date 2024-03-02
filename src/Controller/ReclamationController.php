@@ -15,10 +15,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Twilio\Rest\Client as TwilioClient;
 use GuzzleHttp\Client as GuzzleClient;
+use App\Service\BadWordsChecker;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
+
 
 
 class ReclamationController extends AbstractController
 {
+
+    private $parameterBag;
+    private $badWordsChecker;  // Ajoutez cette ligne pour injecter le service
+
+    public function __construct(ParameterBagInterface $parameterBag, BadWordsChecker $badWordsChecker)
+    {
+        $this->parameterBag = $parameterBag;
+        $this->badWordsChecker = $badWordsChecker;
+    }
+
+
+
     #[Route('/reclamation', name: 'app_reclamation')]
     public function index(): Response
     {
@@ -63,34 +79,40 @@ class ReclamationController extends AbstractController
     );
 }
 
-    #[Route('/addReclamation', name: 'add_reclamation')]
-    public function addReclamation(Request $request)
-    {
-        $reclamation = new Reclamation();
+#[Route('/addReclamation', name: 'add_reclamation')]
+public function addReclamation(Request $request)
+{
+    $reclamation = new Reclamation();
+    $user = $this->getUser();
 
-        $user = $this->getUser();
-
-        if ($user) {
-            $reclamation->setUser($user);
-        }
-        
-
-        $form = $this->createForm(ReclamationTypeUser::class, $reclamation);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($reclamation);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('list_reclamation_front');
-        }
-
-        return $this->render('frontoffice/Reclamation/addReclamation.html.twig', [
-            'formulaireReclamation' => $form->createView(),
-        ]);
+    if ($user) {
+        $reclamation->setUser($user);
     }
+
+    $form = $this->createForm(ReclamationTypeUser::class, $reclamation);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $reclamationText = $reclamation->getDescription();
+
+        if ($this->badWordsChecker->containsBadWords($reclamationText)) {
+            $this->addFlash('danger', 'Le texte de la réclamation contient des mots inappropriés.');
+            dump('Message flash ajouté'); 
+            return $this->redirectToRoute('add_reclamation');
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($reclamation);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('list_reclamation_front');
+    
+    }
+
+    return $this->render('frontoffice/Reclamation/addReclamation.html.twig', [
+        'formulaireReclamation' => $form->createView(),
+    ]);
+}
 
     
 
@@ -174,7 +196,7 @@ class ReclamationController extends AbstractController
     }
 
 
-    public function checkBadWords(Request $request)
+   /* public function checkBadWords(Request $request)
     {
         // Récupérer le texte de la réclamation depuis la requête
         $reclamationText = $request->get('reclamation_text');
@@ -201,5 +223,8 @@ class ReclamationController extends AbstractController
             // Le texte est propre
             return $this->json(['containsBadWords' => false]);
         }
-    }
+    }*/
+
+    
 }
+

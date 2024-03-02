@@ -194,10 +194,18 @@ background:#eee;
 <div class="section-title text-center">
 <h1>Ajouter une réclamation</h1>
 </div>
+{% if app.flashes('danger') is not empty %}
+    <div class="alert alert-danger">
+        {{ app.flashes('danger')[0] }}
+    </div>
+{% endif %}
+
+
 <div class="row">
 <div class="col-lg-7">
 <div class="contact">
-{{form_start(formulaireReclamation,{'attr': {'novalidate': 'novalidate'}})}}
+    
+    {{ form_start(formulaireReclamation,{'attr': {'id': 'formulaire-reclamation', 'novalidate': 'novalidate'}})}}
 <div class="row">
 <div class="form-group col-md-12">
 {{ form_widget(formulaireReclamation.sujet,{'attr': {'class': 'form-control', 'placeholder' : 'Sujet'
@@ -207,8 +215,8 @@ background:#eee;
       </div>
 </div>
 <div class="form-group col-md-12">
-{{ form_widget(formulaireReclamation.description,{'attr': {'class': 'form-control', 'placeholder' : 'Description', 'rows' : '6'
-}}) }}
+    {{ form_widget(formulaireReclamation.description,{'attr': {'id': 'champ-description-reclamation', 'class': 'form-control', 'placeholder' : 'Description', 'rows' : '6'}}) }}
+
       <div class="text-danger">
         {{ form_errors(formulaireReclamation.description) }}
       </div>
@@ -242,11 +250,12 @@ background:#eee;
 </div>
 </div>
 </div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
 	
 </script>
+
+
 </body>
 </html>
 
