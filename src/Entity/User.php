@@ -57,6 +57,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     maxMessage: "Le numéro de téléphone ne peut pas dépasser {{ limit }} chiffres")]
     private ?int $num_tel = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imagefilename = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -201,6 +204,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
       public function setNumTel(int $num_tel): static
       {
           $this->num_tel = $num_tel;
+
+          return $this;
+      }
+
+      public function getImagefilename(): ?string
+      {
+          return $this->imagefilename;
+      }
+
+      public function setImagefilename(?string $imagefilename): static
+      {
+          $this->imagefilename = $imagefilename;
 
           return $this;
       }

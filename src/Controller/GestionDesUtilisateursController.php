@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class GestionDesUtilisateursController extends AbstractController
 {
@@ -75,17 +77,44 @@ class GestionDesUtilisateursController extends AbstractController
 
 
     #[Route('/profile/update/{id}', name: 'app_profile')]
-    public function UpdateProfile(Request $request,UserRepository $repository,$id,ManagerRegistry $managerRegistry)
+    public function UpdateProfile(Request $request, SluggerInterface $slugger,UserRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $user=$repository->find($id);
         $form=$this->createForm(UserProfileType::class,$user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            //add the image
+            $imageFile = $form->get('imagefilename')->getData();
+            if ($imageFile) {
+                //delete the old image
+                $oldFilename = $user->getImagefilename();
+                if ($oldFilename) {
+                    $oldFilePath = $this->getParameter('image_file_directory') . '/' . $oldFilename;
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+                
+                //save the new image
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('image_file_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    throw new HttpException(Response::HTTP_BAD_REQUEST, 'This is an error message.');
+                }
+
+                $user->setImagefilename($newFilename);
+            }
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("list_profile_front");
         }
-        return $this->renderForm("frontoffice/profile/updateprofile.html.twig",["formulaireProfile"=>$form]);
+        return $this->renderForm("frontoffice/profile/updateprofile.html.twig",["formulaireProfile"=>$form,'user'=>$user]);
 
     }
 
