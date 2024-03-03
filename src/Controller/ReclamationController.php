@@ -14,10 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Twilio\Rest\Client as TwilioClient;
-use GuzzleHttp\Client as GuzzleClient;
 use App\Service\BadWordsChecker;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-
+use Knp\Component\Pager\PaginatorInterface;
 
 
 
@@ -25,7 +24,7 @@ class ReclamationController extends AbstractController
 {
 
     private $parameterBag;
-    private $badWordsChecker;  // Ajoutez cette ligne pour injecter le service
+    private $badWordsChecker;  
 
     public function __construct(ParameterBagInterface $parameterBag, BadWordsChecker $badWordsChecker)
     {
@@ -64,23 +63,27 @@ class ReclamationController extends AbstractController
     }
     
     #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]
-    public function listReclamationFront(ReclamationRepository $repository, Security $security)
-    {
-        $user = $security->getUser();
+    public function listReclamationFront(ReclamationRepository $repository,Security $security,PaginatorInterface $paginator,Request $request) {
+    $user = $security->getUser();
 
-        if ($user) {
-        $reclamations = $repository->findBy(['user' => $user]);
-    }   else {
-        $reclamations = [];
-    }
+    $query = $repository->createQueryBuilder('r')
+        ->where('r.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery();
 
-        return $this->render("frontoffice/Reclamation/listeReclamation.html.twig",
-             ['tabReclamation' => $reclamations]
+    $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1), // Le numéro de page actuel
+        10 // Nombre d'éléments par page
     );
+
+    return $this->render("frontoffice/Reclamation/listeReclamation.html.twig", [
+        'pagination' => $pagination,
+    ]);
 }
 
 #[Route('/addReclamation', name: 'add_reclamation')]
-public function addReclamation(Request $request)
+public function addReclamation(Request $request): Response
 {
     $reclamation = new Reclamation();
     $user = $this->getUser();
@@ -93,26 +96,19 @@ public function addReclamation(Request $request)
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        $reclamationText = $reclamation->getDescription();
-
-        if ($this->badWordsChecker->containsBadWords($reclamationText)) {
-            $this->addFlash('danger', 'Le texte de la réclamation contient des mots inappropriés.');
-            dump('Message flash ajouté'); 
-            return $this->redirectToRoute('add_reclamation');
-        }
-
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($reclamation);
         $entityManager->flush();
 
+
         return $this->redirectToRoute('list_reclamation_front');
-    
     }
 
     return $this->render('frontoffice/Reclamation/addReclamation.html.twig', [
         'formulaireReclamation' => $form->createView(),
     ]);
 }
+
 
     
 
@@ -195,36 +191,22 @@ public function addReclamation(Request $request)
         return $this->redirectToRoute("list_reclamation_front");
     }
 
+    public function listAction(Request $request, PaginatorInterface $paginator)
+{
+    $query = $yourRepository->createQueryBuilder('entity')
+        ->getQuery();
 
-   /* public function checkBadWords(Request $request)
-    {
-        // Récupérer le texte de la réclamation depuis la requête
-        $reclamationText = $request->get('reclamation_text');
+    $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1),
+        10
+    );
 
-        // Vérifier les "Bad words" avec l'API Purgomalum
-        $guzzleClient = new GuzzleClient();
+    return $this->render('votre_template.twig', [
+        'pagination' => $pagination,
+    ]);
+}
 
-        $response = $client->get('https://www.purgomalum.com/service/containsprofanity', [
-            'query' => [
-                'text' => $reclamationText,
-                'add' => 'censor',
-                'fill_text' => '***',
-            ],
-        ]);
 
-        $result = json_decode($response->getBody(), true);
-
-        // Vérifier la réponse de l'API
-        if ($result['result']) {
-            // Le texte contient des "Bad words"
-            // Vous pouvez prendre des mesures appropriées ici (par exemple, empêcher la soumission)
-            return $this->json(['containsBadWords' => true]);
-        } else {
-            // Le texte est propre
-            return $this->json(['containsBadWords' => false]);
-        }
-    }*/
-
-    
 }
 
