@@ -31,6 +31,10 @@ class Voiture
     #[ORM\OneToOne(mappedBy: 'voiture', cascade: ['persist', 'remove'])]
     private ?LocationVoiture $locationVoiture = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageFileName = null;
+
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -114,6 +118,18 @@ class Voiture
         }
 
         $this->locationVoiture = $locationVoiture;
+
+        return $this;
+    }
+
+    public function getImageFileName(): ?string
+    {
+        return $this->imageFileName;
+    }
+
+    public function setImageFileName(?string $imageFileName): static
+    {
+        $this->imageFileName = $imageFileName;
 
         return $this;
     }

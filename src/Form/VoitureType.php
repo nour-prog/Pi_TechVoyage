@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class VoitureType extends AbstractType
 {
@@ -68,6 +70,23 @@ class VoitureType extends AbstractType
                         'value' => 1,
                         'message' => 'la capacité doit être au moins 1.',
                     ]),
+                ],
+            ])
+            ->add('imageFile', FileType::class, [
+                'label' => 'image',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                            'image/bmp',
+                        ],
+                        'mimeTypesMessage' => 'Veuillez choisir une image valide',
+                    ])
                 ],
             ])
             ->add('Submit',SubmitType::class)

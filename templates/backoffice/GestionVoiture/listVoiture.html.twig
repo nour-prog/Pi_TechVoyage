@@ -17,6 +17,7 @@
         <td>Capacité</td>
         <td>Couleur</td>
         <td>location</td>
+        <td>image</td>
     </tr>
     {% for i in voitureArr %}
         <tr>
@@ -27,6 +28,7 @@
             <td>{{i.capacite}}</td>
             <td>{{i.couleur}}</td>
             <td>{{i.locationVoiture}}</td>
+            <td><img width="50px" height="50px" src="{{ asset('uploads/images/' ~ i.imageFileName) }}"></td>
             
 
             <td>
