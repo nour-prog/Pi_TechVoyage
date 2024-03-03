@@ -62,9 +62,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'user')]
     private Collection $reclamations;
 
+    #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'User')]
+    private Collection $reclamationCommentaires;
+
     public function __construct()
     {
         $this->reclamations = new ArrayCollection();
+        $this->reclamationCommentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -239,6 +243,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
               // set the owning side to null (unless already changed)
               if ($reclamation->getUser() === $this) {
                   $reclamation->setUser(null);
+              }
+          }
+
+          return $this;
+      }
+
+      /**
+       * @return Collection<int, ReclamationCommentaire>
+       */
+      public function getReclamationCommentaires(): Collection
+      {
+          return $this->reclamationCommentaires;
+      }
+
+      public function addReclamationCommentaire(ReclamationCommentaire $reclamationCommentaire): static
+      {
+          if (!$this->reclamationCommentaires->contains($reclamationCommentaire)) {
+              $this->reclamationCommentaires->add($reclamationCommentaire);
+              $reclamationCommentaire->setUser($this);
+          }
+
+          return $this;
+      }
+
+      public function removeReclamationCommentaire(ReclamationCommentaire $reclamationCommentaire): static
+      {
+          if ($this->reclamationCommentaires->removeElement($reclamationCommentaire)) {
+              // set the owning side to null (unless already changed)
+              if ($reclamationCommentaire->getUser() === $this) {
+                  $reclamationCommentaire->setUser(null);
               }
           }
 

@@ -35,47 +35,38 @@ class ReclamationCommentaireController extends AbstractController
             array('tabCommentaire'=>$commentaire));
     }
 
-    #[Route('/frontoffice/listCommentaire', name: 'list_commentaire_front')]
-public function listCommentaireFront(ReclamationRepository $reclamationRepository, Security $security)
-{
-    // Récupérer l'utilisateur actuellement connecté
-    $user = $security->getUser();
+    #[Route('/frontoffice/ShowReclamation/{id}', name: 'Show_Reclamation_front')]
+    public function ShowReclamationFront(ReclamationRepository $reclamationRepository , $id , Security $security)
+   {        
+        $user = $security->getUser();
+        $userID = $user ->getId();
+        $reclamations = $reclamationRepository->find($id);
 
-    if ($user) {
-        // Récupérer les réclamations de l'utilisateur actuel
-        $reclamations = $reclamationRepository->findBy(['user' => $user]);
+        $commentaires = $reclamations->getReclamationCommentaires()->toArray();
 
-        // Initialiser un tableau pour stocker les commentaires de l'utilisateur
-        $commentaires = [];
-
-        // Parcourir les réclamations de l'utilisateur
-        foreach ($reclamations as $reclamation) {
-            // Ajouter les commentaires de chaque réclamation
-            $commentaires = array_merge($commentaires, $reclamation->getReclamationCommentaires()->toArray());
-        }
-    } else {
-        // Gérer le cas où l'utilisateur n'est pas connecté si nécessaire
-        $commentaires = [];
+        return $this->render("frontoffice/ReclamationCommentaire/ShowReclamation.html.twig", [
+        'tabCommentaire' => $commentaires, 'reclamation' => $reclamations , 'UserId' => $userID]);
     }
-
-    return $this->render("frontoffice/ReclamationCommentaire/listeCommentaire.html.twig", [
-        'tabCommentaire' => $commentaires,
-    ]);
-}
+ 
 
 
-
-    #[Route('/addCommentaireFront', name: 'add_commentaire_front')]
-    public function addCommentaireFront(Request $request,ManagerRegistry $managerRegistry)
+    #[Route('/addCommentaireFront/{id}', name: 'add_commentaire_front')]
+    public function addCommentaireFront(Request $request,Security $security,ManagerRegistry $managerRegistry,$id, ReclamationRepository $reclamationRepository)
     {
+        $user = $security->getUser();
+
         $commentaire= new ReclamationCommentaire();
         $form= $this->createForm(CommentaireType::class,$commentaire);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+            $reclamations = $reclamationRepository->find($id);
+            $commentaire -> setReclamation($reclamations);
+            $commentaire -> setUser($user);
+
             $em= $managerRegistry->getManager();
             $em->persist($commentaire);
             $em->flush();
-            return $this->redirectToRoute("list_commentaire_front");
+            return $this->redirectToRoute("Show_Reclamation_front", ['id' => $id ] );
         }
         return $this->renderForm("frontoffice/ReclamationCommentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
@@ -100,12 +91,13 @@ public function listCommentaireFront(ReclamationRepository $reclamationRepositor
     public function UpdateCommentaire(Request $request,ReclamationCommentaireRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
+        $reclamationId= $commentaire->getReclamation()->getId();
         $form=$this->createForm(CommentaireType::class,$commentaire);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
-            return $this->redirectToRoute("list_commentaire_front");
+            return $this->redirectToRoute("Show_Reclamation_front", ['id' => $reclamationId ]);
         }
         return $this->renderForm("frontoffice/ReclamationCommentaire/updateCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
@@ -129,11 +121,12 @@ public function listCommentaireFront(ReclamationRepository $reclamationRepositor
     public function DeleteCommentaireFront ($id, ReclamationCommentaireRepository $repository,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
+        $reclamationId= $commentaire->getReclamation()->getId();
         $em=$managerRegistry->getManager();
         $em->remove($commentaire);
         $em->flush();
 
-        return $this->redirectToRoute("list_commentaire_front");
+        return $this->redirectToRoute("Show_Reclamation_front", ['id' => $reclamationId ]);
     }
 
     #[Route('/deleteCommentaireBack/{id}', name: 'app_deleteCommentaire_back')]

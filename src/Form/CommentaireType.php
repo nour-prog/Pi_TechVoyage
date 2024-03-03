@@ -17,7 +17,6 @@ class CommentaireType extends AbstractType
     {
         $builder
         ->add('contenu')
-        ->add('Reclamation',null,['placeholder' => "Choisir la réclamation",])           
         ->add('Submit',SubmitType::class)
 
         ;

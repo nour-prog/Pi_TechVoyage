@@ -26,8 +26,10 @@ class ReclamationCommentaire
     private ?\DateTimeInterface $dateCreation = null;
 
     #[ORM\ManyToOne(inversedBy: 'reclamationCommentaires')]
-    #[Assert\NotBlank(message: "Veuillez choisir la réclamation.")]
     private ?Reclamation $Reclamation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reclamationCommentaires')]
+    private ?User $User = null;
 
     public function __construct()
     {
@@ -70,6 +72,18 @@ class ReclamationCommentaire
     public function setReclamation(?Reclamation $Reclamation): static
     {
         $this->Reclamation = $Reclamation;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): static
+    {
+        $this->User = $User;
 
         return $this;
     }
