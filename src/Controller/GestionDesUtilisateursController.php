@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\UserFormType;
+use App\Form\UserProfileType;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -77,14 +78,14 @@ class GestionDesUtilisateursController extends AbstractController
     public function UpdateProfile(Request $request,UserRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $user=$repository->find($id);
-        $form=$this->createForm(UserFormType::class,$user);
+        $form=$this->createForm(UserProfileType::class,$user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
             return $this->redirectToRoute("list_profile_front");
         }
-        return $this->renderForm("frontoffice/profile/updateprofile.html.twig",["formulaireUser"=>$form]);
+        return $this->renderForm("frontoffice/profile/updateprofile.html.twig",["formulaireProfile"=>$form]);
 
     }
 
