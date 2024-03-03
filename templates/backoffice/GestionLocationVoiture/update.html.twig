@@ -4,5 +4,48 @@
 
 
 {% block body %}
-    {{ form(formulaireLocationVoiture, {attr: {novalidate: 'novalidate'}}) }}
+    {{ form_start(formulaireLocationVoiture, {attr: {novalidate: 'novalidate'}}) }}
+        <div class="row mb-3 justify-content-center">
+            {# color input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.prix)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.prix,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.prix) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# color input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.type)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.type,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.type) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# color input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.status)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.status,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.status) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            {{ form_widget(formulaireLocationVoiture.Submit,{'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+    {{ form_end(formulaireLocationVoiture) }}
 {% endblock %}

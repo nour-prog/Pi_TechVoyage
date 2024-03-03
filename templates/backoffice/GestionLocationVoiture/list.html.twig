@@ -6,47 +6,53 @@
 {% block body %}
 <h1>Liste des Location voitures</h1>
 
-<a href="{{ path('app_createLocationVoiture') }}"> Ajout Location Voiture </a>
 
-<table border="1">
-    <tr>
-        <td>Id</td>
-        <td>Prix Par Jour ($)</td>
-        <td>Date Debut</td>
-        <td>Date Fin</td>
-        <td>Type</td>
-        <td>Status</td>
-        <td>Voiture</td>
-    </tr>
-    {% for i in locationVoitureArr %}
+<div class="text-center">
+    <a href="{{ path('app_createLocationVoiture') }}" class="btn btn-primary my-3"> Ajout Location Voiture </a>
+</div>
+
+<table border="1" class="table table-striped table-bordered">
+    <thead class="thead-dark">
         <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.prix}}</td>
-
-            {% if i.dateDebut is not null %}
-                <td>{{ i.dateDebut|date }}</td>
-            {% else %}
-                <td></td>
-            {% endif %}
-
-            {% if i.datefin is not null %}
-                <td>{{ i.datefin|date }}</td>
-            {% else %}
-                <td></td>
-            {% endif %}
-
-            
-            <td>{{i.type}}</td>
-            <td>{{i.status}}</td>
-            <td>{{i.voiture}}</td>
-
-            <td>
-                <a href = "{{ path('app_updateLocationVoiture', { id: i.id }) }}"> Modifier </a>
-                <a href = "{{ path('app_deleteLocationVoiture', { id: i.id }) }}"> Supprimer </a>
-             </td>
-
+            <th>Prix Par Jour ($)</th>
+            <th>Date Debut</th>
+            <th>Date Fin</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Voiture</th>
+            <th>Action</th>
         </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+        {% for i in locationVoitureArr %}
+            <tr>
+                <td>{{i.prix}}</td>
+
+                {% if i.dateDebut is not null %}
+                    <td>{{ i.dateDebut|date }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+
+                {% if i.datefin is not null %}
+                    <td>{{ i.datefin|date }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+
+                
+                <td>{{i.type}}</td>
+                <td>{{i.status}}</td>
+                <td>{{i.voiture}}</td>
+
+                <td>
+                    <a class="btn btn-warning" href = "{{ path('app_updateLocationVoiture', { id: i.id }) }}"> Modifier </a>
+                    <a class="btn btn-danger" href = "{{ path('app_deleteLocationVoiture', { id: i.id }) }}"> Supprimer </a>
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}

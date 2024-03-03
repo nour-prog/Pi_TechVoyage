@@ -4,20 +4,57 @@
 
 
 {% block body %}
-<br>
-<br>
-<br>
-<br>
-<br>
-    <h3> Detail </h3>
-    <p>
-        <b>Couleur: </b>{{voiture.couleur}}<br>
-        <b>Marque: </b>{{voiture.marque}}<br>
-        <b>Model: </b>{{voiture.model}}<br>
-        <b>Energy: </b>{{voiture.energy}}<br>
-        <b>Capacite: </b>{{voiture.capacite}}
-    </p>
-    {{ form(formulaireLocationVoiture, {attr: {novalidate: 'novalidate'}}) }}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="text-center">
+        <h3> Detail </h3>
+        <hr>
+            <td><img width="auto" height="250px" src="{{ asset('uploads/images/' ~ voiture.imageFileName) }}"></td>
+        <hr>
+        <p>
+            <b>Couleur: </b>{{voiture.couleur}}<br>
+            <b>Marque: </b>{{voiture.marque}}<br>
+            <b>Model: </b>{{voiture.model}}<br>
+            <b>Energy: </b>{{voiture.energy}}<br>
+            <b>Capacite: </b>{{voiture.capacite}}
+        </p>
+    </div>
+    <hr>
+    {{ form_start(formulaireLocationVoiture, {attr: {novalidate: 'novalidate'}}) }}
+        <div class="row mb-3 justify-content-center">
+            {# dateDebut input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.dateDebut)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.dateDebut) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.dateDebut) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# datefin input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.datefin)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.datefin) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.datefin) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            {{ form_widget(formulaireLocationVoiture.Submit,{'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+    {{ form_end(formulaireLocationVoiture) }}
+    
 <br>
 <br>
 <br>

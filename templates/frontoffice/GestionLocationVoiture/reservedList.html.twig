@@ -14,39 +14,41 @@
 <br>
 <h1>Liste des Location voitures Réservé</h1>
 
-<table border="1">
-    <tr>
-        <td>Id</td>
-        <td>Prix Par Jour ($)</td>
-        <td>Date Debut</td>
-        <td>Date Fin</td>
-        <td>Type</td>
-        <td>Status</td>
-        <td>Voiture</td>
-    </tr>
-    {% for i in locationVoitureArr %}
+<table border="1" class="table table-striped table-bordered" id="dataTable">
+    <thead class="thead-dark">
         <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.prix}}</td>
-
-            {% if i.dateDebut is not null %}
-                <td>{{ i.dateDebut|date }}</td>
-            {% else %}
-                <td></td>
-            {% endif %}
-
-            {% if i.datefin is not null %}
-                <td>{{ i.datefin|date }}</td>
-            {% else %}
-                <td></td>
-            {% endif %}
-
-            
-            <td>{{i.type}}</td>
-            <td>{{i.status}}</td>
-            <td>{{i.voiture}}</td>
+            <th>Prix Par Jour ($)</th>
+            <th>Date Debut</th>
+            <th>Date Fin</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Voiture</th>
         </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+        {% for i in locationVoitureArr %}
+            <tr>
+                <td>{{i.prix}}</td>
+
+                {% if i.dateDebut is not null %}
+                    <td>{{ i.dateDebut|date }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+
+                {% if i.datefin is not null %}
+                    <td>{{ i.datefin|date }}</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+
+                
+                <td>{{i.type}}</td>
+                <td>{{i.status}}</td>
+                <td>{{i.voiture}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 <br>
 <br>

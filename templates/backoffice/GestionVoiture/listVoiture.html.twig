@@ -6,38 +6,43 @@
 {% block body %}
 <h1>Liste des voitures</h1>
 
-<a href="{{ path('app_createVoiture') }}"> Ajout Voiture </a>
+<div class="text-center">
+    <a href="{{ path('app_createVoiture') }}" class="btn btn-primary my-3"> Ajout Voiture </a>
+</div>
 
-<table border="1">
-    <tr>
-        <td>Id</td>
-        <td>Modéle</td>
-        <td>Marque</td>
-        <td>Energie</td>
-        <td>Capacité</td>
-        <td>Couleur</td>
-        <td>location</td>
-        <td>image</td>
-    </tr>
-    {% for i in voitureArr %}
+<table border="1" class="table table-striped table-bordered">
+    <thead class="thead-dark">
         <tr>
-            <td>{{i.id}}</td>
-            <td>{{i.model}}</td>
-            <td>{{i.marque}}</td>
-            <td>{{i.energy}}</td>
-            <td>{{i.capacite}}</td>
-            <td>{{i.couleur}}</td>
-            <td>{{i.locationVoiture}}</td>
-            <td><img width="50px" height="50px" src="{{ asset('uploads/images/' ~ i.imageFileName) }}"></td>
-            
-
-            <td>
-                <a href = "{{ path('app_updateVoiture', { id: i.id }) }}"> Modifier </a>
-                <a href = "{{ path('app_deleteVoiture', { id: i.id }) }}"> Supprimer </a>
-             </td>
-
+            <th>Modéle</th>
+            <th>Marque</th>
+            <th>Energie</th>
+            <th>Capacité</th>
+            <th>Couleur</th>
+            <th>location</th>
+            <th>image</th>
+            <th>Action</th>
         </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+        {% for i in voitureArr %}
+            <tr>
+                <td>{{i.model}}</td>
+                <td>{{i.marque}}</td>
+                <td>{{i.energy}}</td>
+                <td>{{i.capacite}}</td>
+                <td>{{i.couleur}}</td>
+                <td>{{i.locationVoiture}}</td>
+                <td><img width="50px" height="50px" src="{{ asset('uploads/images/' ~ i.imageFileName) }}"></td>
+                
+
+                <td>
+                    <a class="btn btn-warning" href = "{{ path('app_updateVoiture', { id: i.id }) }}"> Modifier </a>
+                    <a class="btn btn-danger" href = "{{ path('app_deleteVoiture', { id: i.id }) }}"> Supprimer </a>
+                </td>
+
+            </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}

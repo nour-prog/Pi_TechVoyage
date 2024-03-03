@@ -4,5 +4,82 @@
 
 
 {% block body %}
-    {{ form(formulaireVoiture, {attr: {novalidate: 'novalidate'}}) }}
+    {{ form_start(formulaireVoiture, {attr: {novalidate: 'novalidate'}}) }}
+        <div class="row mb-3 justify-content-center">
+            {# color input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireVoiture.couleur)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireVoiture.couleur,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireVoiture.couleur) }}
+                </div>
+            </div>
+            {# marque input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireVoiture.marque)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireVoiture.marque,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireVoiture.marque) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# model input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireVoiture.model)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireVoiture.model,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireVoiture.model) }}
+                </div>
+            </div>
+            {# model input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireVoiture.capacite)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireVoiture.capacite,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireVoiture.capacite) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# energy input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireVoiture.energy)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireVoiture.energy,{'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireVoiture.energy) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# image input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireVoiture.imageFile)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireVoiture.imageFile,{'attr': {'class': 'form-control-file'}}) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireVoiture.imageFile) }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="text-center">
+            {{ form_widget(formulaireVoiture.Submit,{'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+    {{ form_end(formulaireVoiture) }}
 {% endblock %}
