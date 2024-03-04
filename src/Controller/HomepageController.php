@@ -17,14 +17,6 @@ class HomepageController extends AbstractController
         ]);
     }
 
-    #[Route('/affiche/commentaire', name: 'app_affichecommentaire')]
-    public function affichecommentaire(OffreCommentaireRepository $offrecommentaireRepository): Response
-    {      
-        return $this->render('frontoffice/offre_commentaire/show.html.twig',[
-            "commentaires" =>$offrecommentaireRepository->findAll()
-        ]);
-    }
-
 
 
 
