@@ -30,11 +30,25 @@
         </tr>
         </thead>
         <tbody>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
         <input type="search" id="myInput" class="form-control pl-6" placeholder="Search "/><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script><script>$(document).ready(function () {$("#myInput").on("keyup", function () {var value = $(this).val().toLowerCase();$("#myTable tr ").filter(function () {$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)});})});</script>
-        <a href="{{ path('generator_service') }}">PDF</a>
-        <a href="{{ path('stats') }}">Statistique</a>
+
+        <div class="ms-3">
+            <a href="{{ path('generator_service') }}" class="btn btn-outline-primary"> PDF</a>
+        </div>
+        <div class="ms-3">
+            <a href="{{ path('stats') }}" class="btn btn-outline-primary"> Statistiques</a>
+        </div>
+
+
         {% for reservation in reservations %}
             <tr>
+
                 <td>{{ reservation.id }}</td>
                 <td>{{ reservation.Datedepart ? reservation.Datedepart|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ reservation.Dateretour ? reservation.Dateretour|date('Y-m-d H:i:s') : '' }}</td>
@@ -55,8 +69,11 @@
             </tr>
         {% endfor %}
         <div class="ms-3">
-            <a href="{{ path('app_reservation_index', {'sort': 'Nbrdepersonne'}) }}" class="btn btn-outline-primary">Trier par Nbrdepersonne</a>
+            <a href="{{ path('app_reservation_index') }}?sort=Nbrdepersonne" class="btn btn-outline-primary">Trier</a>
         </div>
+
+
+
 
         </tbody>
 

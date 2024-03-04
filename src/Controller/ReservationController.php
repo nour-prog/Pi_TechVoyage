@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Reservation;
 use App\Form\ReservationType;
-use App\Repository\OeuvreRepository;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +18,18 @@ use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
+
+    #[Route('/index', name: 'app_reservation_index', methods: ['GET'])]
+    public function listeReservation(EntityManagerInterface $entityManager) :Response
+    {
+        // Récupérez les hôtels triés par le nombre d'étoiles
+        $reservation = $entityManager->getRepository(Reservation::class)
+            ->createQueryBuilder('h')
+            ->orderBy('h.Nbrdepersonne', 'ASC') // Changez 'ASC' à 'DESC' si vous voulez trier par ordre décroissant
+            ->getQuery()
+            ->getResult();
+        return $this->render('frontoffice/reservation/index1.html.twig', ['reservation' => $reservation]);
+    }
 
     #[Route('/statistique', name: 'stats')]
     public function stat()
@@ -108,6 +119,7 @@ class ReservationController extends AbstractController
             'reservations' => $reservationRepository->findAll(),
         ]);
     }
+
 
     #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

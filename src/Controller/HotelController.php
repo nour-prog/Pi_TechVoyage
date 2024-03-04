@@ -14,6 +14,19 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/hotel')]
 class HotelController extends AbstractController
 {
+    #[Route('/index1', name: 'app_hotel_index', methods: ['GET'])]
+    public function listeHotels(EntityManagerInterface $entityManager) :Response
+    {
+        // Récupérez les hôtels triés par le nombre d'étoiles
+        $hotels = $entityManager->getRepository(Hotel::class)
+            ->createQueryBuilder('u')
+            ->orderBy('u.nbretoile','ASC') // Changez 'ASC' à 'DESC' si vous voulez trier par ordre décroissant
+            ->getQuery()
+            ->getResult();
+
+        // Passez la liste triée à votre template Twig
+        return $this->render('frontoffice/hotel/index1.html.twig', ['hotels' => $hotels]);
+    }
     #[Route('/', name: 'app_hotel_index', methods: ['GET'])]
     public function index(HotelRepository $hotelRepository): Response
     {
@@ -21,6 +34,7 @@ class HotelController extends AbstractController
             'hotels' => $hotelRepository->findAll(),
         ]);
     }
+
 
     #[Route('/new', name: 'app_hotel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -78,4 +92,5 @@ class HotelController extends AbstractController
 
         return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }
