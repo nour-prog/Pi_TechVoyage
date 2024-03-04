@@ -17,7 +17,7 @@ class UserChecker implements UserCheckerInterface
 
         if (!$user->isVerified()) {
            
-            throw new CustomUserMessageAccountStatusException('Your user account no longer exists.');
+            throw new CustomUserMessageAccountStatusException('Votre compte utilisateur n existe plus.');
         }
     }
 

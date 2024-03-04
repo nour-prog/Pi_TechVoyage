@@ -46,18 +46,21 @@
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-<h1 class="h2">Reset password</h1>
+<h1 class="h2">Réinitialiser le mot de passe</h1>
 <p class="lead">
-Enter your email to reset your password.
+Entrez votre adresse e-mail pour réinitialiser votre mot de passe.
 </p>
 </div>
 <div class="card">
 <div class="card-body">
 <div class="m-sm-4">
-    {{ form_start(requestForm) }}
+    {{ form_start(requestForm,{'attr': {'novalidate': 'novalidate'}}) }}
 <div class="form-group">
-
-{{ form_row(requestForm.email,{'attr': {'class': 'form-control form-control-lg'}},{'attr': {'placeholder': 'Enter your email'}}) }}
+<h6>Email</h6>
+     <div class="text-danger">
+        {{ form_errors(requestForm.email) }}
+      </div>
+    {{ form_widget(requestForm.email,{'attr': {'class': 'form-control form-control-lg','placeholder': 'Entrez votre adresse e-mail'}}) }}
 </div>
 <div class="text-center mt-3">
 {{form_row(requestForm.Submit,{'attr': {'class': 'btn btn-lg btn-primary'}})}}

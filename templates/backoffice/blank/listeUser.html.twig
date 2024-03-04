@@ -34,7 +34,7 @@
             <th>Email</th>
             <th>téléphone</th>
             <th>Roles</th>
-            <th>IsVerified</th>
+            <th>Confirmation</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -53,7 +53,14 @@
             <td>{{i.email}}</td>
             <td>{{i.getNumTel}}</td>
             <td>{{i.roles[0]}}</td>
-            <td>{{i.isVerified}}</td>
+            <td>
+              {% if i.isVerified  %}
+                  <i class="fas fa-check"></i>
+              {% else %}
+                  <i class="fas fa-times"></i>
+              {% endif %}
+            </td>
+            <!-- <td>{{i.isVerified}}</td> -->
             <td>
               <a href="{{ path('app_UpdateUser', { id: i.id }) }}" class="edit" ><i class="material-icons" data-toggle="tooltip" >&#xE254;</i></a>
               <a href="{{ path('app_deleteUser', { id: i.id }) }}" class="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
