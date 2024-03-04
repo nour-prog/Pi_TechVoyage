@@ -150,4 +150,16 @@ class Reclamation
 
         return $this;
     }
+
+
+    public function getObject()
+    {
+        return [
+            "sujet" => $this->getSujet(),
+            "description" => $this->getDescription(),
+            "dateSoumission" => $this->getDatesoumission(),
+            "estTraite" => $this->isEstTraite(),
+            "userName" => $this->getUser()->getPrenom() . " " . $this->getUser()->getNom(),
+        ];
+    }
 }

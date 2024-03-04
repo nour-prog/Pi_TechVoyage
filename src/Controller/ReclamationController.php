@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Reclamation;
 use App\Form\ReclamationTypeUser;
 use App\Form\ReclamationTypeAdmin;
-use App\Form\ReclamationFilterType;
 use App\Repository\ReclamationRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +16,7 @@ use Twilio\Rest\Client as TwilioClient;
 use App\Service\BadWordsChecker;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
@@ -42,52 +42,13 @@ class ReclamationController extends AbstractController
         ]);
     }
 
-    #[Route('/backoffice/listReclamation', name: 'list_reclamation_back')]
-public function listReclamationBack(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator)
+    
+#[Route('/backoffice/listReclamation', name: 'list_reclamation_back')]
+public function listReclamationBack(Request $request, ReclamationRepository $repository)
 {
-    // Create the form
-    $form = $this->createForm(ReclamationFilterType::class);
-    $form->handleRequest($request);
 
-    // Filter reclamations based on form input
-    $estTraite = $form->get('estTraite')->getData();
-
-    // Query builder for reclamations
-    $queryBuilder = $repository->createQueryBuilder('r');
-
-    if ($estTraite !== null) {
-        $queryBuilder->andWhere('r.estTraite = :estTraite')
-            ->setParameter('estTraite', $estTraite);
-    }
-
-    // Paginate the results
-    $pagination = $paginator->paginate(
-        $queryBuilder->getQuery(), // Use query instead of results
-        $request->query->getInt('page', 1), // Current page number
-        10 // Items per page
-    );
-
-    if ($estTraite === null) {
-        $reclamations = $repository->findAll();
-    } else {
-        $reclamations = $repository->findBy(['estTraite' => $estTraite]);
-    }
-
-    // Render the view
-    return $this->render('backoffice/Reclamation/listeReclamation.html.twig', [
-        'tabReclamation' => $reclamations,
-        'form' => $form->createView(),
-        'pagination' => $pagination,
-    ]);
+    return $this->render('backoffice/Reclamation/listeReclamation.html.twig');
 }
-
-
-
-
-
-
-
-
     
     #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]
     public function listReclamationFront(ReclamationRepository $repository,Security $security,PaginatorInterface $paginator,Request $request) {
@@ -216,6 +177,42 @@ public function addReclamation(Request $request): Response
          $em->flush();
 
         return $this->redirectToRoute("list_reclamation_front");
+    }
+
+
+
+
+    #[Route('/reclamation/search', name: 'app_reclamation_search')]
+    public function ReclamationSearch(ReclamationRepository $repository, Request $request)
+    {
+        $nom = $request->query->get('nom');
+        $prenom = $request->query->get('prenom');
+        $estTraite = $request->query->get('estTraite');
+
+        $queryBuilder = $repository->createQueryBuilder('r');
+        $queryBuilder->leftJoin('r.user', 'u');
+
+        //apply filters
+        if ($nom !== null) {
+            $queryBuilder->andWhere('u.nom LIKE :nom')
+                        ->setParameter('nom', '%' . $nom . '%');
+        }
+        if ($prenom !== null) {
+            $queryBuilder->andWhere('u.prenom LIKE :prenom')
+                        ->setParameter('prenom', '%' . $prenom . '%');
+        }
+        if ($estTraite !== null && $estTraite !== "" ) {
+            $queryBuilder->andWhere('r.estTraite = :estTraite')
+                        ->setParameter('estTraite', $estTraite);
+        }
+        
+
+        $reclamation = $queryBuilder->getQuery()->getResult();
+        $objects = [];
+        foreach ($reclamation as $rec) {
+            $objects[$rec->getId()] = $rec->getObject();
+        }
+        return new JsonResponse($objects);
     }
 
 
