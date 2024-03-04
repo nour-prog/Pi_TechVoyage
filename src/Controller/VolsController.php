@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\PdfGeneratorService;
 
 #[Route('/backoffice/vols')]
 class VolsController extends AbstractController
@@ -77,5 +78,26 @@ class VolsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_vols_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/pdf/vol', name: 'generator_service')]
+    public function pdfEvenement(): Response
+    {
+        $vol= $this->getDoctrine()
+            ->getRepository(Vols::class)
+            ->findAll();
+
+
+
+        $html =$this->renderView('backoffice/vpdf/index.html.twig', ['vols' => $vol]);
+        $pdfGeneratorService=new PdfGeneratorService();
+        $pdf = $pdfGeneratorService->generatePdf($html);
+
+        return new Response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="document.pdf"',
+        ]);
+
     }
 }
