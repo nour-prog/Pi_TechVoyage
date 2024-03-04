@@ -3,32 +3,54 @@
 {% block title %}Reclamation{% endblock %}
 
 {% block body %}
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <h1>Liste des réclamations ({{ tabReclamation|length }} réclamations)</h1>
 
-    {{ form_start(form) }}
-    {{ form_widget(form.estTraite) }}
-    {{ form_widget(form.Filtrer) }}
-    {{ form_end(form) }}
+   <link rel="stylesheet" href="/CRUD/CRUD.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   
 
-    <table border="1">
-        <tr>
-            <td>Nom et Prénom</td>
-            <td>Sujet</td>
-            <td>Description</td>
-            <td>Date de soumission</td>
-            <td>EstTraite</td>
-            <td>Actions</td>
-        </tr>
+   
+<div class="container">
+    <div class="table-wrapper">
+      <div class="table-title">
+        <div class="row">
+          <div class="col-sm-6">
+            <h2>Liste des réclamations ({{ tabReclamation|length }} réclamations)</h2>
+          </div>
+          
+        </div>
+      </div>
+        {{ form_start(form) }}
+        {{ form_widget(form.estTraite) }}
+        {{ form_widget(form.Filtrer) }}
+        {{ form_end(form) }}
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>
+              <span class="custom-checkbox">
+                                  <input type="checkbox" id="selectAll">
+                                  <label for="selectAll"></label>
+              </span>
+            </th>
+            <th>Nom et Prénom</th>
+            <th>Sujet</th>
+            <th>Description</th>
+            <th>Date de soumission</th>
+            <th>EstTraite</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in pagination %}
 
-        {% for i in tabReclamation %}
-            <tr>
-                <td>{{ i.getUser().getPrenom() }} {{ i.getUser().getNom() }}</td>
+          <tr>
+            <td>
+              <span class="custom-checkbox">
+                                  <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                  <label for="checkbox1"></label>
+             </span>
+            </td>
+            <td>{{ i.getUser().getPrenom() }} {{ i.getUser().getNom() }}</td>
                 <td>{{i.Sujet}}</td>
                 <td>{{i.Description}}</td>
                 {% if i.DateSoumission is not null %}
@@ -43,20 +65,35 @@
                         <i class="fas fa-times"></i>
                     {% endif %}
                 </td>
+
                 <td>
-                    <a href="{{ path('app_deleteReclamation_back', { id: i.id }) }}"> Supprimer </a>
-                    <a href="{{ path('app_updateReclamation_back', { id: i.id }) }}"> Modifier </a>
+                    <a href="{{ path('app_deleteReclamation_back', { id: i.id }) }} class="delete"> <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i> </a>
+                    <a href="{{ path('app_updateReclamation_back', { id: i.id }) }} class="edit"> <i class="material-icons" data-toggle="tooltip" >&#xE254;</i> </a>
                     <a href="{{ path('Show_Reclamation_back', { id: i.id }) }}"> Commentaires </a>
 
                 </td>
-            </tr>
-        {% endfor %}
-    </table>
+                
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="pagination-container">
+        <div class="row g-0 align-items-center pb-4">
+            <div class="col-sm-6">
+                <div>
+                    <p class="mb-sm-0">Affichage de {{ pagination.getTotalItemCount }} entrées</p>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="float-sm-end">
+                    <ul class="pagination mb-sm-0">
+                        {{ knp_pagination_render(pagination) }}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  <script src="/CRUD/CRUD.js"></script>
 
-    <br>
-    <br>
-    <br>
-    <br>
-
-    <br>
 {% endblock %}

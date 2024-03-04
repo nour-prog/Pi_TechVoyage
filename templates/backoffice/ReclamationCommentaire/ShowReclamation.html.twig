@@ -2,26 +2,39 @@
 
 {% block title %}Commentaire{% endblock %}
 
-
 {% block body %}
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h1>Liste des commentaires</h1>
-<table border="1">
-    <tr>
-        <td>UserName</td>
-        <td>Contenu</td>
-        <td>Date de creation</td>
-        <td>Réclamation</td>
 
+   <link rel="stylesheet" href="/CRUD/CRUD.css">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+   
 
-    </tr>
-    {% for i in tabCommentaire %}
-        <tr>
+   
+<div class="container">
+    <div class="table-wrapper">
+      <div class="table-title">
+        <div class="row">
+          <div class="col-sm-6">
+            <h2>Liste des commentaires ({{ tabCommentaire|length }} commentaires)</h2>
+          </div>
+          
+        </div>
+      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            
+            <th>Nom et Prénom</th>
+            <th>Contenu</th>
+            <th>Date de creation</th>
+            <th>Réclamation</th>
+            <th>Actions</th>
+
+        
+          </tr>
+        </thead>
+        <tbody>
+            {% for i in tabCommentaire %}
+            <tr>
             <td>{{ i.getUser().getPrenom() }} {{ i.getUser().getNom() }}</td>
             <td>{{i.contenu}}</td>
             {% if i.dateCreation is not null %}
@@ -33,24 +46,26 @@
 
 
              <td>
-                 <a href = "{{ path('app_deleteCommentaire_back', { id: i.id }) }}"> Supprimer </a>
+                 <a href = "{{ path('app_deleteCommentaire_back', { id: i.id }) }} class="delete""> <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i> </a>
 
                  {% if i.getUser().getId() == UserId %}
-                 <a href = "{{ path('app_updateCommentaire_back', { id: i.id }) }}"> Modifier </a>
+                 <a href = "{{ path('app_updateCommentaire_back', { id: i.id }) }} class="edit""> <i class="material-icons" data-toggle="tooltip" >&#xE254;</i> </a>
                  {% endif %}
 
+                 
+
              </td>
+          </tr>
+          {% endfor %} 
+          <a class="btn btn-primary" href  = "{{ path('add_commentaire_back', { id: reclamation.getId() }) }}"> Ajouter </a>
+          <br>
 
-        </tr>
-    {% endfor %}
+        </tbody>
+      </table>
+      
+    </div>
+</div>
 
-            <a href = "{{ path('add_commentaire_back', { id: reclamation.getId() }) }}"> Ajouter </a>
+  <script src="/CRUD/CRUD.js"></script>
 
-</table>
-<br>
-<br>
-<br>
-<br>
-
-<br>
 {% endblock %}

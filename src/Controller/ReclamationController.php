@@ -43,24 +43,39 @@ class ReclamationController extends AbstractController
     }
 
     #[Route('/backoffice/listReclamation', name: 'list_reclamation_back')]
-    public function listReclamationBack(Request $request, ReclamationRepository $repository)
-    {
-        $form = $this->createForm(ReclamationFilterType::class);
-        $form->handleRequest($request);
-    
-        $estTraite = $form->get('estTraite')->getData();
-    
-        if ($estTraite === null) {
-            $reclamations = $repository->findAll();
-        } else {
-            $reclamations = $repository->findBy(['estTraite' => $estTraite]);
-        }
-    
-        return $this->render('backoffice/Reclamation/listeReclamation.html.twig', [
-            'tabReclamation' => $reclamations,
-            'form' => $form->createView(),
-        ]);
+public function listReclamationBack(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator)
+{
+    // Récupérer toutes les réclamations
+    $query = $repository->createQueryBuilder('r')->getQuery();
+
+    // Créer le formulaire
+    $form = $this->createForm(ReclamationFilterType::class);
+    $form->handleRequest($request);
+
+    // Filtrer les réclamations en fonction de la saisie du formulaire
+    $estTraite = $form->get('estTraite')->getData();
+
+    if ($estTraite === null) {
+        $reclamations = $repository->findAll();
+    } else {
+        $reclamations = $repository->findBy(['estTraite' => $estTraite]);
     }
+
+    // Paginer les résultats
+    $pagination = $paginator->paginate(
+        $query,
+        $request->query->getInt('page', 1), // Le numéro de page actuel
+        10 // Nombre d'éléments par page
+    );
+
+    // Rendre la vue
+    return $this->render('backoffice/Reclamation/listeReclamation.html.twig', [
+        'tabReclamation' => $reclamations,
+        'form' => $form->createView(),
+        'pagination' => $pagination,
+    ]);
+}
+
     
     #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]
     public function listReclamationFront(ReclamationRepository $repository,Security $security,PaginatorInterface $paginator,Request $request) {
@@ -190,22 +205,6 @@ public function addReclamation(Request $request): Response
 
         return $this->redirectToRoute("list_reclamation_front");
     }
-
-    public function listAction(Request $request, PaginatorInterface $paginator)
-{
-    $query = $yourRepository->createQueryBuilder('entity')
-        ->getQuery();
-
-    $pagination = $paginator->paginate(
-        $query,
-        $request->query->getInt('page', 1),
-        10
-    );
-
-    return $this->render('votre_template.twig', [
-        'pagination' => $pagination,
-    ]);
-}
 
 
 }
