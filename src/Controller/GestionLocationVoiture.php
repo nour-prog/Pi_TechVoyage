@@ -14,6 +14,9 @@ use App\Form\ReserveLocationVoitureType;
 use App\Repository\LocationVoitureRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GestionLocationVoiture extends AbstractController
 {
@@ -88,6 +91,36 @@ class GestionLocationVoiture extends AbstractController
         return $this->render("frontoffice/GestionLocationVoiture/reservedList.html.twig",
             array('locationVoitureArr'=>$locationVoitures));
     }
+
+    #[Route('/locationVoiture/myReserved/recu/{id}', name: 'app_reservedRecu_user')]
+    public function reservedRecu_user(LocationVoitureRepository $repository, $id)
+    {
+        $locationVoiture = $repository->find($id);
+        if ($locationVoiture) {
+            if ($locationVoiture->getStatus() === "réservé") {
+                $html = $this->renderView('frontoffice/GestionLocationVoiture/recuPdf.html.twig',[
+                    "locationVoiture" => $locationVoiture
+                ]);
+                $options = new Options();
+                $options->set('isHtml5ParserEnabled', true);
+                $dompdf = new Dompdf($options);
+                $dompdf->loadHtml($html);
+                $dompdf->setPaper('A4', 'portrait');
+                $dompdf->render();
+        
+                // $dompdf->stream('récu.pdf');
+        
+                return new Response($dompdf->output(), 200, [
+                    'Content-Type' => 'application/pdf',
+                    'Content-Disposition' => 'inline; filename="your_pdf_filename.pdf"',
+                ]);
+            } else {
+                throw new NotFoundHttpException("Le Recu demandé n'a pas pu être trouvé.");
+            }
+        } else {
+            throw new NotFoundHttpException("La Voiture demandé n'a pas pu être trouvé.");
+        }
+    }
     
 
     #[Route('/locationVoiture/reserve/{id}', name: 'app_reserveVoiture_user')]
@@ -105,7 +138,7 @@ class GestionLocationVoiture extends AbstractController
             $em->flush();
             return $this->redirectToRoute("app_listLocationVoiture_user");
         }
-        return $this->renderForm("frontoffice/GestionLocationVoiture/reserveVoiture.html.twig",["formulaireLocationVoiture"=>$form, "voiture"=>$voiture]);
+        return $this->renderForm("frontoffice/GestionLocationVoiture/reserveVoiture.html.twig",["formulaireLocationVoiture"=>$form, "locationVoiture"=>$locationVoiture ,"voiture"=>$voiture]);
     }
 
     #[Route('/locationVoiture/search', name: 'app_searchLocationVoiture_user')]
@@ -136,6 +169,8 @@ class GestionLocationVoiture extends AbstractController
             $queryBuilder->andWhere('lv.prix >= :minPrix')
                         ->setParameter('minPrix', $minPrix);
         }
+        $queryBuilder->andWhere('lv.status = :status')
+                    ->setParameter('status', "disponible");
         $locations = $queryBuilder->getQuery()->getResult();
         $objects = [];
         foreach ($locations as $locationVoiture) {

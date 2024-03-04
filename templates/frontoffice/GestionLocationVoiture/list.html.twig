@@ -67,14 +67,6 @@
                 Prix Par Jour ($)
                 <i class=""></i>
             </th>
-            <th id="dateDebut" class="cursor-pointer" data-ascend-order="0" onclick="sortField(event, 'dateDebut')">
-                Date Debut
-                <i class=""></i>
-            </th>
-            <th id="datefin" class="cursor-pointer" data-ascend-order="0" onclick="sortField(event, 'datefin')">
-                Date Fin
-                <i class=""></i>
-            </th>
             <th id="type" class="cursor-pointer" data-ascend-order="0"  onclick="sortField(event, 'type')">
                 Type
                 <i class=""></i>
@@ -168,8 +160,6 @@
             tableContent.innerHTML += `
                 <tr>
                     <td>${data.prix}</td>
-                    <td>${data.dateDebut == null ? "": formatDate(new Date(data.dateDebut.date))}</td>
-                    <td>${data.datefin == null ? "": formatDate(new Date(data.datefin.date))}</td>
                     <td>${data.type}</td>
                     <td>${data.status}</td>
                     <td>${data.voiture}</td>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reçu de Location de Voiture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .receipt-body {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .receipt-info {
+            margin-bottom: 20px;
+        }
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .receipt-table th, .receipt-table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        .receipt-total {
+            margin-top: 20px;
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="receipt-header">
+            <h1>Reçu de Location de Voiture</h1>
+            <p>123 Rue Principale, Ville, Pays</p>
+        </div>
+        <div class="receipt-body">
+            <div class="receipt-info">
+                <p><strong>Numéro de Location :</strong> {{locationVoiture.id}}</p>
+                <p><strong>Date de Location :</strong>{{locationVoiture.dateDebut | date}}</p>
+                <p><strong>Date de Retour :</strong> {{locationVoiture.dateFin | date}}</p>
+            </div>
+            <table class="receipt-table">
+                <thead>
+                    <tr>
+                        <th>Voiture</th>
+                        <th>Jours Loués</th>
+                        <th>Prix par Jour</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{locationVoiture.getVoiture().marque}} {{locationVoiture.getVoiture().model}}</td>
+                        <td>
+                            {% set startDate = locationVoiture.dateDebut %}
+                            {% set endDate = locationVoiture.dateFin %}
+
+                            {% set difference = endDate|date('U') - startDate|date('U') %}
+                            {% set differenceInDays = difference / (24 * 60 * 60) %}
+
+                            {{ differenceInDays }}
+                        </td>
+                        <td>{{locationVoiture.prix}} $</td>
+                        <td>{{locationVoiture.prix * differenceInDays}} $</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="receipt-total">
+                <p><strong>Montant Total :</strong> {{locationVoiture.prix * differenceInDays}} $</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 
 use Symfony\Component\Validator\Constraints\Length;
@@ -26,7 +27,7 @@ class ReserveLocationVoitureType extends AbstractType
         $currentDate = new \DateTime();
 
         $builder
-            ->add('dateDebut', DateTimeType::class, [
+            ->add('dateDebut', DateType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => "veuillez entrer un date",
@@ -37,7 +38,7 @@ class ReserveLocationVoitureType extends AbstractType
                     ]),
                 ]
             ])
-            ->add('datefin', DateTimeType::class, [
+            ->add('datefin', DateType::class, [
                 'constraints' => [
                     new NotBlank([
                         'message' => "veuillez entrer un date",
