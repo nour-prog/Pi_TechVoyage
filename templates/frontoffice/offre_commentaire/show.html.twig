@@ -25,6 +25,8 @@
             {% for offrecommentaire in commentaires %}
                 <tr>
                     <td>{{ offrecommentaire.avis}}</td>
+                   <td> {{ offrecommentaire.createdAt|date("d/m/Y") }}</td>
+                    
                 </tr>
             {% endfor %}
         </table>

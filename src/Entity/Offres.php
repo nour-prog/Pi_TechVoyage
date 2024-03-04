@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OffresRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -56,11 +58,15 @@ class Offres
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\OneToMany(targetEntity: OffreCommentaire::class, mappedBy: 'offres', orphanRemoval: true)]
+    private Collection $offreCommentaires;
     public function __construct(?DateTimeImmutable $createdAt = null) {
         if ($createdAt === null) {
             $createdAt = new \DateTimeImmutable();
         }
         $this->createdAt = $createdAt;
+        $this->offreCommentaires = new ArrayCollection();
     }
     
 
@@ -151,6 +157,36 @@ class Offres
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OffreCommentaire>
+     */
+    public function getOffreCommentaires(): Collection
+    {
+        return $this->offreCommentaires;
+    }
+
+    public function addOffreCommentaire(OffreCommentaire $offreCommentaire): static
+    {
+        if (!$this->offreCommentaires->contains($offreCommentaire)) {
+            $this->offreCommentaires->add($offreCommentaire);
+            $offreCommentaire->setOffres($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffreCommentaire(OffreCommentaire $offreCommentaire): static
+    {
+        if ($this->offreCommentaires->removeElement($offreCommentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($offreCommentaire->getOffres() === $this) {
+                $offreCommentaire->setOffres(null);
+            }
+        }
 
         return $this;
     }

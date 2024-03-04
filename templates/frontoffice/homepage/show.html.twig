@@ -40,11 +40,49 @@
         font-size: 12px;
     }
 </style>
+<script>
+function showreply(id) {
+    console.log(id);
+//id input
+  var commentDiv = $('#REP-' + id);
+  var commentbtn = $('#REPBTN-' + id);
+ var commentValue = commentDiv.val(); // Assuming the value you want to send is obtained from an input field
+var commentDiv = $('#REP-' + id);
+    if (commentValue.length > 0&& !commentbtn.prop("disabled")) {
+        // Perform AJAX request
+        commentbtn.prop("disabled",true);
+        $.ajax({
+            url: '/api/offer/addcomment',
+            method: 'POST',
+            data: {
+                commentId: id,
+                commentValue: commentValue
+            },
+            success: function(response) {
+                // Handle successful response here
+                console.log(response);
+               window.location.reload()
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(error);
+                    commentbtn.prop("disabled",false);
+            }
+        });
+    }
+    //input visible
+  if (commentDiv.hasClass('d-none')) {
+    commentDiv.removeClass('d-none');
+    commentDiv.addClass('d-flex');
+  }
+}
+</script>
 
 
 <div class="row">
     {% for offres in table %}
-    <div class="col-md-4 p-3">
+    <div class=" p-3">
         <div class="card mb-4 shadow-sm">
         <p class="card-text">{{ offres.title }}</p>
             <img src="{{ offres.image }}" alt="{{ offres.image }}">
@@ -61,9 +99,56 @@
                     <small class="text-muted">{{ offres.createdAt|date("d/m/Y") }}</small>
                 </div>
             </div>
-        </div>
+        </div>       
     </div>
     {% endfor %}
+      </div>
+   <div class="">
+       <div class="">
+         <h2>liste des commentaire</h2>
+        {% for offres in table %}
+    {% for offrecommentaire in offres.offreCommentaires %}
+     {% if offrecommentaire.active %}
+           <div  style='       border: #6c6c6c70;
+    border-width: 1px;
+    border-style: solid;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 7px;
+    background: white;
+    box-shadow: -1px 1px 7px 0 #00000033;' class="customBorder ">
+         
+            <div class="font-weight-bold">{{ offrecommentaire.avis|raw }}</div>
+               <p style="line-height: 1;">publie le {{ offrecommentaire.createdAt|date("d/m/y H:i") }}</p>
+            <div class="col-xs2 col-sm3" id="ajout-commentaire">
+                {% for offrereplycommentaire in offrecommentaire.replies %}
+                    <div id="listREP-{{ offrecommentaire.id }}" class="px-5 ">
+                        <div>
+                            <div>{{ offrereplycommentaire.avis|raw }}</div>
+                             <p style="line-height: 1;">publie le {{ offrereplycommentaire.createdAt|date("d/m/y H:i") }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="text" id="REP-{{ offrecommentaire.id }}" data-id="REP-{{ offrecommentaire.id }}" class="d-none" />
+                <p><button  onclick="showreply({{ offrecommentaire.id }})" data-reply id="REPBTN-{{ offrecommentaire.id }}" class="btn primary press">repondre</button></p>
+            </div>
+        </div>      
+              
+                {% else %}
+                     {% endif %}
+       
+    {% endfor %}
+{% endfor %}
+
+</div>
+       </div>
+       <div class="col-xs2 col-sm3" id="ajout-commentaire">
+         <h2>Ajouter un Commentaire</h2>
+         {{form(commentForm)}}
+       </div>
+
+
+    </div>
 </div>
 </div>
 </div>
