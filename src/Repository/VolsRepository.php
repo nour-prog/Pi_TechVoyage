@@ -21,7 +21,22 @@ class VolsRepository extends ServiceEntityRepository
         parent::__construct($registry, Vols::class);
     }
 
-
+    public function findByKeyword($keyword)
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.pointdepart LIKE :keyword 
+                  OR v.destination LIKE :keyword 
+                  OR v.duree LIKE :keyword 
+                  OR v.datedepart LIKE :keyword 
+                  OR v.datearrive LIKE :keyword 
+                  OR v.nbrescale LIKE :keyword 
+                  OR v.nbrplace LIKE :keyword 
+                  OR v.classe LIKE :keyword 
+                  OR v.prix LIKE :keyword')
+            ->setParameter('keyword', '%' . $keyword . '%')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return Vols[] Returns an array of Vols objects
