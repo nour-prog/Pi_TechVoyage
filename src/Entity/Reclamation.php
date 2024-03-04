@@ -27,6 +27,8 @@ class Reclamation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
 
     #[Assert\NotBlank(message: "Veuillez fournir une description pour cette réclamation.")]
+    #[Assert\Length(min : 3,max: 255, minMessage : "La réclamation doit comporter au moins {{ limit }} caractères",
+    maxMessage: "La réclamation ne peut pas dépasser {{ limit }} caractères")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

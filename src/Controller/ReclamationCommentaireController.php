@@ -26,13 +26,26 @@ class ReclamationCommentaireController extends AbstractController
         ]);
     }
 
-    #[Route('/backoffice/listCommentaire', name: 'list_commentaire_back')]
+    /*#[Route('/backoffice/listCommentaire', name: 'list_commentaire_back')]
     public function listCommenatireBack(ReclamationCommentaireRepository $repository)
     {
         $commentaire= $repository->findAll();
 
         return $this->render("backoffice/ReclamationCommentaire/listeCommentaire.html.twig",
             array('tabCommentaire'=>$commentaire));
+    }*/
+
+    #[Route('/backoffice/ShowReclamation/{id}', name: 'Show_Reclamation_back')]
+    public function ShowReclamationBack(ReclamationRepository $reclamationRepository , $id , Security $security)
+   {        
+        $user = $security->getUser();
+        $userID = $user ->getId();
+        $reclamations = $reclamationRepository->find($id);
+
+        $commentaires = $reclamations->getReclamationCommentaires()->toArray();
+
+        return $this->render("backoffice/ReclamationCommentaire/ShowReclamation.html.twig", [
+        'tabCommentaire' => $commentaires, 'reclamation' => $reclamations , 'UserId' => $userID]);
     }
 
     #[Route('/frontoffice/ShowReclamation/{id}', name: 'Show_Reclamation_front')]
@@ -71,8 +84,29 @@ class ReclamationCommentaireController extends AbstractController
         return $this->renderForm("frontoffice/ReclamationCommentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
 
+    #[Route('/addCommentaireBack/{id}', name: 'add_commentaire_back')]
+    public function addCommentaireBack2(Request $request,Security $security,ManagerRegistry $managerRegistry,$id, ReclamationRepository $reclamationRepository)
+    {
+        $user = $security->getUser();
 
-    #[Route('/addCommentaireBack', name: 'add_commentaire_back')]
+        $commentaire= new ReclamationCommentaire();
+        $form= $this->createForm(CommentaireType::class,$commentaire);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $reclamations = $reclamationRepository->find($id);
+            $commentaire -> setReclamation($reclamations);
+            $commentaire -> setUser($user);
+
+            $em= $managerRegistry->getManager();
+            $em->persist($commentaire);
+            $em->flush();
+            return $this->redirectToRoute("Show_Reclamation_back", ['id' => $id ] );
+        }
+        return $this->renderForm("backoffice/ReclamationCommentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
+    }
+
+
+    /*#[Route('/addCommentaireBack', name: 'add_commentaire_back')]
     public function addCommentaireBack(Request $request,ManagerRegistry $managerRegistry)
     {
         $commentaire= new ReclamationCommentaire();
@@ -86,7 +120,7 @@ class ReclamationCommentaireController extends AbstractController
         }
         return $this->renderForm("backoffice/ReclamationCommentaire/addCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
-
+*/
     #[Route('/UpdateCommentaireFront/{id}', name: 'app_updateCommentaire_front')]
     public function UpdateCommentaire(Request $request,ReclamationCommentaireRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
@@ -106,12 +140,13 @@ class ReclamationCommentaireController extends AbstractController
     public function UpdateCommentaireBack(Request $request,ReclamationCommentaireRepository $repository,$id,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
+        $reclamationId= $commentaire->getReclamation()->getId();
         $form=$this->createForm(CommentaireType::class,$commentaire);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $em=$managerRegistry->getManager();
             $em->flush();
-            return $this->redirectToRoute("list_commentaire_back");
+            return $this->redirectToRoute("Show_Reclamation_back", ['id' => $reclamationId ]);
         }
         return $this->renderForm("backoffice/ReclamationCommentaire/updateCommentaire.html.twig",["formulaireCommentaire"=>$form]);
     }
@@ -134,10 +169,11 @@ class ReclamationCommentaireController extends AbstractController
     public function DeleteCommentaireBack ($id, ReclamationCommentaireRepository $repository,ManagerRegistry $managerRegistry)
     {
         $commentaire=$repository->find($id);
+        $reclamationId= $commentaire->getReclamation()->getId();
         $em=$managerRegistry->getManager();
         $em->remove($commentaire);
         $em->flush();
 
-        return $this->redirectToRoute("list_commentaire_back");
+        return $this->redirectToRoute("Show_Reclamation_back", ['id' => $reclamationId ]);
     }
 }

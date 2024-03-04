@@ -93,6 +93,7 @@ a {
 .bg-soft-primary {
     background-color: rgba(59,118,225,.25)!important;
 }
+
     </style>
 </head>
 <body>
@@ -143,6 +144,7 @@ a {
 <th scope="col" class="ps-4" style="width: 50px;">
 <div class="form-check font-size-16"><input type="checkbox" class="form-check-input" id="contacusercheck" /><label class="form-check-label" for="contacusercheck"></label></div>
 </th>
+<th scope="col">Nom et prénom</th>
 <th scope="col">Sujet</th>
 <th scope="col">Description</th>
 <th scope="col">Date de soumission</th>
@@ -158,6 +160,7 @@ a {
 <th scope="row" class="ps-4">
 <div class="form-check font-size-16"><input type="checkbox" class="form-check-input" id="contacusercheck1" /><label class="form-check-label" for="contacusercheck1"></label></div>
 </th>
+<td><span class="badge badge-soft-success mb-0"><class="text-body">{{ reclamation.getUser().getPrenom() }} {{ reclamation.getUser().getNom() }}</td>
 <td><span class="badge badge-soft-success mb-0"><class="text-body">{{ reclamation.Sujet }}</td>
 <td><alt class="avatar-sm rounded-circle me-2" />{{ reclamation.Description }}</span></td>
 {% if reclamation.DateSoumission is not null %}
@@ -177,7 +180,7 @@ a {
 </li>
 </li>
 <li class="list-inline-item">
-<a href="{{ path('Show_Reclamation_front', { id: reclamation.id }) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Show" class="px-2 text-danger">Show</a>
+<a href="{{ path('Show_Reclamation_front', { id: reclamation.id }) }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Show"  style="color:rgb(37, 157, 31);">Commentaires</a>
 </li>
 </ul>
 </td>

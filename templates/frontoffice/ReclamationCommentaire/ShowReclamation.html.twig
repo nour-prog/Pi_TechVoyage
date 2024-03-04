@@ -160,7 +160,9 @@
                             
                         </div>
                         <h3>{{tabCommentaire | length}} Commentaires</h3>
-
+                        <div>
+                            <a href="{{ path('add_commentaire_front',{ id: reclamation.id })}}" class="btn btn-primary"><i class="bx bx-plus me-1"></i> Ajouter un commentaire</a>
+                        </div>
                         {% for commentaire in tabCommentaire %}
                             <div class="media">
                                 <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt></a>

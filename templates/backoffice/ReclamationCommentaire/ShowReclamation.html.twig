@@ -13,6 +13,7 @@
 <h1>Liste des commentaires</h1>
 <table border="1">
     <tr>
+        <td>UserName</td>
         <td>Contenu</td>
         <td>Date de creation</td>
         <td>Réclamation</td>
@@ -21,6 +22,7 @@
     </tr>
     {% for i in tabCommentaire %}
         <tr>
+            <td>{{ i.getUser().getPrenom() }} {{ i.getUser().getNom() }}</td>
             <td>{{i.contenu}}</td>
             {% if i.dateCreation is not null %}
                 <td>{{ i.dateCreation|date }}</td>
@@ -32,13 +34,17 @@
 
              <td>
                  <a href = "{{ path('app_deleteCommentaire_back', { id: i.id }) }}"> Supprimer </a>
+
+                 {% if i.getUser().getId() == UserId %}
                  <a href = "{{ path('app_updateCommentaire_back', { id: i.id }) }}"> Modifier </a>
+                 {% endif %}
+
              </td>
 
         </tr>
     {% endfor %}
 
-            <a href = "{{ path('add_commentaire_back') }}"> Ajouter </a>
+            <a href = "{{ path('add_commentaire_back', { id: reclamation.getId() }) }}"> Ajouter </a>
 
 </table>
 <br>
