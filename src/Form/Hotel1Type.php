@@ -33,7 +33,7 @@ class Hotel1Type extends AbstractType
             ->add('avis', TextType::class, [
                 'constraints' => [
                     new Assert\Regex([
-                        'pattern' => '/^(?i)(?!.*\b(gros|gros_mot2|gros_mot3)\b).*/',
+                        'pattern' => '/^(?i)(?!.*\b(Putain|Fait chier|gros_mot3)\b).*/',
                         'message' => 'Des termes offensants ont été détectés dans l\'avis.',
                     ]),
                     new Assert\Regex([

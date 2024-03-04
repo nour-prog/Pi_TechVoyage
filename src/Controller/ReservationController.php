@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\PdfGeneratorService;
+use App\Service\MailService;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 
 
@@ -18,6 +19,23 @@ use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
+    #[Route('/index', name: 'app_reservation_index', methods: ['GET'])]
+    public function sendEmail(MailerInterface $mailer): Response
+    {
+        $email = (new Email())
+            ->from('maloukabensdira3@gmail.com') // Replace with your email
+            ->to('melekjouini724@gmail.com')    // Replace with the recipient's email
+            ->subject('Subject of the email')
+            ->text('This is the plain text body of the email.')
+            ->html('<p>This is the HTML body of the email.</p>');
+
+        $mailer->send($email);
+
+        // Optionally, handle the response or redirect
+        // ...
+
+        return $this->redirectToRoute('frontoffice/reservation/index1.html.twig');
+    }
 
     #[Route('/index', name: 'app_reservation_index', methods: ['GET'])]
     public function listeReservation(EntityManagerInterface $entityManager) :Response
@@ -131,6 +149,7 @@ class ReservationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reservation);
             $entityManager->flush();
+            flash()->addSuccess('Votre Reservation est effectuer en succés');
 
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -176,6 +195,7 @@ class ReservationController extends AbstractController
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
@@ -185,6 +205,7 @@ class ReservationController extends AbstractController
         return $this->renderForm('frontoffice/reservation/edit1.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
+
         ]);
     }
 
@@ -196,6 +217,7 @@ class ReservationController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$reservation->getId(), $request->request->get('_token'))) {
             $entityManager->remove($reservation);
             $entityManager->flush();
+            flash()->addSuccess('Votre Reservation est supprimer avec succés');
         }
 
         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
