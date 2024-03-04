@@ -16,12 +16,31 @@ use App\Entity\PdfGeneratorService;
 class VolsController extends AbstractController
 {
     #[Route('/', name: 'app_vols_index', methods: ['GET'])]
-    public function index(VolsRepository $volsRepository): Response
+    public function index(VolsRepository $volsRepository, Request $request): Response
     {
+        if ($request->isXmlHttpRequest()) {
+            // Handle AJAX request for sorting
+            $column = $request->query->get('column', 'id'); // Default column to sort by
+            $direction = $request->query->get('direction', 'asc');
+
+            // Debugging statement to check sorting parameters
+            // dd([$column => $direction]);
+
+            $vols = $volsRepository->findBy([], [$column => $direction]);
+
+            // Debugging statement to check sorted data
+            // dd($vols);
+
+            return $this->json(['vols' => $vols]);
+        }
+
+        // Regular rendering for non-AJAX requests
         return $this->render('vols/index.html.twig', [
             'vols' => $volsRepository->findAll(),
         ]);
     }
+
+
 
     #[Route('/new', name: 'app_vols_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -100,4 +119,8 @@ class VolsController extends AbstractController
         ]);
 
     }
+
+
+
+
 }

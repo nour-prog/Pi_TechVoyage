@@ -1,29 +1,27 @@
 {% extends 'backoffice/base.html.twig' %}
 {% block title %}
-
-<title>Vols index</title>
+    <title>Vols index</title>
 {% endblock %}
 
 {% block body %}
 
     <h1>Vols</h1>
 
-
     <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Duree</th>
-                <th>Datedepart</th>
-                <th>Datearrive</th>
-                <th>Nbrescale</th>
-                <th>Nbrplace</th>
-                <th>Classe</th>
-                <th>Destination</th>
-                <th>Pointdepart</th>
-                <th>Prix</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th><a href="#" class="sortable-column" data-column="id" data-direction="asc">Id</a></th>
+            <th><a href="#" class="sortable-column" data-column="duree" data-direction="asc">Durée</a></th>
+            <th><a href="#" class="sortable-column" data-column="datedepart" data-direction="asc">Date de départ</a></th>
+            <th><a href="#" class="sortable-column" data-column="datearrive" data-direction="asc">Date d'arrivée</a></th>
+            <th><a href="#" class="sortable-column" data-column="nbrescale" data-direction="asc">Nombre d'escales</a></th>
+            <th><a href="#" class="sortable-column" data-column="nbrplace" data-direction="asc">Nombre de places</a></th>
+            <th><a href="#" class="sortable-column" data-column="classe" data-direction="asc">Classe</a></th>
+            <th><a href="#" class="sortable-column" data-column="destination" data-direction="asc">Destination</a></th>
+            <th><a href="#" class="sortable-column" data-column="pointdepart" data-direction="asc">Pointdepart</a></th>
+            <th><a href="#" class="sortable-column" data-column="prix" data-direction="asc">Prix</a></th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for vol in vols %}
@@ -55,4 +53,8 @@
     <div class="ms-3">
         <a href="{{ path('generator_service') }}" class="btn btn-outline-primary"> PDF</a>
     </div>
+    <script src="{{ asset('sort.js') }}"></script>
+
 {% endblock %}
+
+
