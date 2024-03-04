@@ -19,10 +19,12 @@
           
         </div>
       </div>
-        {{ form_start(form) }}
-        {{ form_widget(form.estTraite) }}
-        {{ form_widget(form.Filtrer) }}
-        {{ form_end(form) }}
+      {{ form_start(form) }}
+      {{ form_widget(form.estTraite, {'attr': {'class': 'custom-input-class'}}) }}
+      {{ form_widget(form.Filtrer, {'attr': {'class': 'custom-input-class'}}) }}
+      {{ form_end(form) }}
+  
+
       <table class="table table-striped table-hover">
         <thead>
           <tr>

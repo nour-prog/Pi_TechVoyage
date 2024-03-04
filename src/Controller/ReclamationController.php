@@ -45,15 +45,27 @@ class ReclamationController extends AbstractController
     #[Route('/backoffice/listReclamation', name: 'list_reclamation_back')]
 public function listReclamationBack(Request $request, ReclamationRepository $repository, PaginatorInterface $paginator)
 {
-    // Récupérer toutes les réclamations
-    $query = $repository->createQueryBuilder('r')->getQuery();
-
-    // Créer le formulaire
+    // Create the form
     $form = $this->createForm(ReclamationFilterType::class);
     $form->handleRequest($request);
 
-    // Filtrer les réclamations en fonction de la saisie du formulaire
+    // Filter reclamations based on form input
     $estTraite = $form->get('estTraite')->getData();
+
+    // Query builder for reclamations
+    $queryBuilder = $repository->createQueryBuilder('r');
+
+    if ($estTraite !== null) {
+        $queryBuilder->andWhere('r.estTraite = :estTraite')
+            ->setParameter('estTraite', $estTraite);
+    }
+
+    // Paginate the results
+    $pagination = $paginator->paginate(
+        $queryBuilder->getQuery(), // Use query instead of results
+        $request->query->getInt('page', 1), // Current page number
+        10 // Items per page
+    );
 
     if ($estTraite === null) {
         $reclamations = $repository->findAll();
@@ -61,20 +73,20 @@ public function listReclamationBack(Request $request, ReclamationRepository $rep
         $reclamations = $repository->findBy(['estTraite' => $estTraite]);
     }
 
-    // Paginer les résultats
-    $pagination = $paginator->paginate(
-        $query,
-        $request->query->getInt('page', 1), // Le numéro de page actuel
-        10 // Nombre d'éléments par page
-    );
-
-    // Rendre la vue
+    // Render the view
     return $this->render('backoffice/Reclamation/listeReclamation.html.twig', [
         'tabReclamation' => $reclamations,
         'form' => $form->createView(),
         'pagination' => $pagination,
     ]);
 }
+
+
+
+
+
+
+
 
     
     #[Route('/frontoffice/listReclamation', name: 'list_reclamation_front')]

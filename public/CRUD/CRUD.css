@@ -259,3 +259,32 @@ table.table .avatar {
     color: #ccc;
     background-color: #f9f9f9;
 }
+
+
+
+
+/* Styles pour le formulaire en général */
+
+
+/* Styles pour les champs du formulaire */
+.custom-input-class {
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Styles pour le bouton du formulaire */
+.custom-button-class {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-button-class:hover {
+    background-color: #0056b3;
+}
