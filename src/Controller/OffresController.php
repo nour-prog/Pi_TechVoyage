@@ -14,6 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Cloudinary\Cloudinary;
 class OffresController extends AbstractController
 {
+
+
+   
     #[Route('offres/ajouter', name: 'offres_ajout')]
     public function index(Request $request, Cloudinary $cloudinary): Response
     {

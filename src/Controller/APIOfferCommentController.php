@@ -9,7 +9,7 @@ use App\Entity\OffreCommentaire;
 use  App\Repository\OffreCommentaireRepository;
 class APIOfferCommentController extends AbstractController
 {
-    #[Route('api/offer/addcomment', methods:"POST")]
+    #[Route('api/offer/addreplycomment', methods:"POST")]
     public function index(Request $request,OffreCommentaireRepository $offrecommentaireRepository): JsonResponse
     {
  

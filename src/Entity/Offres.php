@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
+use App\Entity\OfferReview;
 
 #[ORM\Entity(repositoryClass: OffresRepository::class)]
 #[Broadcast]
@@ -61,12 +61,111 @@ class Offres
 
     #[ORM\OneToMany(targetEntity: OffreCommentaire::class, mappedBy: 'offres', orphanRemoval: true)]
     private Collection $offreCommentaires;
+
+   
+
+    #[ORM\OneToMany(targetEntity: OfferReview::class, mappedBy: 'OfferList')]
+    private Collection $offerReviews;
+
+
+
+   
+   public function hasUserReviewed($id): bool
+   {
+    foreach ($this->offerReviews as $review) {
+        // Assuming getUserId() method exists on OfferReview entity to get the user ID
+        if ($review->getUserId() == $id) {
+            return true; // User has reviewed
+        }
+    }
+       return false;
+   }
+   public function getTotalReview(): int
+   {
+       return $this->offerReviews->count();
+   }
+
+   public function getReviewByUserId($Userid): int
+   {
+    $reviewval=0;
+    foreach ($this->offerReviews as $review) {
+        if ($review->getUserId() == $Userid) {
+$reviewval=$review->getValue();
+        }
+
+    }
+       return $reviewval;
+   }
+
+   public function getValueReview(): string{
+    $totalValue = 0;
+    $totalReviews = $this->offerReviews->count();
+
+    // Calculate the total value of reviews
+    foreach ($this->offerReviews as $review) {
+        // Assuming getValue() method exists on OfferReview entity to get the value of each review
+        $totalValue += $review->getValue();
+    }
+
+    // Calculate the average value
+    if ($totalReviews > 0) {
+        $averageValue = ($totalReviews > 0) ? $totalValue / $totalReviews : 0;
+
+        // Format the average value with a comma as thousand separator
+        return number_format($averageValue, 2, '.', ',');
+    } else {
+        return 0; // Return 0 if there are no reviews
+    }
+   }
+   public function addReview($id,$value,$entityManager): self
+    {
+        if (!$this->hasUserReviewed($id)) {
+            $newReview = new OfferReview(); // Assuming OfferReview is the entity for user reviews
+            $newReview->setUserId($id); // Assuming the entity is self-referencing
+            $newReview->setValue($value);
+            $newReview->setOfferList($this);
+       
+            // Add the new review to the collection
+            $this->offerReviews[] = $newReview;
+            
+            $entityManager->persist($newReview);
+            $entityManager->flush();
+            $entityManager->persist($this);
+            $entityManager->flush();
+        }else{
+
+            foreach ($this->offerReviews as $review) {
+                // Assuming getUserId() method exists on OfferReview entity to get the user ID
+                if ($review->getUserId() == $id) {
+                    $newReview = $review; // Assuming OfferReview is the entity for user reviews
+                    $newReview->setUserId($id); // Assuming the entity is self-referencing
+                    $newReview->setValue($value);
+              
+               
+                    // Add the new review to the collection
+                    $this->offerReviews[] = $newReview;
+                    
+                  
+                    $entityManager->persist($newReview);
+                    $entityManager->flush();
+                    $entityManager->persist($this);
+                    $entityManager->flush();
+
+                }
+            }
+          
+        }
+        return $this;
+    }
+
+
     public function __construct(?DateTimeImmutable $createdAt = null) {
         if ($createdAt === null) {
             $createdAt = new \DateTimeImmutable();
         }
         $this->createdAt = $createdAt;
         $this->offreCommentaires = new ArrayCollection();
+        $this->offerReviews = new ArrayCollection();
     }
     
 
@@ -185,6 +284,60 @@ class Offres
             // set the owning side to null (unless already changed)
             if ($offreCommentaire->getOffres() === $this) {
                 $offreCommentaire->setOffres(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getReviewTotal(): ?int
+    {
+        return $this->ReviewTotal;
+    }
+
+    public function setReviewTotal(?int $ReviewTotal): static
+    {
+        $this->ReviewTotal = $ReviewTotal;
+
+        return $this;
+    }
+
+    public function getReviewValue(): ?float
+    {
+        return $this->ReviewValue;
+    }
+
+    public function setReviewValue(?float $ReviewValue): static
+    {
+        $this->ReviewValue = $ReviewValue;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OfferReview>
+     */
+    public function getOfferReviews(): Collection
+    {
+        return $this->offerReviews;
+    }
+
+    public function addOfferReview(OfferReview $offerReview): static
+    {
+        if (!$this->offerReviews->contains($offerReview)) {
+            $this->offerReviews->add($offerReview);
+            $offerReview->setOfferList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOfferReview(OfferReview $offerReview): static
+    {
+        if ($this->offerReviews->removeElement($offerReview)) {
+            // set the owning side to null (unless already changed)
+            if ($offerReview->getOfferList() === $this) {
+                $offerReview->setOfferList(null);
             }
         }
 

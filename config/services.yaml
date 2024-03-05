@@ -6,6 +6,10 @@
 parameters:
     image_directory: '%kernel.project_dir%/public/uploads/images'
 services:
+    App\Controller\APIOfferReviewController:
+        autowire: true
+        autoconfigure: true
+        public: true
     App\Service\CloudinaryFactory:
         class: App\Service\CloudinaryFactory
         arguments:

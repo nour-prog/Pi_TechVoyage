@@ -86,20 +86,40 @@
     {% for offres in table %}
     <div class="col-md-4 p-3">
         <div class="card mb-4 shadow-sm">
-        <p class="card-text">{{ offres.title }}</p>
             <img src="{{ offres.image }}" alt="{{ offres.image }}">
+            <div>
+            <p class="card-text">{{ offres.title }}</p>
+            
             <div class="p-3">
 
                 <p class="card-text">{{ offres.lieu }}</p>
                 <p class="card-text">Prix: {{ offres.prix }} DT</p>
                 <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                        <a href="{{ path('offres_show', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary">Details</a>
+                    <div class="btn-group pb-2" style="    display: flex;
+    justify-content: space-between;
+    /* flex-direction: row; */
+    width: 100%;">
+                        <a style="flex: none;" href="{{ path('offres_show', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary px-3">Details</a>
                         
                       <small class="text-muted">{{ offres.createdAt|date("d/m/Y") }}</small>
                 </div>
             </div>
-        </div>
+
+           <div style="    display: flex;">
+            <div class="stars" style="display: flex;
+    align-items: center;" data-note="1">
+{% for i in range(1,5) %}
+    {% if i <= offres.getValueReview() %}
+        <i class="lar la-star" data-value="{{ i + 1 }}"></i>
+    {% else %}
+        <i class="las la-star" data-value="{{ i + 1 }}"></i>
+    {% endif %}
+{% endfor %}
+                </div>
+              
+       ( {{offres.getTotalReview()}})
+   </div>
+        </div>    </div>
        
     </div>
 
@@ -110,7 +130,6 @@
 </main>
 
 
- 
    
     
     <section class="call-to-action section">

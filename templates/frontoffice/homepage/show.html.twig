@@ -47,12 +47,11 @@ function showreply(id) {
   var commentDiv = $('#REP-' + id);
   var commentbtn = $('#REPBTN-' + id);
  var commentValue = commentDiv.val(); // Assuming the value you want to send is obtained from an input field
-var commentDiv = $('#REP-' + id);
     if (commentValue.length > 0&& !commentbtn.prop("disabled")) {
         // Perform AJAX request
         commentbtn.prop("disabled",true);
         $.ajax({
-            url: '/api/offer/addcomment',
+            url: '/api/offer/addreplycomment',
             method: 'POST',
             data: {
                 commentId: id,
@@ -76,7 +75,33 @@ var commentDiv = $('#REP-' + id);
     commentDiv.removeClass('d-none');
     commentDiv.addClass('d-flex');
   }
+
+
 }
+
+  function addreview(offerid,value,userId){
+ $.ajax({
+            url: '/api/offer/addreview',
+            method: 'POST',
+            data: {
+                userid: userId,
+                value: value,
+                offreid:offerid
+            },
+            success: function(response) {
+                // Handle successful response here
+                console.log(response);
+               window.location.reload()
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(error);
+                    commentbtn.prop("disabled",false);
+            }
+        });
+    console.log(offerid,value,userId)
+  }
 </script>
 
 
@@ -84,8 +109,30 @@ var commentDiv = $('#REP-' + id);
     {% for offres in table %}
     <div class=" p-3">
         <div class="card mb-4 shadow-sm">
-        <p class="card-text">{{ offres.title }}</p>
+        
             <img src="{{ offres.image }}" alt="{{ offres.image }}">
+            <div class='px-3 pt-3' style="    display: flex;
+    align-items: center;
+    justify-content: space-between;">
+            <p style='font-weight:bold' class="card-text ">{{ offres.title }}</p>  
+            <div style="    display: flex;">
+            <div class="stars" style="display: flex;
+    align-items: center;" data-note="1">
+{% for i in range(1,5) %}
+    {% if i <= offres.getValueReview() %}
+        <i class="lar la-star" data-value="{{ i + 1 }}"></i>
+    {% else %}
+        <i class="las la-star" data-value="{{ i + 1 }}"></i>
+    {% endif %}
+{% endfor %}
+                </div>
+              {{offres.getValueReview()}}
+       ( {{offres.getTotalReview()}})
+   </div>
+            
+              
+            </div>
+          
             <div class="p-3">
                 <p class="card-text">{{ offres.lieu }}</p>
                 <p class="card-text">{{ offres.description }}</p>
@@ -93,6 +140,7 @@ var commentDiv = $('#REP-' + id);
                 <div class="d-flex justify-content-between align-items-center">
                  <div class="btn-group">
                         <button class="btn btn-sm btn-outline-secondary">Reserver</button>
+
                         
                     </div>
                   
@@ -103,6 +151,24 @@ var commentDiv = $('#REP-' + id);
     </div>
     {% endfor %}
       </div>
+
+  {% for offres in table %}
+      <br/>
+     
+      <div class='card w-min p-3'>
+       <h4> add Review</h4>
+<div class="stars" style="display: flex; align-items: center; " data-note="1">
+    {% for i in range(1, 5) %}
+        {% if i <= offres.getReviewByUserId("1243") %}
+            <i class="lar la-star" onclick="addreview({{ offres.id }},{{i}},'12243')" data-value="{{ i }}"></i>
+        {% else %}
+            <i class="las la-star" onclick="addreview({{ offres.id }},{{i}},'1243')" data-value="{{ i }}"></i>
+        {% endif %}
+    {% endfor %}
+</div>
+      
+      </div>
+      <br/>    {% endfor %}
    <div class="">
        <div class="">
          <h2>liste des commentaire</h2>
