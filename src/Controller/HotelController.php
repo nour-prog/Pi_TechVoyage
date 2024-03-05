@@ -50,19 +50,7 @@ class HotelController extends AbstractController
     }
 
    //
-    #[Route('/index1', name: 'app_hotel_index', methods: ['GET'])]
-    public function listeHotels(EntityManagerInterface $entityManager) :Response
-    {
-        // Récupérez les hôtels triés par le nombre d'étoiles
-        $hotels = $entityManager->getRepository(Hotel::class)
-            ->createQueryBuilder('u')
-            ->orderBy('u.nbretoile','ASC') // Changez 'ASC' à 'DESC' si vous voulez trier par ordre décroissant
-            ->getQuery()
-            ->getResult();
 
-        // Passez la liste triée à votre template Twig
-        return $this->render('frontoffice/hotel/index1.html.twig', ['hotels' => $hotels]);
-    }
     #[Route('/', name: 'app_hotel_index', methods: ['GET'])]
     public function index(HotelRepository $hotelRepository): Response
     {
