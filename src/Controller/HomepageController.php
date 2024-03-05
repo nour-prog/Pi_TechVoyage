@@ -13,4 +13,10 @@ class HomepageController extends AbstractController
     {
         return $this->render('frontoffice/homepage/index.html.twig');
     }
+
+    #[Route('/profile', name: 'profile')]
+    public function profile(): Response
+    {
+        return $this->render('frontoffice/profile/profile.html.twig');
+    }
 }

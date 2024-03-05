@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -64,6 +65,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: ReclamationCommentaire::class, mappedBy: 'User')]
     private Collection $reclamationCommentaires;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imagefilename = null;
 
     public function __construct()
     {
@@ -275,6 +279,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                   $reclamationCommentaire->setUser(null);
               }
           }
+
+          return $this;
+      }
+      
+      public function getImagefilename(): ?string
+      {
+          return $this->imagefilename;
+      }
+
+      public function setImagefilename(?string $imagefilename): static
+      {
+          $this->imagefilename = $imagefilename;
 
           return $this;
       }

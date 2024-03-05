@@ -7,7 +7,7 @@ parameters:
     twilio_account_sid: 'ACe6b91492b768c01136f3df2ee76d14d9'
     twilio_auth_token: 'b747491e81b2ea8ba7a2ff9dde989818'
     twilio_phone_number: '+14013714143'
-
+    image_file_directory: '%kernel.project_dir%/public/uploads/images'
 
 services:
     # default configuration for services in *this* file

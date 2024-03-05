@@ -248,7 +248,11 @@
                         </div>
                         {% for commentaire in tabCommentaire %}
                             <div class="media">
-                                <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt></a>
+                                {% if commentaire.getUser().getImagefilename() %}
+                                    <a class="pull-left" href="#"><img class="media-object" src="{{ asset('uploads/images/' ~ commentaire.getUser().getImagefilename()) }}" alt></a>
+                                {% else %}
+                                    <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt></a>
+                                {% endif %}
                                 <div class="media-body">
                                 
                                     <h4 class="media-heading">{{ commentaire.getUser().getPrenom() }} {{ commentaire.getUser().getNom() }}</h4>
