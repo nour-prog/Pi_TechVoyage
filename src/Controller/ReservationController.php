@@ -19,36 +19,6 @@ use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
-    #[Route('/index', name: 'app_reservation_indexu', methods: ['GET'])]
-    public function sendEmail(MailerInterface $mailer): Response
-    {
-        $email = (new Email())
-            ->from('maloukabensdira3@gmail.com') // Replace with your email
-            ->to('melekjouini724@gmail.com')    // Replace with the recipient's email
-            ->subject('Subject of the email')
-            ->text('This is the plain text body of the email.')
-            ->html('<p>This is the HTML body of the email.</p>');
-
-        $mailer->send($email);
-
-        // Optionally, handle the response or redirect
-        // ...
-
-        return $this->redirectToRoute('backoffice/index1.html.twig');
-    }
-
-    #[Route('/index', name: 'app_reservation_indexu', methods: ['GET'])]
-    public function listeReservation(EntityManagerInterface $entityManager) :Response
-    {
-        // Récupérez les hôtels triés par le nombre d'étoiles
-        $reservation = $entityManager->getRepository(Reservation::class)
-            ->createQueryBuilder('h')
-            ->orderBy('h.Nbrdepersonne', 'ASC') // Changez 'ASC' à 'DESC' si vous voulez trier par ordre décroissant
-            ->getQuery()
-            ->getResult();
-        return $this->render('backoffice/index1.html.twig', ['reservation' => $reservation]);
-    }
-
     #[Route('/statistique', name: 'stats')]
     public function stat()
     {
