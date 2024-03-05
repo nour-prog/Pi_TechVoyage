@@ -19,7 +19,7 @@ use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 #[Route('/reservation')]
 class ReservationController extends AbstractController
 {
-    #[Route('/index', name: 'app_reservation_index', methods: ['GET'])]
+    #[Route('/index', name: 'app_reservation_indexu', methods: ['GET'])]
     public function sendEmail(MailerInterface $mailer): Response
     {
         $email = (new Email())
@@ -34,10 +34,10 @@ class ReservationController extends AbstractController
         // Optionally, handle the response or redirect
         // ...
 
-        return $this->redirectToRoute('frontoffice/reservation/index1.html.twig');
+        return $this->redirectToRoute('backoffice/index1.html.twig');
     }
 
-    #[Route('/index', name: 'app_reservation_index', methods: ['GET'])]
+    #[Route('/index', name: 'app_reservation_indexu', methods: ['GET'])]
     public function listeReservation(EntityManagerInterface $entityManager) :Response
     {
         // Récupérez les hôtels triés par le nombre d'étoiles
@@ -46,7 +46,7 @@ class ReservationController extends AbstractController
             ->orderBy('h.Nbrdepersonne', 'ASC') // Changez 'ASC' à 'DESC' si vous voulez trier par ordre décroissant
             ->getQuery()
             ->getResult();
-        return $this->render('frontoffice/reservation/index1.html.twig', ['reservation' => $reservation]);
+        return $this->render('backoffice/index1.html.twig', ['reservation' => $reservation]);
     }
 
     #[Route('/statistique', name: 'stats')]
@@ -133,7 +133,7 @@ class ReservationController extends AbstractController
     #[Route('/', name: 'app_reservation_index', methods: ['GET'])]
     public function index(ReservationRepository $reservationRepository): Response
     {
-        return $this->render('frontoffice/reservation/index1.html.twig', [
+        return $this->render('backoffice/index1.html.twig', [
             'reservations' => $reservationRepository->findAll(),
         ]);
     }
