@@ -1,0 +1,70 @@
+{% extends 'backoffice/base.html.twig' %}
+{% block title %}
+    <title>Vols index</title>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Vols</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th><a href="#" class="sortable-column" data-column="id" data-direction="asc">Id</a></th>
+            <th><a href="#" class="sortable-column" data-column="duree" data-direction="asc">Durée</a></th>
+            <th><a href="#" class="sortable-column" data-column="datedepart" data-direction="asc">Date de départ</a></th>
+            <th><a href="#" class="sortable-column" data-column="datearrive" data-direction="asc">Date d'arrivée</a></th>
+            <th><a href="#" class="sortable-column" data-column="nbrescale" data-direction="asc">Nombre d'escales</a></th>
+            <th><a href="#" class="sortable-column" data-column="nbrplace" data-direction="asc">Nombre de places</a></th>
+            <th><a href="#" class="sortable-column" data-column="classe" data-direction="asc">Classe</a></th>
+            <th><a href="#" class="sortable-column" data-column="destination" data-direction="asc">Destination</a></th>
+            <th><a href="#" class="sortable-column" data-column="pointdepart" data-direction="asc">Pointdepart</a></th>
+            <th><a href="#" class="sortable-column" data-column="prix" data-direction="asc">Prix</a></th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for vol in vols %}
+
+
+
+
+            <tr>
+                <td>{{ vol.id }}</td>
+                <td>{{ vol.duree ? vol.duree|date('H:i:s') : '' }}</td>
+                <td>{{ vol.datedepart ? vol.datedepart|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ vol.datearrive ? vol.datearrive|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ vol.nbrescale }}</td>
+                <td>{{ vol.nbrplace }}</td>
+                <td>{{ vol.classe }}</td>
+                <td>{{ vol.destination }}</td>
+                <td>{{ vol.pointdepart }}</td>
+                <td>{{ vol.prix }}</td>
+                <td>
+                    <a href="{{ path('app_vols_show', {'id': vol.id}) }}">show</a>
+                    <a href="{{ path('app_vols_edit', {'id': vol.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_vols_new') }}">Create new</a>
+    <div class="ms-3">
+        <a href="{{ path('generator_service') }}" class="btn btn-outline-primary"> PDF</a>
+    </div>
+    <script src="{{ asset('sort.js') }}"></script>
+
+
+
+
+
+
+
+{% endblock %}
+
+
