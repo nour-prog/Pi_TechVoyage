@@ -69,10 +69,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imagefilename = null;
 
+    #[ORM\OneToMany(targetEntity: LocationVoiture::class, mappedBy: 'user')]
+    private Collection $locationVoitures;
+
     public function __construct()
     {
         $this->reclamations = new ArrayCollection();
         $this->reclamationCommentaires = new ArrayCollection();
+        $this->locationVoitures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -291,6 +295,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
       public function setImagefilename(?string $imagefilename): static
       {
           $this->imagefilename = $imagefilename;
+
+          return $this;
+      }
+
+      /**
+       * @return Collection<int, LocationVoiture>
+       */
+      public function getLocationVoitures(): Collection
+      {
+          return $this->locationVoitures;
+      }
+
+      public function addLocationVoiture(LocationVoiture $locationVoiture): static
+      {
+          if (!$this->locationVoitures->contains($locationVoiture)) {
+              $this->locationVoitures->add($locationVoiture);
+              $locationVoiture->setUser($this);
+          }
+
+          return $this;
+      }
+
+      public function removeLocationVoiture(LocationVoiture $locationVoiture): static
+      {
+          if ($this->locationVoitures->removeElement($locationVoiture)) {
+              // set the owning side to null (unless already changed)
+              if ($locationVoiture->getUser() === $this) {
+                  $locationVoiture->setUser(null);
+              }
+          }
 
           return $this;
       }

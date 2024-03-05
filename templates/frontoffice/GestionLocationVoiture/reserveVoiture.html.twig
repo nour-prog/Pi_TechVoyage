@@ -1,0 +1,115 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}reserve voiture{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="text-center">
+        <h3> Detail </h3>
+        <hr>
+            <td><img width="auto" height="250px" src="{{ asset('uploads/images/' ~ voiture.imageFileName) }}"></td>
+        <hr>
+        <p>
+            <b>Couleur: </b>{{voiture.couleur}}<br>
+            <b>Marque: </b>{{voiture.marque}}<br>
+            <b>Model: </b>{{voiture.model}}<br>
+            <b>Energy: </b>{{voiture.energy}}<br>
+            <b>Capacite: </b>{{voiture.capacite}}<br>
+            <b>Prix (Par Jour): </b> {{locationVoiture.prix}} $
+        </p>
+    </div>
+    <hr>
+    {{ form_start(formulaireLocationVoiture, {attr: {novalidate: 'novalidate'}}) }}
+        <div class="row mb-3 justify-content-center">
+            {# dateDebut input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.dateDebut)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.dateDebut) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.dateDebut) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3 justify-content-center">
+            {# datefin input #}
+            <div class="ml-2">
+                <label class="mb-0">{{form_label(formulaireLocationVoiture.datefin)}}</label>
+            </div>
+            <div class="col-sm-4 text-secondary">
+                {{ form_widget(formulaireLocationVoiture.datefin) }}
+                <div class="text-danger">
+                    {{ form_errors(formulaireLocationVoiture.datefin) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <b> Total: </b> <span id="totalPrice">0</span> $
+        </div>
+
+        <div class="text-center">
+            {{ form_widget(formulaireLocationVoiture.Submit,{'attr': {'class': 'btn btn-primary'}}) }}
+        </div>
+    {{ form_end(formulaireLocationVoiture) }}
+
+
+    <script>
+        const debutDaySelect = document.getElementById('reserve_location_voiture_dateDebut_day');
+        const debutMonthSelect = document.getElementById('reserve_location_voiture_dateDebut_month');
+        const debutYearSelect = document.getElementById('reserve_location_voiture_dateDebut_year');
+
+        const finDaySelect = document.getElementById('reserve_location_voiture_datefin_day');
+        const finMonthSelect = document.getElementById('reserve_location_voiture_datefin_month');
+        const finYearSelect = document.getElementById('reserve_location_voiture_datefin_year');
+
+        const totalPrice = document.getElementById("totalPrice");
+
+        function handleDateChange() {
+            const debutDay = debutDaySelect.value;
+            const debutMonth = debutMonthSelect.value;
+            const debutYear = debutYearSelect.value;
+
+            const finDay = finDaySelect.value;
+            const finMonth = finMonthSelect.value;
+            const finYear = finYearSelect.value;
+
+            const debutDate = new Date(debutYear, debutMonth - 1, debutDay);
+            const finDate = new Date(finYear, finMonth - 1, finDay);
+
+            const totalRentingDays = calculateDays(debutDate,finDate);
+            if (totalRentingDays > 0){
+                totalPrice.innerText={{locationVoiture.prix}} * totalRentingDays;
+            }else{
+                totalPrice.innerText=0;
+            }
+        }
+
+        //handle date changes
+        debutDaySelect.addEventListener('change', handleDateChange);
+        debutMonthSelect.addEventListener('change', handleDateChange);
+        debutYearSelect.addEventListener('change', handleDateChange);
+        finDaySelect.addEventListener('change', handleDateChange);
+        finMonthSelect.addEventListener('change', handleDateChange);
+        finYearSelect.addEventListener('change', handleDateChange);
+
+        function calculateDays(startDate, endDate) {
+            const startMillis = startDate.getTime();
+            const endMillis = endDate.getTime();
+            const differenceMillis = endMillis - startMillis;
+            const differenceDays = differenceMillis / (1000 * 60 * 60 * 24);
+            return Math.floor(differenceDays);
+        }
+    </script>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}
