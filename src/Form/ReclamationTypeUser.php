@@ -30,7 +30,11 @@ class ReclamationTypeUser extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('sujet')
+        ->add('sujet' , null ,[
+            'constraints' => [
+                new Assert\Callback([$this, 'validateBadWords']),
+            ],
+        ])
         ->add('description', TextareaType::class, [
             'label' => 'Description',
             'constraints' => [
