@@ -25,6 +25,10 @@
         </thead>
         <tbody>
         {% for vol in vols %}
+
+
+
+
             <tr>
                 <td>{{ vol.id }}</td>
                 <td>{{ vol.duree ? vol.duree|date('H:i:s') : '' }}</td>
@@ -54,6 +58,12 @@
         <a href="{{ path('generator_service') }}" class="btn btn-outline-primary"> PDF</a>
     </div>
     <script src="{{ asset('sort.js') }}"></script>
+
+
+
+
+
+
 
 {% endblock %}
 
