@@ -25,7 +25,6 @@ class BlankController extends AbstractController
             'vols' => $volsRepository->findAll(),
         ]);
     }
-
     /**
      * @Route("/search", name="search_action", methods={"POST"})
      */

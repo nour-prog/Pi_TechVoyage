@@ -1,0 +1,34 @@
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <img src="{{ asset('imagee/logo.jpg') }}" style="width: 140px; height: 100px;" alt="Description de votre image">
+
+</div>
+<br>
+<br>
+<table  border="1">
+    <thead >
+    <tr>
+        <th style="color:#009CFF;">Id </th>
+        <th style="color:#009CFF;">Datedepart</th>
+        <th style="color:#009CFF;">Dateretour</th>
+        <th style="color:#009CFF;">Classe</th>
+        <th style="color:#009CFF;">Destinationdepart</th>
+        <th style="color:#009CFF;">Destinationretour</th>
+        <th style="color:#009CFF;">Nbrdepersonne</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for reservation in reservations %}
+        <tr>
+            <td>{{ reservation.id }}</td>
+            <td>{{ reservation.Datedepart ? reservation.Datedepart|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ reservation.Dateretour ? reservation.Dateretour|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ reservation.Classe }}</td>
+            <td>{{ reservation.Destinationdepart }}</td>
+            <td>{{ reservation.Destinationretour }}</td>
+            <td>{{ reservation.Nbrdepersonne }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
