@@ -109,10 +109,10 @@ $reviewval=$review->getValue();
 
     // Calculate the average value
     if ($totalReviews > 0) {
-        $averageValue = ($totalReviews > 0) ? $totalValue / $totalReviews : 0;
+         $averageValue = ($totalReviews > 0) ? $totalValue / $totalReviews : 0;
 
-        // Format the average value with a comma as thousand separator
-        return number_format($averageValue, 2, '.', ',');
+    // Format the average value with a comma as thousand separator
+    return number_format($averageValue, 2, '.', ',');
     } else {
         return 0; // Return 0 if there are no reviews
     }

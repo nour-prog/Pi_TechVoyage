@@ -80,6 +80,7 @@ function showreply(id) {
 }
 
   function addreview(offerid,value,userId){
+ 
  $.ajax({
             url: '/api/offer/addreview',
             method: 'POST',
@@ -160,7 +161,7 @@ function showreply(id) {
 <div class="stars" style="display: flex; align-items: center; " data-note="1">
     {% for i in range(1, 5) %}
         {% if i <= offres.getReviewByUserId("1243") %}
-            <i class="lar la-star" onclick="addreview({{ offres.id }},{{i}},'12243')" data-value="{{ i }}"></i>
+            <i class="lar la-star" onclick="addreview({{ offres.id }},{{i}},'1243')" data-value="{{ i }}"></i>
         {% else %}
             <i class="las la-star" onclick="addreview({{ offres.id }},{{i}},'1243')" data-value="{{ i }}"></i>
         {% endif %}
