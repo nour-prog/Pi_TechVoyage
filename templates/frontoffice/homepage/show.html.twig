@@ -1,0 +1,224 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}Show{% endblock %}
+
+
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<main role ="main">
+<div class ="album py-5 bg-light">
+<div class="container-fluid">
+<style>
+    .card {
+        height: 100%;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-text {
+        color: #333;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .btn-group {
+        margin-top: 10px;
+    }
+
+    .text-muted {
+        font-size: 12px;
+    }
+</style>
+<script>
+function showreply(id) {
+    console.log(id);
+//id input
+  var commentDiv = $('#REP-' + id);
+  var commentbtn = $('#REPBTN-' + id);
+ var commentValue = commentDiv.val(); // Assuming the value you want to send is obtained from an input field
+    if (commentValue.length > 0&& !commentbtn.prop("disabled")) {
+        // Perform AJAX request
+        commentbtn.prop("disabled",true);
+        $.ajax({
+            url: '/api/offer/addreplycomment',
+            method: 'POST',
+            data: {
+                commentId: id,
+                commentValue: commentValue
+            },
+            success: function(response) {
+                // Handle successful response here
+                console.log(response);
+               window.location.reload()
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(error);
+                    commentbtn.prop("disabled",false);
+            }
+        });
+    }
+    //input visible
+  if (commentDiv.hasClass('d-none')) {
+    commentDiv.removeClass('d-none');
+    commentDiv.addClass('d-flex');
+  }
+
+
+}
+
+  function addreview(offerid,value,userId){
+ 
+ $.ajax({
+            url: '/api/offer/addreview',
+            method: 'POST',
+            data: {
+                userid: userId,
+                value: value,
+                offreid:offerid
+            },
+            success: function(response) {
+                // Handle successful response here
+                console.log(response);
+               window.location.reload()
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(error);
+                    commentbtn.prop("disabled",false);
+            }
+        });
+    console.log(offerid,value,userId)
+  }
+</script>
+
+
+<div class="row">
+    {% for offres in table %}
+    <div class=" p-3">
+        <div class="card mb-4 shadow-sm">
+        
+            <img src="{{ offres.image }}" alt="{{ offres.image }}">
+            <div class='px-3 pt-3' style="    display: flex;
+    align-items: center;
+    justify-content: space-between;">
+            <p style='font-weight:bold' class="card-text ">{{ offres.title }}</p>  
+            <div style="    display: flex;">
+            <div class="stars" style="display: flex;
+    align-items: center;" data-note="1">
+{% for i in range(1,5) %}
+    {% if i <= offres.getValueReview() %}
+        <i class="lar la-star" data-value="{{ i + 1 }}"></i>
+    {% else %}
+        <i class="las la-star" data-value="{{ i + 1 }}"></i>
+    {% endif %}
+{% endfor %}
+                </div>
+              {{offres.getValueReview()}}
+       ( {{offres.getTotalReview()}})
+   </div>
+            
+              
+            </div>
+          
+            <div class="p-3">
+                <p class="card-text">{{ offres.lieu }}</p>
+                <p class="card-text">{{ offres.description }}</p>
+                <p class="card-text">Prix: {{ offres.prix }} DT</p>
+                <div class="d-flex justify-content-between align-items-center">
+                 <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-secondary">Reserver</button>
+
+                        
+                    </div>
+                  
+                    <small class="text-muted">{{ offres.createdAt|date("d/m/Y") }}</small>
+                </div>
+            </div>
+        </div>       
+    </div>
+    {% endfor %}
+      </div>
+
+  {% for offres in table %}
+      <br/>
+        {% if user %}
+            <div class='card w-min p-3'>
+            <h4> add Review</h4>
+                <div class="stars" style="display: flex; align-items: center; " data-note="1">
+                    {% for i in range(1, 5) %}
+                        {% if i <= offres.getReviewByUserId(user.getId()) %}
+                            <i class="lar la-star" onclick="addreview({{ offres.id }},{{i}},'{{user.getId()}}' )" data-value="{{ i }}"></i>
+                        {% else %}
+                            <i class="las la-star" onclick="addreview({{ offres.id }},{{i}},'{{user.getId()}}')" data-value="{{ i }}"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+      <br/>    {% endfor %}
+   <div class="">
+       <div class="">
+         <h2>liste des commentaire</h2>
+        {% for offres in table %}
+    {% for offrecommentaire in offres.offreCommentaires %}
+     {% if offrecommentaire.active %}
+           <div  style='       border: #6c6c6c70;
+    border-width: 1px;
+    border-style: solid;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 7px;
+    background: white;
+    box-shadow: -1px 1px 7px 0 #00000033;' class="customBorder ">
+         
+            <div class="font-weight-bold">{{ offrecommentaire.avis|raw }}</div>
+               <p style="line-height: 1;">publie le {{ offrecommentaire.createdAt|date("d/m/y H:i") }}</p>
+            <div class="col-xs2 col-sm3" id="ajout-commentaire">
+                {% for offrereplycommentaire in offrecommentaire.replies %}
+                    <div id="listREP-{{ offrecommentaire.id }}" class="px-5 ">
+                        <div>
+                            <div>{{ offrereplycommentaire.avis|raw }}</div>
+                             <p style="line-height: 1;">publie le {{ offrereplycommentaire.createdAt|date("d/m/y H:i") }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="text" id="REP-{{ offrecommentaire.id }}" data-id="REP-{{ offrecommentaire.id }}" class="d-none" />
+                <p><button  onclick="showreply({{ offrecommentaire.id }})" data-reply id="REPBTN-{{ offrecommentaire.id }}" class="btn primary press">repondre</button></p>
+            </div>
+        </div>      
+              
+                {% else %}
+                     {% endif %}
+       
+    {% endfor %}
+{% endfor %}
+
+</div>
+       </div>
+       <div class="col-xs2 col-sm3" id="ajout-commentaire">
+         <h2>Ajouter un Commentaire</h2>
+         {{form(commentForm)}}
+       </div>
+
+
+    </div>
+</div>
+</div>
+</div>
+</main>
+
+{% endblock %}

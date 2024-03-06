@@ -1,0 +1,142 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Edite un Offre!{% endblock %}
+
+{% block body %}
+
+<h1>Edit un Offre</h1>
+
+    
+    {{ form_start(form ,{'attr': {'novalidate': 'novalidate'}})}}
+
+    <div class="form-group">
+    {{form_label(form.title)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.title) }}
+    </div>
+    {{ form_widget(form.title)}}
+
+    </div>
+    <br>
+    <br>
+        <div class="form-group">
+    {{ form_label(form.description)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.description) }}
+    </div>
+    {{ form_widget(form.description)}}
+    </div>
+<br>
+<br>
+    <div class="form-group">
+    {{ form_label(form.lieu)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.lieu) }}
+    </div>
+    {{ form_widget(form.lieu)}}
+    </div>
+    <br>
+    <br>
+
+        <div class="form-group">
+    {{ form_label(form.prix)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.prix) }}
+    </div>
+    {{ form_widget(form.prix)}}
+    </div>
+<br>
+<br>
+        <div class="form-group">
+    {{ form_label(form.image)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.image) }}
+    </div>
+    {{ form_widget(form.image)}}
+    </div>
+<br>
+<br>
+
+    <button class="btn btn-primary"> Edit</button>
+
+    {{form_end(form)}}
+    
+<script>
+function ToggleComment(id) {
+    console.log(id);
+
+    if (id) {
+        // Perform AJAX request
+        $.ajax({
+            url: '/api/offer/toggleComment',
+            method: 'POST',
+            data: {
+                commentId: id,
+                
+            },
+            success: function(response) {
+                // Handle successful response here
+                console.log(response);
+               window.location.reload()
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(error);
+            }
+        });
+    }
+
+}
+</script>
+  <div class="">
+       <div class="">
+         <h2>liste des commentaire</h2>
+    
+    {% for offrecommentaire in offre.offreCommentaires %}
+        <div  style='       border: #6c6c6c70;
+    border-width: 1px;
+    border-style: solid;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 7px;
+    background: white;
+    box-shadow: -1px 1px 7px 0 #00000033;' class="customBorder ">
+         <div class="d-flex ">  <div>
+            <div class="font-weight-bold">{{ offrecommentaire.avis|raw }}</div>
+               <p style="line-height: 1;">publie le {{ offrecommentaire.createdAt|date("d/m/y H:i") }}</p></div> 
+               
+                <div>
+                   {% if offrecommentaire.active %}
+                    <p><a class='bg-green' onclick="ToggleComment({{ offrecommentaire.id }})" data-reply data-id="{{ offrecommentaire.id }}" class="btn primary press">Desactiver</a></p>
+                {% else %}
+                    <p><a class="btn bg-red" onclick="ToggleComment({{ offrecommentaire.id }})" >activer</a></p>
+                {% endif %}
+                </div>
+                </div>
+            <div class="col-xs2 col-sm3" id="ajout-commentaire">
+                {% for offrereplycommentaire in offrecommentaire.replies %}
+                    <div id="listREP-{{ offrecommentaire.id }}" class="px-5 ">
+                        <div>
+                            <div>{{ offrereplycommentaire.avis|raw }}</div>
+                             <p style="line-height: 1;">publie le {{ offrereplycommentaire.createdAt|date("d/m/y H:i") }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="text" id="REP-{{ offrecommentaire.id }}" data-id="REP-{{ offrecommentaire.id }}" class="d-none" />
+                <p><a onclick="showreply({{ offrecommentaire.id }})" data-reply data-id="{{ offrecommentaire.id }}" class="btn primary press">repondre</a></p>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+       </div>
+
+    
+
+
+{% endblock %}

@@ -17,10 +17,12 @@
 
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
+        <link rel= "stylesheet" href= "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css" >
     {% endblock %}
 
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
+        <script src="/frontoffice/plugins/jquery/jquery.min.js"></script>
     {% endblock %}
 
   <!-- Mobile Specific Metas
@@ -226,7 +228,7 @@ End Fixed Navigation
     Essential Scripts
     =====================================-->
 <!-- Main jQuery -->
-<script src="/frontoffice/plugins/jquery/jquery.min.js"></script>
+
 
 <!-- Bootstrap4 -->
 <script src="/frontoffice/plugins/bootstrap/bootstrap.min.js"></script>
