@@ -114,12 +114,21 @@ class ReservationController extends AbstractController
 
     
     #[Route('/user', name: 'app_user_reservation', methods: ['GET'])]
-    public function userReservations(ReservationRepository $reservationRepository, Security $security): Response
+    public function userReservations(ReservationRepository $repository, Security $security): Response
     {
         $user = $security->getUser();
+        if (!$user) {
+            throw new NotFoundHttpException('User is not logged in.');
+        }
+
+        $reservations = $repository->createQueryBuilder('r')
+        ->where('r.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
         
         return $this->render('frontoffice/index1.html.twig', [
-            'reservations' => $reservationRepository->findAll(),
+            'reservations' => $reservations,
         ]);
     }
     #[Route('/user/{id}', name: 'app_user_reservation_show', methods: ['GET'])]
@@ -134,6 +143,9 @@ class ReservationController extends AbstractController
     public function reservationVol(Request $request, Security $security, EntityManagerInterface $entityManager, $volId): Response
     {
         $user = $security->getUser();
+        if (!$user) {
+            throw new NotFoundHttpException('User is not logged in.');
+        }
 
         $vol = $entityManager
             ->getRepository(Vols::class)->find($volId);

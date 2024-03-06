@@ -19,7 +19,6 @@
     <table class="table"id='myTable'>
         <thead>
         <tr>
-            <th>Id</th>
             <th>Datedepart</th>
             <th>Dateretour</th>
             <th>Classe</th>
@@ -43,7 +42,6 @@
         {% for reservation in reservations %}
             <tr>
 
-                <td>{{ reservation.id }}</td>
                 <td>{{ reservation.Datedepart ? reservation.Datedepart|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ reservation.Dateretour ? reservation.Dateretour|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ reservation.Classe }}</td>
