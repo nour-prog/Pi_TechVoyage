@@ -1,4 +1,4 @@
-{% extends 'frontoffice/base.html.twig' %}
+{% extends 'backoffice/base.html.twig' %}
 
 {% block title %}blank{% endblock %}
 
@@ -15,7 +15,7 @@
 
     {{ include('hotel/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_hotel_index') }}">back to list</a>
+    <a href="{{ path('app_hotel_index_backoffice') }}">back to list</a>
 
     {{ include('hotel/_delete_form.html.twig') }}
 

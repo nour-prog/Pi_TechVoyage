@@ -49,7 +49,6 @@ class HotelController extends AbstractController
         }
     }
 
-   //
 
     #[Route('/', name: 'app_hotel_index', methods: ['GET'])]
     public function index(HotelRepository $hotelRepository): Response
@@ -59,6 +58,21 @@ class HotelController extends AbstractController
         ]);
     }
 
+    #[Route('/backoffice', name: 'app_hotel_index_backoffice', methods: ['GET'])]
+    public function indexBackoffice(HotelRepository $hotelRepository): Response
+    {
+        return $this->render('backoffice/hotel/index1.html.twig', [
+            'hotels' => $hotelRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/backoffice/{id}', name: 'app_hotel_show_backoffice', methods: ['GET'])]
+    public function showBackoffice(Hotel $hotel): Response
+    {
+        return $this->render('backoffice/hotel/show1.html.twig', [
+            'hotel' => $hotel,
+        ]);
+    }
 
     #[Route('/new', name: 'app_hotel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -83,7 +97,7 @@ class HotelController extends AbstractController
             $entityManager->flush();
             flash()->addSuccess('Votre Hotel est ajouter avec succés');
 
-            return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_hotel_index_backoffice', [], Response::HTTP_SEE_OTHER);
 
         }
 
@@ -93,6 +107,7 @@ class HotelController extends AbstractController
 
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_hotel_show', methods: ['GET'])]
     public function show(Hotel $hotel): Response
@@ -112,10 +127,10 @@ class HotelController extends AbstractController
             $entityManager->flush();
             flash()->addSuccess('Votre Hotel est Modifier avec succés');
 
-            return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_hotel_index_backoffice', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('frontoffice/hotel/edit1.html.twig', [
+        return $this->renderForm('backoffice/hotel/edit1.html.twig', [
             'hotel' => $hotel,
             'form' => $form,
         ]);
@@ -129,7 +144,7 @@ class HotelController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_hotel_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_hotel_index_backoffice', [], Response::HTTP_SEE_OTHER);
     }
 
 }

@@ -139,7 +139,7 @@ class ReservationController extends AbstractController
         ]);
     }
 
-    #[Route('/vol/{volId}', name: 'app_newReservation_Vol', methods: ['GET', 'POST'])]
+    #[Route('/new/vol/{volId}', name: 'app_newReservation_Vol', methods: ['GET', 'POST'])]
     public function reservationVol(Request $request, Security $security, EntityManagerInterface $entityManager, $volId): Response
     {
         $user = $security->getUser();
@@ -160,18 +160,7 @@ class ReservationController extends AbstractController
         $reservation->setDestinationdepart($vol->getDestination());
         $reservation->setDestinationretour($vol->getPointdepart());
         $reservation->setNbrdepersonne($vol->getNbrplace());
-        
-        $entityManager->persist($reservation);
-        $entityManager->flush();
-        flash()->addSuccess('Votre Reservation est effectuer en succés');
 
-        return $this->redirectToRoute('app_user_reservation', [], Response::HTTP_SEE_OTHER);
-    }
-
-    #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $reservation = new Reservation();
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
@@ -180,7 +169,7 @@ class ReservationController extends AbstractController
             $entityManager->flush();
             flash()->addSuccess('Votre Reservation est effectuer en succés');
 
-            return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_reservation', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('frontoffice/reservation/new1.html.twig', [
@@ -188,6 +177,27 @@ class ReservationController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    // #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
+    // public function new(Request $request, EntityManagerInterface $entityManager): Response
+    // {
+    //     $reservation = new Reservation();
+    //     $form = $this->createForm(ReservationType::class, $reservation);
+    //     $form->handleRequest($request);
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->persist($reservation);
+    //         $entityManager->flush();
+    //         flash()->addSuccess('Votre Reservation est effectuer en succés');
+
+    //         return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
+    //     }
+
+    //     return $this->renderForm('frontoffice/reservation/new1.html.twig', [
+    //         'reservation' => $reservation,
+    //         'form' => $form,
+    //     ]);
+    // }
 
 //    #[Route('/statistics', name: 'app_statistics')]
 //    public function statistics(ReservationRepository $ReservationRepository): Response
