@@ -35,7 +35,7 @@
                 <td>{{ hotel.avis }}</td>
                 <td>
                     <a href="{{ path('app_hotel_show', {'id': hotel.id}) }}">show</a>
-                    <a href="{{ path('app_hotel_show', {'id': hotel.id}) }}">Réserver</a>
+                    <a href="{{ path('app_hotel_reserver', {'id': hotel.id}) }}">Réserver</a>
                 </td>
             </tr>
         {% else %}

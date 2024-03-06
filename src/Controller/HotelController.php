@@ -74,6 +74,14 @@ class HotelController extends AbstractController
         ]);
     }
 
+    #[Route('/reserver/{id}', name: 'app_hotel_reserver', methods: ['GET'])]
+    public function reserverHotel(Hotel $hotel): Response
+    {
+        return $this->render('frontoffice/hotel/reserver.html.twig', [
+            'hotel' => $hotel,
+        ]);
+    }
+
     #[Route('/new', name: 'app_hotel_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
