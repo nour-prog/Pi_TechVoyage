@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chatbot Test{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div id="chatbot-container">
+                    <div id="chatbot" class="closed">
+                        <div class="chat-window" id="chatbot-window">
+                            <!-- Fenêtre de chat ici -->
+                        </div>
+                        <div>
+                            <input type="text" id="chatbot-message" placeholder="Posez une question...">
+                            <button onclick="sendMessage()">Envoyer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charger le script du chatbot -->
+    <script src="{{ asset('js/chatbot.js') }}"></script>
+{% endblock %}

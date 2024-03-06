@@ -7,12 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\Constraints as CustomAssert;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ForumCommentaireRepository::class)]
 class ForumCommentaire
@@ -22,10 +16,7 @@ class ForumCommentaire
     #[ORM\Column]
     private ?int $id = null;
 
-    
-    
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -34,9 +25,8 @@ class ForumCommentaire
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaire')]
-    
-    private ?Publication $publication = null;
+    #[ORM\OneToMany(targetEntity: Publication::class, mappedBy: 'commentaire')]
+  private Collection $publications;
 
 
     public function __construct()
@@ -106,22 +96,11 @@ class ForumCommentaire
     public function removePublication(Publication $publication): static
     {
         if ($this->publications->removeElement($publication)) {
+            // set the owning side to null (unless already changed)
             if ($publication->getCommentaire() === $this) {
                 $publication->setCommentaire(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getPublication(): ?Publication
-    {
-        return $this->publication;
-    }
-
-    public function setPublication(?Publication $publication)
-    {
-        $this->publication = $publication;
 
         return $this;
     }

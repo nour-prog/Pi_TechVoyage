@@ -1,0 +1,43 @@
+{# templates/frontoffice/publication/search_results.html.twig #}
+{% if publications is not empty %}
+    <div class="row">
+        {% for publication in publications %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if publication.image %}
+                        <img src="{{ asset('uploads/' ~ publication.image) }}" alt="{{ publication.title }}" width="100" height="100" class="fluid my-2 rounded">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ publication.title }}</h5>
+                        <p class="card-text">{{ publication.shortDescription }}</p>
+                        <p class="card-text">{{ publication.content }}</p>
+                        
+                        <!-- Formulaire pour commenter -->
+                        <form action="{{ path('app_forum_commentaire_new', {'id': publication.id }) }}" method="POST">
+                            <div class="form-group">
+                                <label for="comment">Comment:</label>
+                                <textarea class="form-control" id="comment" name="content" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary my-2">Commenter</button>
+                        </form>
+                        
+                        <!-- Boutons "Like" et "Dislike" -->
+                        <div class="btn-group" role="group" aria-label="Like and Dislike buttons">
+                            <form action="{{ path('app_like_publication', {'id': publication.id }) }}" method="POST">
+                                <button type="submit" class="btn btn-success">Like</button>
+                            </form>
+                            <form action="{{ path('app_dislike_publication', {'id': publication.id }) }}" method="POST">
+                                <button type="submit" class="btn btn-danger">Dislike</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No records found</p>
+{% endif %}

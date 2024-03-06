@@ -5,9 +5,7 @@ namespace App\Entity;
 use App\Repository\PublicationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PublicationRepository::class)]
 class Publication
@@ -18,38 +16,27 @@ class Publication
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(
-        max: 20,
-        maxMessage: "Title cannot be longer than 20 characters."
-    )]
     private ?string $shortDescription = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::TEXT),]
     private ?string $content = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'publications')]
+    #[ORM\JoinColumn(nullable: true)]
+     private ?ForumCommentaire $commentaire = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
-
-    #[ORM\OneToMany(targetEntity: ForumCommentaire::class, mappedBy: 'publication', cascade: ['remove'])]
-    private Collection $comments;
-
-    #[ORM\Column(length: 255)]
-    private ?string $rating = null;
-
-    #[ORM\ManyToOne(inversedBy: 'publication')]
-    private ?Like $likee = null;
-
-
-    public function __construct()
-    {
-        $this->comments = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -92,6 +79,41 @@ class Publication
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?ForumCommentaire
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(?ForumCommentaire $commentaire): static
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
 
     public function getImage(): ?string
     {
@@ -104,66 +126,11 @@ class Publication
 
         return $this;
     }
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
 
-    public function addComment(ForumCommentaire $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setPublication($this);
-        }
+    public function setLikee(?Like $likee): self
+{
+    $this->likee = $likee;
 
-        return $this;
-    }
-    public function removeComment(ForumCommentaire $comment): self
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getPublication() === $this) {
-                $comment->setPublication(null);
-            }
-        }
-
-        return $this;
-    }
-
-    // Add this method to the Publication entity
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        // Assuming you want the createdAt from the first comment, adjust as needed
-        if ($this->comments->isEmpty()) {
-            return null; // or handle the case when there are no comments
-        }
-    
-        return $this->comments->first()->getCreatedAt();
-    }
-
-    public function getRating(): ?string
-    {
-        return $this->rating;
-    }
-
-    public function setRating(string $rating): static
-    {
-        $this->rating = $rating;
-
-        return $this;
-    }
-
-    public function getLikee(): ?Like
-    {
-        return $this->likee;
-    }
-
-    public function setLikee(?Like $likee): static
-    {
-        $this->likee = $likee;
-
-        return $this;
-    }
-
-
+    return $this;
+}
 }

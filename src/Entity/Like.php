@@ -22,6 +22,9 @@ class Like
     #[ORM\OneToMany(targetEntity: Publication::class, mappedBy: 'likee')]
     private Collection $publication;
 
+    #[ORM\Column]
+    private ?int $likes = null;
+
     public function __construct()
     {
         $this->publication = new ArrayCollection();
@@ -58,9 +61,9 @@ class Like
             $this->publication->add($publication);
             $publication->setLikee($this);
         }
-
         return $this;
     }
+    
 
     public function removePublication(Publication $publication): static
     {
@@ -73,5 +76,18 @@ class Like
 
         return $this;
     }
+
+    public function getLikes(): ?int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): static
+    {
+        $this->likes = $likes;
+
+        return $this;
+    }
+    
 
 }

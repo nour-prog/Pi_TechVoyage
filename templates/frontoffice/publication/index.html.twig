@@ -3,49 +3,132 @@
 {% block title %}Publications{% endblock %}
 
 {% block body %}
-    <h1>Publications</h1>
+    <!-- Header -->
+    {% block header %}
+        <!-- Votre code de header ici -->
+        <!-- Peut-être un joli titre ou une image en bannière -->
+    {% endblock %}
+          
+    
 
-    <div class="row">
-        {% for publication in publications %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    {% if publication.image %}
-                        <img src="{{ asset('uploads/' ~ publication.image) }}" alt="{{ publication.title }}" width="100" height="100" class="fluid my-2 rounded">
-                    {% else %}
-                        <p>No image available</p>
-                    {% endif %}
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ publication.title }}</h5>
-                        <p class="card-text">{{ publication.shortDescription }}</p>
-                        <p class="card-text">{{ publication.content }}</p>
-
-                        <!-- Formulaire pour commenter -->
-                        <form action="{{ path('app_forum_commentaire_new', {'id': publication.id }) }}" method="POST">
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" id="comment" name="content" rows="3"></textarea>
+    <div class="container mt-5">
+        <div class="row">
+            {% for publication in publications %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        {% if publication.image %}
+                            <img src="{{ asset('uploads/images/' ~ publication.image) }}" alt="{{ publication.title }}" class="card-img-top rounded" style="max-height: 300px; object-fit: cover; filter: brightness(100%);">
+                        {% else %}
+                            <div class="card-img-top bg-secondary text-white text-center p-3">
+                                No image available
                             </div>
-                            <button type="submit" class="btn btn-primary my-2">Commenter</button>
-                        </form>
-                        
-                        <!-- Boutons "Like" et "Dislike" -->
-                        <div class="btn-group" role="group" aria-label="Like and Dislike buttons">
-                            <form action="{{ path('app_like_publication', {'id': publication.id }) }}" method="POST">
-                                <button type="submit" class="btn btn-success">Like</button>
+                        {% endif %}
+
+                        <div class="card-body">
+                            <h5 class="card-title">{{ publication.title }}</h5>
+                            <p class="card-text">{{ publication.shortDescription }}</p>
+                            <p class="card-text">{{ publication.content }}</p>
+
+                            <!-- Formulaire pour commenter -->
+                            <form action="{{ path('app_forum_commentaire_new', {'id': publication.id }) }}" method="POST">
+                                <div class="form-group">
+                                    <label for="comment">Commentaire :</label>
+                                    <textarea class="form-control" id="comment" name="content" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary my-2">Commenter</button>
                             </form>
-                            <form action="{{ path('app_dislike_publication', {'id': publication.id }) }}" method="POST">
-                                <button type="submit" class="btn btn-danger">Dislike</button>
-                            </form>
+                            
+                            <!-- Boutons "Like" et "Dislike" -->
+                            <div class="btn-group" role="group" aria-label="Boutons Like et Dislike">
+                                <form action="{{ path('app_like_publication', {'id': publication.id }) }}" method="POST">
+                                    <button type="submit" class="btn btn-success">Like</button>
+                                </form>
+                                <form action="{{ path('app_dislike_publication', {'id': publication.id }) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">Dislike</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
-        {% else %}
-            <div class="col-12">
-                <p>No records found</p>
-            </div>
-        {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p>Aucun enregistrement trouvé</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
+    <!-- Charger le script et le style du chatbot depuis les répertoires correspondants -->
+    <script src="{{ asset('js/chatbot/script.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/chatbot/chatbot.css') }}">
+    <script>
+        // Fonction pour ouvrir/fermer la fenêtre du chatbot
+function toggleChatbot() {
+    var chatbot = document.getElementById('chatbot');
+    chatbot.classList.toggle('open');
+}
+
+// Fonction pour envoyer un message à l'API Chatbot
+function sendMessage() {
+    var messageInput = document.getElementById('chatbot-message');
+    var userMessage = messageInput.value;
+
+    // Remplacez l'URL par l'URL correcte de votre API Chatbot
+    var apiUrl = 'https://app.chatbot.com/';
+
+    // Remplacez 'YOUR_CHATBOT_API_KEY' par votre clé d'API Chatbot
+    var requestData = {
+        key: 'aOs72PVrOL9_Dtgsmvj4ODc_C8MHnmgI',
+        message: userMessage,
+    };
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Traiter la réponse du Chatbot API ici
+        var chatWindow = document.getElementById('chatbot-window');
+        var messageElement = document.createElement('div');
+        messageElement.className = 'message bot';
+        messageElement.innerHTML = data.message;
+        chatWindow.appendChild(messageElement);
+
+        messageInput.value = '';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Événement pour ouvrir/fermer la fenêtre du chatbot lorsqu'on clique sur l'icône
+document.getElementById('chatbot-icon').addEventListener('click', function() {
+    toggleChatbot();
+});
+
+// Événement pour envoyer un message lorsque l'utilisateur appuie sur Entrée
+document.getElementById('chatbot-message').addEventListener('keydown', function(event) {
+    if (event.keyCode === 13) { // Le code 13 correspond à la touche Entrée
+        event.preventDefault(); // Empêcher le saut de ligne dans le champ de texte
+        sendMessage(); // Appeler la fonction pour envoyer le message
+    }
+});
+
+    </script>
+    <!-- Start of ChatBot (www.chatbot.com) code -->
+<script type="text/javascript">
+    window.__be = window.__be || {};
+    window.__be.id = "65e8cd3335edc000075ee272";
+    (function() {
+        var be = document.createElement('script'); be.type = 'text/javascript'; be.async = true;
+        be.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.chatbot.com/widget/plugin.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(be, s);
+    })();
+</script>
+<noscript>You need to <a href="https://www.chatbot.com/help/chat-widget/enable-javascript-in-your-browser/" rel="noopener nofollow">enable JavaScript</a> in order to use the AI chatbot tool powered by <a href="https://www.chatbot.com/" rel="noopener nofollow" target="_blank">ChatBot</a></noscript>
+<!-- End of ChatBot code -->
 {% endblock %}

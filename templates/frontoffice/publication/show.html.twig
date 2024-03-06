@@ -1,3 +1,4 @@
+{# frontoffice/publication/show.html.twig #}
 {% extends 'frontoffice/base.html.twig' %}
 
 {% block body %}
@@ -31,10 +32,14 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ publication.image }}</td>
+                <td>
+                    {% if publication.image %}
+                        <img src="{{ asset('uploads/' ~ publication.image) }}" alt="{{ publication.title }}" width="100" height="100" class="fluid my-2 rounded">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </td>
             </tr>
         </tbody>
     </table>
-
-
 {% endblock %}

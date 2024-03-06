@@ -21,6 +21,16 @@ class ForumCommentaireRepository extends ServiceEntityRepository
         parent::__construct($registry, ForumCommentaire::class);
     }
 
+    public function findCommentsByPublicationId(int $publicationId): array
+    {
+        return $this->createQueryBuilder('fc')
+            ->join('fc.publications', 'p')
+            ->andWhere('p.id = :publicationId')
+            ->setParameter('publicationId', $publicationId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return ForumCommentaire[] Returns an array of ForumCommentaire objects
 //     */

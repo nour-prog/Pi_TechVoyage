@@ -19,6 +19,11 @@ class PublicationType extends AbstractType
             ->add('image',FileType::class,['required' => false,
             'mapped'=>false
         ])
+           /* ->add('image', FileType::class, [
+                'label' => 'Image (JPEG or PNG file)',
+                'required' => false,
+                'mapped' => false,
+            ])*/
             ->add('ajouter', SubmitType::class, [
                 'label' => 'Ajouter',
                 'attr' => ['class' => 'btn btn-primary'],
@@ -32,4 +37,6 @@ class PublicationType extends AbstractType
             'data_class' => Publication::class,
         ]);
     }
+
+    
 }

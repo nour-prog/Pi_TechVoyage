@@ -1,14 +1,19 @@
-app_publication_showback:
-    path: '/publication/{id}'
-    controller: 'App\Controller\PublicationController::show'
+index:
+    path: /
+    controller: App\Controller\DefaultController::index
+
+app_publication_show_comments:
+    path: '/publication/{id}/show_comments'
+    controller: 'App\Controller\PublicationController::show_comments'
     methods: ['GET']
 
-app_publication_showfront:
-    path: '/front/publication/{id}'
-    controller: 'App\Controller\PublicationController::showFront'
+app_publication_search_ajax:
+    path: '/publication/search-ajax'
+    controller: 'App\Controller\YourController::searchAjax'
     methods: ['GET']
 
-app_like_publication:
-    path: '/publication/{id}/like'
-    controller: 'App\Controller\PublicationController::likePublication'
+
+chatbot:
+    path: '/chatbot'
+    controller: 'App\Controller\ChatbotController::handleChatbotRequest'
     methods: ['POST']

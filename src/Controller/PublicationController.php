@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 #[Route('/publication')]
 class PublicationController extends AbstractController
@@ -34,6 +37,7 @@ class PublicationController extends AbstractController
     {
         $this->publication = $publication;
     }
+     
 
     #[Route('/back', name: 'app_publication_indexback', methods: ['GET'])]
     public function index(Request $request): Response
@@ -51,6 +55,8 @@ class PublicationController extends AbstractController
             'searchTerm' => $searchTerm,
         ]);
     }
+
+
     
     #[Route('/front', name: 'app_publication_indexfront', methods: ['GET'])]
     public function indexFront(PublicationRepository $publicationRepository): Response
@@ -59,7 +65,7 @@ class PublicationController extends AbstractController
             'publications' => $publicationRepository->findAll(),
         ]);
     }
-    #[Route('/new', name: 'app_publication_new', methods: ['GET', 'POST'])]
+   /* #[Route('/new', name: 'app_publication_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $publication = new Publication();
@@ -86,9 +92,42 @@ class PublicationController extends AbstractController
             'publication' => $publication,
             'form' => $form,
         ]);
+    }*/
+    #[Route('/new', name: 'app_publication_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $publication = new Publication();
+        $form = $this->createForm(PublicationType::class, $publication);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle image upload
+            $imageFile = $form->get('image')->getData();
+    
+            if ($imageFile) {
+                // Set the image property of the publication entity
+                $publication->setImage($imageFile->getClientOriginalName());
+                
+                // Move the uploaded file to the desired directory
+                $imageFile->move(
+                    $this->getParameter('kernel.project_dir') . '/public/uploads/images',
+                    $imageFile->getClientOriginalName()
+                );
+            }
+    
+            $entityManager->persist($publication);
+            $entityManager->flush();
+    
+            $this->addFlash('Success', 'Publication Ajouté avec Success');
+            return $this->redirectToRoute('app_publication_indexback', [], Response::HTTP_SEE_OTHER);
+        }
+    
+        return $this->renderForm('backoffice/publication/new.html.twig', [
+            'publication' => $publication,
+            'form' => $form,
+        ]);
     }
-
-          
+        
         
 
     #[Route('/{id}', name: 'app_publication_showback', methods: ['GET'])]
@@ -112,7 +151,7 @@ class PublicationController extends AbstractController
             'publication' => $publication,
         ]);
     }
-    #[Route('/{id}/edit', name: 'app_publication_edit', methods: ['GET', 'POST'])]
+  /*  #[Route('/{id}/edit', name: 'app_publication_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, int $id, PublicationRepository $publicationRepository, EntityManagerInterface $entityManager): Response
     {
         $publication = $publicationRepository->find($id);
@@ -134,7 +173,45 @@ class PublicationController extends AbstractController
             'publication' => $publication,
             'form' => $form,
         ]);
+    }*/
+
+    #[Route('/{id}/edit', name: 'app_publication_edit', methods: ['GET', 'POST'])]
+public function edit(Request $request, int $id, PublicationRepository $publicationRepository, EntityManagerInterface $entityManager): Response
+{
+    $publication = $publicationRepository->find($id);
+
+    if (!$publication) {
+        throw $this->createNotFoundException('Publication not found');
     }
+
+    $form = $this->createForm(PublicationType::class, $publication);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Handle image upload
+        $imageFile = $form->get('image')->getData();
+
+        if ($imageFile) {
+            // Move the uploaded file to the desired directory
+            $imageFile->move(
+                $this->getParameter('kernel.project_dir') . '/public/uploads/images',
+                $imageFile->getClientOriginalName()
+            );
+
+            // Update the image property of the publication entity
+            $publication->setImage($imageFile->getClientOriginalName());
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_publication_indexback', [], Response::HTTP_SEE_OTHER);
+    }
+
+    return $this->renderForm('backoffice/publication/edit.html.twig', [
+        'publication' => $publication,
+        'form' => $form,
+    ]);
+}
     
     #[Route('/{id}', name: 'app_publication_delete', methods: ['POST'])]
     public function delete(Request $request, $id, EntityManagerInterface $entityManager): Response
@@ -154,8 +231,9 @@ class PublicationController extends AbstractController
         return $this->redirectToRoute('app_publication_indexback', [], Response::HTTP_SEE_OTHER);
     }
 
+ 
      //show_comment
-     #[Route('/{id}/show_comments', name: 'app_publication_show_comments', methods: ['GET'])]
+    /* #[Route('/{id}/show_comments', name: 'app_publication_show_comments', methods: ['GET'])]
     public function show_comments(int $id, ForumCommentaireRepository $forumCommentaireRepository): Response
     {
         $publication = $this->publicationRepository->find($id);
@@ -170,8 +248,26 @@ class PublicationController extends AbstractController
             'publication' => $publication,
             'comments' => $comments,
         ]);
+    }*/
+    // For example, in your PublicationController
+    #[Route('/{id}/show_comments', name: 'app_publication_show_comments', methods: ['GET'])]
+    public function show_comments(int $id, ForumCommentaireRepository $forumCommentaireRepository): Response
+{
+    $publication = $this->publicationRepository->find($id);
+
+    if (!$publication) {
+        throw $this->createNotFoundException('Publication not found');
     }
 
+    // Use the custom method from ForumCommentaireRepository to search comments by publication id
+    $comments = $forumCommentaireRepository->findCommentsByPublicationId($publication->getId());
+
+    return $this->render('backoffice/publication/show_comments.html.twig', [
+        'publication' => $publication,
+        'comments' => $comments,
+    ]);
+}
+    
 
     #[Route('/back/search', name: 'app_publication_searchback', methods: ['GET'])]
     public function search(Request $request): Response
@@ -242,6 +338,74 @@ public function getReactions(int $id, EntityManagerInterface $entityManager): Js
     return new JsonResponse(['likes' => $likes, 'dislikes' => $dislikes]);
 }
 
+/*#[Route('/front/search_ajax', name: 'app_publication_search_ajax', methods: ['GET'])]
+public function searchAjax(Request $request): JsonResponse
+{
+    $searchTerm = $request->query->get('searchTerm', '');
+    $publications = $this->publicationRepository->findBySearchTerm($searchTerm);
+
+    $data = [];
+    foreach ($publications as $publication) {
+        // Adapt this based on your needs
+        $data[] = [
+            'id' => $publication->getId(),
+            'title' => $publication->getTitle(),
+            'shortDescription' => $publication->getShortDescription(),
+            'content' => $publication->getContent(),
+            'image' => $publication->getImage(),
+            // Add other fields as needed
+        ];
+    }
+
+    return new JsonResponse($data);
+}*/
+#[Route('/front/search_ajax', name: 'app_publication_search_ajax', methods: ['GET'])]
+public function searchAjax(Request $request): JsonResponse
+{
+    $searchTerm = $request->query->get('searchTerm');
+    $publications = $this->getDoctrine()->getRepository(Publication::class)->searchByTerm($searchTerm);
+
+    // You may need to serialize your entities appropriately
+    $data = $this->normalizeEntities($publications);
+
+    return new JsonResponse($data);
+}
+
+// Additional helper function to normalize entities to an array
+private function normalizeEntities(array $entities): array
+{
+    $normalized = [];
+
+    foreach ($entities as $entity) {
+        $normalized[] = [
+            'id' => $entity->getId(),
+            'title' => $entity->getTitle(),
+            'shortDescription' => $entity->getShortDescription(),
+            'content' => $entity->getContent(),
+            'image' => $entity->getImage(),
+            // Add other fields as needed
+        ];
+    }
+
+    return $normalized;
+}
+
+#[Route('/add_to_favorites/{id}', name: 'app_add_to_favorites', methods: ['POST'])]
+public function addToFavorites(int $id, EntityManagerInterface $entityManager): JsonResponse
+{
+    // Récupérer la publication depuis la base de données
+    $publication = $entityManager->getRepository(Publication::class)->find($id);
+
+    if (!$publication) {
+        return new JsonResponse(['error' => 'Publication not found'], Response::HTTP_NOT_FOUND);
+    }
+
+    // Ajoutez votre logique métier pour gérer l'ajout aux favoris ici
+    // Par exemple, vous pouvez mettre à jour la base de données, ajouter l'utilisateur actuel aux favoris, etc.
+
+    // Retournez une réponse JSON appropriée
+    return new JsonResponse(['message' => 'Publication ajoutée aux favoris']);
+}
 
 }
     
