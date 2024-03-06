@@ -51,6 +51,9 @@ class Reservation
     #[ORM\OneToMany(targetEntity: Hotel::class, mappedBy: 'Hotel22')]
     private Collection $nbr1;
 
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->reshotel = new ArrayCollection();
@@ -215,6 +218,18 @@ class Reservation
                 $nbr1->setHotel22(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

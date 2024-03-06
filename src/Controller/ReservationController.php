@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reservation;
+use App\Entity\Vols;
 use App\Form\ReservationType;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\PdfGeneratorService;
 use App\Service\MailService;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Security;
 
 
 
@@ -108,6 +112,49 @@ class ReservationController extends AbstractController
         ]);
     }
 
+    
+    #[Route('/user', name: 'app_user_reservation', methods: ['GET'])]
+    public function userReservations(ReservationRepository $reservationRepository, Security $security): Response
+    {
+        $user = $security->getUser();
+        
+        return $this->render('frontoffice/index1.html.twig', [
+            'reservations' => $reservationRepository->findAll(),
+        ]);
+    }
+    #[Route('/user/{id}', name: 'app_user_reservation_show', methods: ['GET'])]
+    public function userReservationShow(Reservation $reservation): Response
+    {
+        return $this->render('frontoffice/reservation/show1.html.twig', [
+            'reservation' => $reservation,
+        ]);
+    }
+
+    #[Route('/vol/{volId}', name: 'app_newReservation_Vol', methods: ['GET', 'POST'])]
+    public function reservationVol(Request $request, Security $security, EntityManagerInterface $entityManager, $volId): Response
+    {
+        $user = $security->getUser();
+
+        $vol = $entityManager
+            ->getRepository(Vols::class)->find($volId);
+        if (!$vol) {
+            throw new NotFoundHttpException('The vol with ID ' . $volId . ' does not exist.');
+        }
+        $reservation = new Reservation();
+        $reservation->setUser($user);
+        $reservation->setDatedepart($vol->getDatedepart());
+        $reservation->setDateretour($vol->getDatearrive());
+        $reservation->setClasse($vol->getClasse());
+        $reservation->setDestinationdepart($vol->getDestination());
+        $reservation->setDestinationretour($vol->getPointdepart());
+        $reservation->setNbrdepersonne($vol->getNbrplace());
+        
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+        flash()->addSuccess('Votre Reservation est effectuer en succés');
+
+        return $this->redirectToRoute('app_user_reservation', [], Response::HTTP_SEE_OTHER);
+    }
 
     #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -154,7 +201,7 @@ class ReservationController extends AbstractController
     #[Route('/{id}', name: 'app_reservation_show', methods: ['GET'])]
     public function show(Reservation $reservation): Response
     {
-        return $this->render('frontoffice/reservation/show1.html.twig', [
+        return $this->render('backoffice/reservation/show1.html.twig', [
             'reservation' => $reservation,
         ]);
     }

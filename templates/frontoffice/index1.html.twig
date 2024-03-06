@@ -1,0 +1,78 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}Reservation index{% endblock %}
+
+{% block body %}
+
+    {% for message in app.flashes('notification') %}
+        <div class="alert alert-info alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+    {% endfor %}
+    <div style="text-align: center; margin-top:100px;">
+        <h1 style="font-size: 42px; font-family: 'Brush Script MT', cursive;">Mes Reservation</h1>
+    </div>
+
+
+
+    <table class="table"id='myTable'>
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Datedepart</th>
+            <th>Dateretour</th>
+            <th>Classe</th>
+            <th>Destinationdepart</th>
+            <th>Destinationretour</th>
+            <th>Nbrdepersonne</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+        <input type="search" id="myInput" class="form-control pl-6" placeholder="Search "/><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script><script>$(document).ready(function () {$("#myInput").on("keyup", function () {var value = $(this).val().toLowerCase();$("#myTable tr ").filter(function () {$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)});})});</script>
+
+
+
+        {% for reservation in reservations %}
+            <tr>
+
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.Datedepart ? reservation.Datedepart|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.Dateretour ? reservation.Dateretour|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ reservation.Classe }}</td>
+                <td>{{ reservation.Destinationdepart }}</td>
+                <td>{{ reservation.Destinationretour }}</td>
+                <td>{{ reservation.Nbrdepersonne }}</td>
+                <td>
+                    <a href="{{ path('app_user_reservation_show', {'id': reservation.id}) }}">show</a>
+                    <a href="{{ path('app_reservation_map', {'id': +reservation.id}) }}" class="btn btn-info">Localisation </a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+
+
+
+
+        </tbody>
+
+    </table>
+
+    {#    <a href="{{ path('app_oeuvre_new') }}">Create new</a>#}
+    {#    <a href="{{ path('stats') }}">Statistique</a>#}
+    {#    <a href="{{ path('generator_service') }}">PDF</a>#}
+    {#    <a href="{{ path('Password_send_sms') }}">SMS</a>#}
+
+
+{% endblock %}

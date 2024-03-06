@@ -161,6 +161,7 @@
 
 
             <th><a href="#" class="sortable-column" data-column="prix" data-direction="asc">Prix</a></th>
+            <th>actions</th>
         </tr>
         </thead>
         <tbody>
@@ -185,7 +186,7 @@
 
                 <td>{{ vol.prix }}</td>
                 <td>
-
+                    <a href="{{ path('app_newReservation_Vol', {'volId': vol.id}) }}">Réserver</a>
                 </td>
             </tr>
         {% else %}
