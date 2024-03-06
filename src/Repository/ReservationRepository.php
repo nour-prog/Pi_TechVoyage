@@ -45,4 +45,12 @@ class ReservationRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+    public function sortByNbrePersonnes() {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.Nbrdepersonne', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

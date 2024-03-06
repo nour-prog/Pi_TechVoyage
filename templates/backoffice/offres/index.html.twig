@@ -1,0 +1,73 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Ajouter un Offre!{% endblock %}
+
+{% block body %}
+
+<h1>Ajouter un Offre</h1>
+
+    
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}})}}
+
+    <div class="form-group">
+    {{form_label(form.title)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.title) }}
+    </div>
+    {{ form_widget(form.title)}}
+
+    </div>
+    <br>
+    <br>
+        <div class="form-group">
+    {{ form_label(form.description)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.description) }}
+    </div>
+    {{ form_widget(form.description)}}
+    </div>
+<br>
+<br>
+    <div class="form-group">
+    {{ form_label(form.lieu)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.lieu) }}
+    </div>
+    {{ form_widget(form.lieu)}}
+    </div>
+    <br>
+    <br>
+
+        <div class="form-group">
+    {{ form_label(form.prix)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.prix) }}
+    </div>
+    {{ form_widget(form.prix)}}
+    </div>
+<br>
+<br>
+        <div class="form-group">
+    {{ form_label(form.image)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.image) }}
+    </div>
+    {{ form_widget(form.image)}}
+    </div>
+<br>
+<br>
+
+    <button class="btn btn-primary"> Add</button>
+
+    {{form_end(form)}}
+ 
+
+    
+
+
+{% endblock %}

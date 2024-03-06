@@ -17,17 +17,24 @@ class LocationVoiture
     #[ORM\Column]
     private ?float $prix = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDebut = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $datefin = null;
 
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?string $status = "disponible";
+
+    #[ORM\OneToOne(inversedBy: 'locationVoiture', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Voiture $voiture = null;
+
+    #[ORM\ManyToOne(inversedBy: 'locationVoitures')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -90,6 +97,47 @@ class LocationVoiture
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getVoiture(): ?Voiture
+    {
+        return $this->voiture;
+    }
+
+    public function setVoiture(Voiture $voiture): static
+    {
+        $this->voiture = $voiture;
+
+        return $this;
+    }
+
+    public function getObject()
+    {
+        return [
+            "prix" => $this->getPrix(),
+            "dateDebut" => $this->getDateDebut(),
+            "datefin" => $this->getDatefin(),
+            "type" => $this->getType(),
+            "status" => $this->getStatus(),
+            "voiture" => $this->getVoiture()->__toString(),
+        ];
+    }
+
+    public function __toString()
+    {
+        return $this->getStatus();
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\VolsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: VolsRepository::class)]
 class Vols
@@ -15,30 +17,48 @@ class Vols
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\NotBlank(message:"La durée est obligatoire.")]
     private ?\DateTimeInterface $duree = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank(message:"La date de départ est obligatoire.")]
     private ?\DateTimeInterface $datedepart = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank(message:"La date d'arrivée est obligatoire.")]
     private ?\DateTimeInterface $datearrive = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Le nombre d'escales est obligatoire.")]
     private ?int $nbrescale = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Le nombre de places est obligatoire.")]
+    #[Assert\Positive(message:"Le nombre de places doit être un nombre positif.")]
     private ?int $nbrplace = null;
 
     #[ORM\Column(length: 255)]
     private ?string $classe = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"La destination est obligatoire.")]
+    #[Assert\Regex(
+        pattern:"/^[a-zA-Z]+$/",
+        message:"La destination ne doit contenir que des lettres."
+    )]
     private ?string $destination = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Le point de départ est obligatoire.")]
+    #[Assert\Regex(
+        pattern:"/^[a-zA-Z]+$/",
+        message:"Le point de départ ne doit contenir que des lettres."
+    )]
     private ?string $pointdepart = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Le prix est obligatoire.")]
+    #[Assert\Positive(message:"Le prix doit être un nombre positif.")]
     private ?float $prix = null;
 
     public function getId(): ?int
@@ -149,6 +169,8 @@ class Vols
 
     public function setPrix(float $prix): static
     {
+
+
         $this->prix = $prix;
 
         return $this;

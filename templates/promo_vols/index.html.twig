@@ -1,0 +1,41 @@
+{% extends 'backoffice/base.html.twig' %}
+{% block title %}
+
+<title>Vols en promo</title>
+{% endblock %}
+
+{% block body %}
+    <h1>Vols en Promo en vols</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Pourcentage</th>
+                <th>DateDebutPromo</th>
+                <th>DateFinPromo</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for promo_vol in promo_vols %}
+            <tr>
+                <td>{{ promo_vol.id }}</td>
+                <td>{{ promo_vol.pourcentage }}</td>
+                <td>{{ promo_vol.dateDebutPromo ? promo_vol.dateDebutPromo|date('Y-m-d') : '' }}</td>
+                <td>{{ promo_vol.dateFinPromo ? promo_vol.dateFinPromo|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_promo_vols_show', {'id': promo_vol.id}) }}">show</a>
+                    <a href="{{ path('app_promo_vols_edit', {'id': promo_vol.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_promo_vols_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,260 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Hotel{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <h1>Hotel List</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Nbretoile</th>
+            <th>Emplacement</th>
+            <th>Avis</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for hotel in hotels %}
+            <tr>
+                <td>{{ hotel.id }}</td>
+                <td>{{ hotel.nom }}</td>
+                <td>{{ hotel.nbretoile }}</td>
+                <td>{{ hotel.emplacement }}</td>
+                <td>{{ hotel.avis }}</td>
+                <td>
+                    <a href="{{ path('app_hotel_show_backoffice', {'id': hotel.id}) }}">show</a>
+
+                    <a href="{{ path('app_hotel_edit', {'id': hotel.id}) }}">edit</a>.
+                    {{ include('hotel/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_hotel_new') }}">Create new</a>
+    <div class="ms-3">
+        <a href="{{ path('app_hotel_index') }}?sort=nbretoile" class="btn btn-outline-primary">Trier  </a>
+    </div>
+    <div id="chatbot-bubble" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 600;">
+        <img src="{{asset('gif.gif')}}" alt="Chatbot" style="width: 90px; height: 90px;"> <!-- Adjust path as necessary -->
+    </div>
+    <style>
+        .chat {
+            position: fixed;
+            bottom: 50px;
+            right: 60px;
+            display: inline-block;
+            background-color: #0000FF;
+            color: #fff;
+            border-radius: 30px;
+            padding: 10px;
+            margin: 10px;
+            animation: floatAnimation 2s infinite alternate;
+        }
+
+        @keyframes floatAnimation {
+            0% {
+                transform: translateY(100);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(100);
+            }
+        }
+    </style>
+
+    <div class="chat" style="display: none;" id="chatMessage"></div>
+
+    <script>
+        setTimeout(function() {
+            const message = "Besoin d'aide ?";
+            const delay = 90; // Délai en millisecondes entre chaque lettre
+
+            let index = 0;
+            const chatMessage = document.getElementById("chatMessage");
+
+            function writeMessage() {
+                chatMessage.textContent += message[index];
+                index++;
+
+                if (index < message.length) {
+                    setTimeout(writeMessage, delay);
+                }
+            }
+
+            writeMessage();
+
+            chatMessage.style.display = "block";
+        }, 1500);
+    </script>
+
+    <!-- Chatbot Interface (Initially Hidden) -->
+    <div id="chatbot-interface" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 300px; height: 400px; background-color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; z-index: 1000;">
+
+        <!-- Option Mailing -->
+        <div id="mailing-option" style="text-align: center; margin-bottom: 10px;">
+            <i class="btn btn-primary" >AlignVibe_chat</i>
+            <button class="btn btn-primary" ">Quitter</button>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="chat-messages" style="padding: 10px; height: 300px; overflow-y: auto;"></div>
+
+        <!-- Chat Input -->
+        <input type="text" id="chat-input" placeholder="Type a message..." style="width: 100%; box-sizing: border-box; border: none; border-top: 1px solid #ccc; padding: 10px;">
+
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+        document.getElementById('chatbot-bubble').addEventListener('click', function() {
+            var chatInterface = document.getElementById('chatbot-interface');
+            chatInterface.style.display = chatInterface.style.display === 'none' ? 'block' : 'none';
+            showInitialOptions(); // Show initial options when chat opens
+        });
+
+        function showInitialOptions() {
+            var chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = ''; // Clear previous messages
+
+            var options = [
+                'Comment puis-je vous aider?',
+                'Comment prendre un Rdv?',
+                'Autres questions?'
+            ];
+
+            options.forEach(function(option, index) {
+                var optionDiv = document.createElement('div');
+                optionDiv.textContent = option;
+                optionDiv.style.cursor = 'pointer';
+                optionDiv.style.padding = '10px';
+                optionDiv.style.border = '1px solid #ccc';
+                optionDiv.style.marginTop = '5px';
+                optionDiv.setAttribute('data-option', index);
+
+                optionDiv.addEventListener('click', function() {
+                    handleOptionSelection(index);
+                });
+
+                chatMessages.appendChild(optionDiv);
+            });
+        }
+
+        function handleOptionSelection(optionIndex) {
+            var chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = ''; // Clear the options
+
+            if (optionIndex === 0) {
+                // User selected "How can I help you?"
+                var questions = [
+                    'Quelles sont vos horaires ?',
+                    'L\'hotel admet des piscine',
+                    'Est ce que je peux annuler un Rdv ?'
+                ];
+
+                questions.forEach(function(question) {
+                    var questionDiv = document.createElement('div');
+                    questionDiv.textContent = question;
+                    questionDiv.style.cursor = 'pointer';
+                    questionDiv.style.padding = '10px';
+                    questionDiv.style.border = '1px solid #ccc';
+                    questionDiv.style.marginTop = '5px';
+
+                    questionDiv.addEventListener('click', function() {
+                        provideAnswer(question);
+                    });
+
+                    chatMessages.appendChild(questionDiv);
+                });
+
+            } else if (optionIndex === 1) {
+                // User selected "How to reserve?"
+                provideAnswer('How to reserve?');
+
+            } else if (optionIndex === 2) {
+                // User selected "Other questions?"
+                provideAnswer('Other questions?');
+            }
+        }
+
+        function provideAnswer(question) {
+            var chatMessages = document.getElementById('chat-messages');
+            var answer = '';
+
+            switch (question) {
+                case 'Quelles sont vos horaires ?':
+                    answer = 'Bot: On est ouverts 24H/24H .';
+                    break;
+                case 'L\'hotel admet des piscine':
+                    answer = 'Oui bien evidement .';
+                    break;
+                case 'Est ce que je peux annuler un Rdv ?':
+                    answer = 'Bot: Oui, mais il y\'aura une penaliter.';
+                    break;
+                case 'Comment reserver?':
+                    answer = 'il suffit tous jsute de nous contacter Sur notre telephone +21622303620.';
+                    break;
+                case 'Autres questions?':
+                    answer = 'Bot: Vous pouvez nous contacter via notre numéro : +216 22303620';
+                    document.getElementById('chat-input').style.display = 'block'; // Show input for typing a question
+                    break;
+                default:
+                    answer = 'Bot: Vous pouvez contacter notre agent Malek Ben Sdira par tel : +216 22 303620 ... soyez les bienvenues !';
+                    break;
+            }
+
+            var answerDiv = document.createElement('div');
+            answerDiv.textContent = answer;
+            chatMessages.appendChild(answerDiv);
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                var input = document.getElementById('chat-input');
+                var message = input.value;
+                input.value = '';
+
+                var userMessageDiv = document.createElement('div');
+                userMessageDiv.textContent = 'You: ' + message;
+                document.getElementById('chat-messages').appendChild(userMessageDiv);
+
+                // Provide an answer based on the user's question
+                provideAnswer(message);
+            }
+        });
+    </script>
+
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+{% endblock %}

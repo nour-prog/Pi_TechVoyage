@@ -1,3 +1,14 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+check_bad_words:
+    path: '/check-bad-words'
+    controller: 'App\Controller\ReclamationController::checkBadWords'
+    methods: ['POST']
+
+country_info:
+  path: '/country/{countryCode}'
+  controller: 'App\Controller\CountryController::index'
+  requirements:
+    countryCode: '[A-Za-z]+'

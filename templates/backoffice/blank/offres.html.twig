@@ -1,0 +1,64 @@
+{% extends 'backoffice/base.html.twig' %}
+{% block title %}Offre{% endblock %}
+{% block body %}
+<a href="{{ path('offres_ajout')}}" class="btn btn-sm btn-outline-secondary">Add offre</a>
+<main role ="main">
+<div class ="album py-5 bg-light">
+<div class="container-fluid">
+<style>
+    .card {
+        height: 100%;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-text {
+        color: #333;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .btn-group {
+        margin-top: 10px;
+    }
+
+    .text-muted {
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="row">
+    {% for offres in table %}
+    <div class="col-md-4 p-3">
+        <div class="card mb-4 shadow-sm">
+        <p class="card-text">{{ offres.title }}</p>
+            <img src="{{ offres.image }}" alt="{{ offres.image }}">
+            <div class="p-3">
+                <p class="card-text">{{ offres.lieu }}</p>
+                <p class="card-text">{{ offres.description }}</p>
+                <p class="card-text">Prix: {{ offres.prix }} DT</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <a href="{{ path('offres_delete', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('Attention, cela va supprimer')">Delete</a>
+                        <a href="{{ path('offres_edit', {'id': offres.id}) }}" class="btn btn-sm btn-outline-secondary">Edit</a>             
+                    </div>
+                    <small class="text-muted">{{ offres.createdAt|date("d/m/Y") }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+</div>
+</main>
+{% endblock %}

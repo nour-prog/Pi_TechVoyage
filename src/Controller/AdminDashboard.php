@@ -14,3 +14,4 @@ class AdminDashboard extends AbstractController
         return $this->render('backoffice/dashboard/index.html.twig');
     }
 }
+

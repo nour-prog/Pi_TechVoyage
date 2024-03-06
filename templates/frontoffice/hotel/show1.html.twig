@@ -1,0 +1,48 @@
+{% extends 'frontoffice/base.html.twig' %}
+
+{% block title %}blank{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <h1>Hotel</h1>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ hotel.id }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ hotel.nom }}</td>
+        </tr>
+        <tr>
+            <th>Nbretoile</th>
+            <td>{{ hotel.nbretoile }}</td>
+        </tr>
+        <tr>
+            <th>Emplacement</th>
+            <td>{{ hotel.emplacement }}</td>
+        </tr>
+        <tr>
+            <th>Avis</th>
+            <td>{{ hotel.avis }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_hotel_index') }}">back to list</a>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+{% endblock %}

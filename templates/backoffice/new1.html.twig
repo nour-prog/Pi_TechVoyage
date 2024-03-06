@@ -1,0 +1,28 @@
+{% extends 'backoffice/base.html.twig' %}
+
+{% block title %}Hotel{% endblock %}
+
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+    <title>New Hotel</title>
+
+    <h1> Hotel</h1>
+
+    {{ include('hotel/_form.html.twig') }}
+
+    <a href="{{ path('app_hotel_index') }}">back to list</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+{% endblock %}
