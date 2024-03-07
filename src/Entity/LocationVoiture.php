@@ -127,7 +127,7 @@ class LocationVoiture
 
     public function __toString()
     {
-        return $this->getStatus();
+        return $this->getVoiture();
     }
 
     public function getUser(): ?User

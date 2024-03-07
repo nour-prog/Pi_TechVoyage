@@ -13,6 +13,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Cloudinary\Cloudinary;
 use Symfony\Component\Security\Core\Security;
+use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Reservation;
+use App\Entity\Voiture;
+use App\Entity\LocationVoiture;
 
 class OffresController extends AbstractController
 {
@@ -126,6 +130,63 @@ class OffresController extends AbstractController
             "user"=>$user
         ]);
 
+    }
+
+
+
+    #[Route('/offre/reserver/{id}', name: 'offre_reserver')]
+    public function reserverOffre($id,OffresRepository $offresRepository,Request $request, Security $security, ManagerRegistry $managerRegistry): Response{
+
+        $user = $security->getUser();
+        $offre = $offresRepository->find($id);
+        if (!$offre) {
+            throw new NotFoundHttpException('offre ID ' . $offre->getId() . ' n existe pas.');
+        }
+        $vol = $offre->getVol();
+        if (!$vol) {
+            throw new NotFoundHttpException('vol ID ' . $vol->getId() . ' n existe pas.');
+        }
+
+        $reservation = new Reservation();
+        $reservation->setUser($user);
+        $reservation->setDatedepart($vol->getDatedepart());
+        $reservation->setDateretour($vol->getDatearrive());
+        $reservation->setClasse($vol->getClasse());
+        $reservation->setDestinationdepart($vol->getDestination());
+        $reservation->setDestinationretour($vol->getPointdepart());
+        $reservation->setNbrdepersonne($vol->getNbrplace());
+
+        $locationVoiture = $offre->getLocationVoiture();
+        if (!$locationVoiture) {
+            throw new NotFoundHttpException('voiture ID ' . $locationVoiture->getId() . ' n existe pas.');
+        }
+        $oldVoiture = $locationVoiture->getVoiture();
+
+        $newVoiture = new Voiture();
+        $newVoiture->setCouleur($oldVoiture->getCouleur());
+        $newVoiture->setMarque($oldVoiture->getMarque());
+        $newVoiture->setModel($oldVoiture->getModel());
+        $newVoiture->setEnergy($oldVoiture->getEnergy());
+        $newVoiture->setCapacite($oldVoiture->getCapacite());
+        $newVoiture->setImageFileName($oldVoiture->getImageFileName());
+
+        $newLocationVoiture = new LocationVoiture();
+        $newLocationVoiture->setType($locationVoiture->getType());
+        $newLocationVoiture->setDatefin($vol->getDatearrive());
+        $newLocationVoiture->setDateDebut($vol->getDatedepart());
+        $newLocationVoiture->setPrix($locationVoiture->getPrix());
+        $newLocationVoiture->setStatus("réservé");
+        $newLocationVoiture->setUser($user);
+        $newLocationVoiture->setVoiture($newVoiture);
+
+        
+        $em= $managerRegistry->getManager();
+        $em->persist($reservation);
+        $em->persist($newLocationVoiture);
+        $em->persist($newVoiture);
+        $em->flush();
+
+        return $this->renderForm("frontoffice/homepage/offreReserver.html.twig");
     }
     
 }

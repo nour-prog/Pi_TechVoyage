@@ -115,7 +115,7 @@ function showreply(id) {
             <div class='px-3 pt-3' style="    display: flex;
     align-items: center;
     justify-content: space-between;">
-            <p style='font-weight:bold' class="card-text ">{{ offres.title }}</p>  
+            <p style='font-weight:bold' class="card-text ">{{ offres.title }}</p>   
             <div style="    display: flex;">
             <div class="stars" style="display: flex;
     align-items: center;" data-note="1">
@@ -138,9 +138,11 @@ function showreply(id) {
                 <p class="card-text">{{ offres.lieu }}</p>
                 <p class="card-text">{{ offres.description }}</p>
                 <p class="card-text">Prix: {{ offres.prix }} DT</p>
+                <p style='font-weight:bold' class="card-text ">Vol: {{ offres.vol }}</p>  
+                <p style='font-weight:bold' class="card-text ">Voiture: {{ offres.locationVoiture }}</p> 
                 <div class="d-flex justify-content-between align-items-center">
                  <div class="btn-group">
-                        <button class="btn btn-sm btn-outline-secondary">Reserver</button>
+                        <a class="btn btn-sm btn-outline-secondary" href="{{path('offre_reserver', { id: offres.id })  }}">Reserver</a>
 
                         
                     </div>

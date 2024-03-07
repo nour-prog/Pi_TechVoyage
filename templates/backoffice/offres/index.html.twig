@@ -51,6 +51,27 @@
     </div>
 <br>
 <br>
+
+    <div class="form-group">
+    {{form_label(form.vol)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.vol) }}
+    </div>
+    {{ form_widget(form.vol)}}
+
+    </div>
+
+    <div class="form-group">
+    {{form_label(form.locationVoiture)}}
+    <br>
+    <div class="text-danger">
+      {{ form_errors(form.locationVoiture) }}
+    </div>
+    {{ form_widget(form.locationVoiture)}}
+
+    </div>
+
         <div class="form-group">
     {{ form_label(form.image)}}
     <br>
