@@ -30,6 +30,12 @@ class OffresType extends AbstractType
                     "class" =>"from-control"
                 ]
             ])
+            ->add('locationVoiture', null, [
+                "placeholder" => "Choisir Une Location Voiture"
+            ])
+            ->add('vol',null, [
+                "placeholder" => "Choisir Un Vol"
+            ])
             ->add('image',  FileType::class, [
                 'mapped' => false,
                 'required' => false,

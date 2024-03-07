@@ -150,7 +150,7 @@ class ReservationController extends AbstractController
         $vol = $entityManager
             ->getRepository(Vols::class)->find($volId);
         if (!$vol) {
-            throw new NotFoundHttpException('The vol with ID ' . $volId . ' does not exist.');
+            throw new NotFoundHttpException('vol ID ' . $volId . ' n existe pas.');
         }
         $reservation = new Reservation();
         $reservation->setUser($user);

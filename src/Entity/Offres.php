@@ -67,6 +67,14 @@ class Offres
     #[ORM\OneToMany(targetEntity: OfferReview::class, mappedBy: 'OfferList', orphanRemoval: true)]
     private Collection $offerReviews;
 
+    #[Assert\NotBlank(message:"ce champs est obligatoire")]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Vols $vol = null;
+
+    #[Assert\NotBlank(message:"ce champs est obligatoire")]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?LocationVoiture $locationVoiture = null;
+
 
 
    
@@ -340,6 +348,30 @@ $reviewval=$review->getValue();
                 $offerReview->setOfferList(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVol(): ?Vols
+    {
+        return $this->vol;
+    }
+
+    public function setVol(?Vols $vol): static
+    {
+        $this->vol = $vol;
+
+        return $this;
+    }
+
+    public function getLocationVoiture(): ?LocationVoiture
+    {
+        return $this->locationVoiture;
+    }
+
+    public function setLocationVoiture(?LocationVoiture $locationVoiture): static
+    {
+        $this->locationVoiture = $locationVoiture;
 
         return $this;
     }

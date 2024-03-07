@@ -175,4 +175,9 @@ class Vols
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return " Dest: ". $this->getDestination() . " Dep: " . $this->getPointdepart();
+    }
 }
